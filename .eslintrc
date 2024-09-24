@@ -1,0 +1,80 @@
+{
+  "root": true,
+  "env": {
+    "jest": true,
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "project": "./tsconfig.json"
+  },
+  "ignorePatterns": ["out/", "dist/"],
+  "extends": [
+    "plugin:wizardry-fsd/next",
+    "airbnb",
+    "airbnb-typescript",
+    "next/core-web-vitals", // Needed to avoid warning in next.js build: 'The Next.js plugin was not detected in your ESLint configuration'
+    "prettier"
+  ],
+  "plugins": ["@typescript-eslint", "unused-imports", "simple-import-sort"],
+  "rules": {
+    /*
+     * React
+     */
+    "react/destructuring-assignment": "off", // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
+    "react/function-component-definition": "off", // Disable Airbnb's specific function type
+    "react/jsx-props-no-spreading": "off", // Don't enforce, let developer choose
+    "react/jsx-sort-props": [
+      "error",
+      {
+        "callbacksLast": true,
+        "shorthandFirst": true,
+        "ignoreCase": true,
+        "noSortAlphabetically": true,
+        "reservedFirst": true
+      }
+    ],
+    "react/prop-types": "off", // Should be handled with TS instead
+    "react/react-in-jsx-scope": "off", // @see https://ru.reactjs.org/blog/2020/09/22/introducing-the-new-jsx-transform.html
+    "react/require-default-props": [
+      "error",
+      {
+        "functions": "defaultArguments"
+      }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    /*
+     * JS
+     */
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "import/no-extraneous-dependencies": "off",
+    "import/extensions": "off", // Avoid missing file extension errors, TypeScript already provides a similar feature
+    "no-underscore-dangle": "off",
+    "max-len": "off", // Disable line length checks, because the IDE is already configured to warn about it, and it's a waste of time to check for lines that are too long, especially in comments (like this one!)
+    "no-unused-vars": 0, // Disabled, already handled by @typescript-eslint/no-unused-vars
+    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"], // Overrides Airbnb configuration and enable no-restricted-syntax
+    "import/prefer-default-export": "off", // Named export is easier to refactor automatically
+    "simple-import-sort/imports": "error", // Import configuration for `eslint-plugin-simple-import-sort`
+    "simple-import-sort/exports": "error", // Export configuration for `eslint-plugin-simple-import-sort`
+    "import/order": "off", // Avoid conflict rule between `eslint-plugin-import` and `eslint-plugin-simple-import-sort`
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": "off",
+    /*
+     * Typescript
+     */
+    "@typescript-eslint/ban-ts-comment": "warn", // ts-ignore are sometimes the only way to bypass a TS issue, we trust we will use them for good and not abuse them
+    "@typescript-eslint/comma-dangle": "off", // Avoid conflict rule between Eslint and Prettier
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "fixStyle": "inline-type-imports"
+      }
+    ], // Ensure `import type` is used when it's necessary
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  }
+}
