@@ -1,6 +1,7 @@
 const routes = {
   // use typeHandle as a key if corresponding typeHandle exists
   homepage: '/',
+  profile: '/profile',
 };
 
 export type RoutePaths = keyof typeof routes;

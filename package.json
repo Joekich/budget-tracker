@@ -19,19 +19,26 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "clsx": "2.0.0",
     "lodash": "4.17.21",
     "next": "14.2.13",
+    "next-auth": "^4.24.7",
+    "prisma": "^5.20.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "ts-pattern": "5.0.5",
     "use-breakpoint": "4.0.1",
-    "zod": "3.22.4"
+    "zod": "3.22.4",
+    "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
     "@commitlint/cli": "18.2.0",
     "@commitlint/config-conventional": "18.1.0",
     "@commitlint/cz-commitlint": "18.2.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/lodash": "4.14.200",
     "@types/node": "20.8.10",
     "@types/react": "18.2.36",
@@ -52,7 +59,7 @@
     "eslint-plugin-unused-imports": "3.0.0",
     "eslint-plugin-wizardry-fsd": "0.2.0",
     "husky": "8.0.3",
-    "lint-staged": "15.0.2",
+    "lint-staged": "^15.2.10",
     "postcss": "8.4.31",
     "prettier": "3.0.3",
     "sass": "1.69.5",
