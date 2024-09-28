@@ -17,6 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta name="msapplication-config" content="/assets/icons/browserconfig.xml" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
