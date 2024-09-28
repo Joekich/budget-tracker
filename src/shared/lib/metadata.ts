@@ -25,10 +25,10 @@ export const getMetadata = ({
   title = translations.common.seoTitle,
   description = translations.common.seoDescription,
   image: images = {
-    url: `${siteUrl}/assets/images/starter-banner.png`,
+    url: `${siteUrl}/assets/icons/android-chrome-512x512.png`,
     width: 1280,
     height: 720,
-    alt: 'Wizardry social share image',
+    alt: 'Budget tracker',
   },
   path = 'homepage',
   slug,
