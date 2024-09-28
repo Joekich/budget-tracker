@@ -65,10 +65,7 @@ export const getMetadata = ({
         images,
       },
       icons: {
-        icon: [
-          { url: '/assets/icons/favicon.ico', sizes: '32x32' },
-          { url: '/assets/icons/safari-pinned-tab.svg', type: 'image/svg+xml' },
-        ],
+        icon: [{ url: '/assets/icons/favicon.ico', sizes: '32x32' }],
         apple: {
           url: '/assets/icons/apple-touch-icon.png',
           sizes: '180x180',

@@ -19,6 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <meta name="msapplication-config" content="/assets/icons/browserconfig.xml" />
+        <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5" />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
