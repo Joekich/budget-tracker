@@ -7,6 +7,7 @@ import type { ReactNode } from 'react';
 import { getMetadata } from 'shared/lib/metadata';
 
 import { inter } from './fonts';
+import SessionProvider from './SessionProvider';
 
 export async function generateMetadata(): Promise<Metadata> {
   // const globals = await globalsApi.get();
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <meta name="msapplication-config" content="/assets/icons/browserconfig.xml" />
         <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5" />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SessionProvider>{children}</SessionProvider>
+      </body>
     </html>
   );
 }

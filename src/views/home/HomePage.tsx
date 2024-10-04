@@ -1,21 +1,32 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 
-import { getPath } from '@/src/shared/routing/paths';
+import styles from './homepage.module.scss';
 
 export const HomePage = () => {
   const router = useRouter();
 
   const handleLoginClick = () => {
-    router.push(getPath('profile'));
+    router.push(getPath('signin'));
+  };
+
+  const handleRegisterClick = () => {
+    router.push(getPath('signup'));
   };
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '100px' }}>
-      <h1>Welcome to the Home Page</h1>
-      <Button label="Войти" onClick={handleLoginClick} />
-    </div>
+    <main className={styles.homePage}>
+      <header>
+        <h1>Welcome to the Home Page</h1>
+      </header>
+
+      <section className={styles.buttonGroup}>
+        <Button label="Регистрация" className={styles.button} onClick={handleRegisterClick} />
+        <Button label="Войти" className={styles.button} onClick={handleLoginClick} />
+      </section>
+    </main>
   );
 };

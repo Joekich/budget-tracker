@@ -2,7 +2,6 @@
 
 html,
 body {
-  height: 100%;
   padding: 0;
 
   color: var(--color-black);
@@ -21,13 +20,26 @@ html {
   min-height: 0; /* 1 */
   font-size: 62.5%; /* 2 */
 
-
-  @include media((
-    fluid-typography: (
-      xs-sm: (0, 16),
-      sm-md: (16, 10),
-      lg-xl: (10, 17),
-      xl-xxl: (17, 22),
-    ),
-  ));
+  @include media(
+    (
+      fluid-typography: (
+        xs-sm: (
+          0,
+          16,
+        ),
+        sm-md: (
+          16,
+          10,
+        ),
+        lg-xl: (
+          10,
+          17,
+        ),
+        xl-xxl: (
+          17,
+          22,
+        ),
+      ),
+    )
+  );
 }

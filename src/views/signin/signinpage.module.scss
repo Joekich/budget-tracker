@@ -1,0 +1,34 @@
+.authPage {
+  margin-top: 30vh;
+  text-align: center;
+}
+
+.authContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.authInput {
+  width: 20%;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.button {
+  width: 200px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.cancelButton {
+  margin-top: 10px;
+}

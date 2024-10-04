@@ -38,9 +38,9 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
       "*": ["./src/*"],
-      "styles/*": ["./src/app/styles/*"]
+      "styles/*": ["./src/app/styles/*"],
+      "@/*": ["./*"]
     },
     "plugins": [
       {

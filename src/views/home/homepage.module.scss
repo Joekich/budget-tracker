@@ -1,0 +1,17 @@
+.homePage {
+  margin-top: 30vh;
+  text-align: center;
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.button {
+  width: 200px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
