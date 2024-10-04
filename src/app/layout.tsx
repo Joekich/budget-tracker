@@ -3,11 +3,13 @@ import './styles/variables.scss';
 import './styles/app.scss';
 
 import type { Metadata } from 'next';
+import { getServerSession } from 'next-auth';
 import type { ReactNode } from 'react';
 import { getMetadata } from 'shared/lib/metadata';
 
+import { authOptions } from './api/auth/[...nextauth]/authOptions';
 import { inter } from './fonts';
-import SessionProvider from './SessionProvider';
+import { SessionProvider } from './SessionProvider';
 
 export async function generateMetadata(): Promise<Metadata> {
   // const globals = await globalsApi.get();
@@ -15,7 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return getMetadata();
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const session = await getServerSession(authOptions);
   return (
     <html lang="en">
       <head>
@@ -23,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="mask-icon" href="/assets/icons/safari-pinned-tab.svg" color="#5bbad5" />
       </head>
       <body className={inter.className}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider session={session}>{children}</SessionProvider>
       </body>
     </html>
   );
