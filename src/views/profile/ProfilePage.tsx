@@ -1,6 +1,7 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { signOut, useSession } from 'next-auth/react';
 
 export const ProfilePage = () => {
   const { data: session } = useSession();
@@ -8,6 +9,7 @@ export const ProfilePage = () => {
   if (!session) {
     return (
       <main style={{ textAlign: 'center', marginTop: '100px' }}>
+        <Link href="/">Home</Link>
         <h1>Вы не авторизованы</h1>
       </main>
     );
@@ -15,7 +17,12 @@ export const ProfilePage = () => {
 
   return (
     <main style={{ textAlign: 'center', marginTop: '100px' }}>
-      <h1>Здравствуйте, {session.user?.login || 'Пользователь'}</h1>
+      <Link href="/">Home</Link>
+      <h1>Здравствуйте, {session.user?.name || 'Пользователь'}</h1>
+      <button type="button" onClick={() => signOut()}>
+        {' '}
+        Sign Out
+      </button>
     </main>
   );
 };

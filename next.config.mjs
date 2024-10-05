@@ -5,4 +5,13 @@ export default ({
   },
   poweredByHeader: false,
   reactStrictMode: true,
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/api/auth/signin',
+  //       destination: '/',
+  //       permanent: true,
+  //     },
+  //   ]
+  // },
 });

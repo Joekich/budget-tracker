@@ -3,11 +3,11 @@ import './styles/variables.scss';
 import './styles/app.scss';
 
 import type { Metadata } from 'next';
-import { getServerSession } from 'next-auth';
 import type { ReactNode } from 'react';
 import { getMetadata } from 'shared/lib/metadata';
 
-import { authOptions } from './api/auth/[...nextauth]/authOptions';
+import { auth } from '@/auth';
+
 import { inter } from './fonts';
 import { SessionProvider } from './SessionProvider';
 
@@ -18,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   return (
     <html lang="en">
       <head>

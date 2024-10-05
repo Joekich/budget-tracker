@@ -1,9 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 import { Input } from 'shared/ui/input';
 
@@ -12,25 +10,14 @@ import styles from './signinpage.module.scss';
 export const SignInPage = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter();
 
-  const handleLogin = async () => {
-    const result = await signIn('credentials', {
+  const handleLogin = () => {
+    signIn('credentials', {
       redirect: false,
-      login,
-      password,
+      login: 'TestUser1',
+      password: 'TestUser1',
+      redirectTo: 'http://localhost:3000/profile',
     });
-
-    if (result?.error) {
-      // eslint-disable-next-line no-alert
-      alert('Неверный логин или пароль');
-    } else {
-      router.push(getPath('profile'));
-    }
-  };
-
-  const handleCancel = () => {
-    router.push(getPath('homepage'));
   };
 
   return (
@@ -55,7 +42,6 @@ export const SignInPage = () => {
       </section>
       <section className={styles.buttonGroup}>
         <Button label="Войти" className={styles.button} onClick={handleLogin} />
-        <Button label="Отмена" className={`${styles.button} ${styles.cancelButton}`} onClick={handleCancel} />
       </section>
     </main>
   );
