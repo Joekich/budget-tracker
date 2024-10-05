@@ -1,10 +1,10 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
-import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
+import NextAuth from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
 // Your own logic for dealing with plaintext password strings; be careful!
 import { prisma } from 'shared/lib/prisma';
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
@@ -24,9 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           where: { login: String(credentials.login) },
         });
 
-        return user
-          ? { id: String(user.id), name: user.login }
-          : null;
+        return user ? { id: String(user.id), name: user.login } : null;
       },
     }),
   ],
@@ -67,4 +65,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   //     };
   //   },
   // },
-})
+});
