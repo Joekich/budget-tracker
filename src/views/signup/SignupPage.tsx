@@ -62,12 +62,7 @@ export const SignUpPage = () => {
         />
       </section>
       <section className={styles.buttonGroup}>
-        <Button
-          label="Зарегистрироваться"
-          className={`${styles.button}`}
-          disabled={!isFormValid()}
-          onClick={handleSubmit}
-        />
+        <Button label="Зарегистрироваться" className={styles.button} disabled={!isFormValid()} onClick={handleSubmit} />
         <Button label="Отмена" className={`${styles.button} ${styles.cancelButton}`} onClick={() => router.push('/')} />
       </section>
     </main>

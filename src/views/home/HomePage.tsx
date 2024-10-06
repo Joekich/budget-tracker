@@ -1,18 +1,28 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { getPath } from 'shared/routing/paths';
+
+import styles from './homepage.module.scss';
 
 export function HomePage() {
-  const credentialsAction = () => {
-    signIn('credentials', {
-      login: 'TestUser1',
-      password: 'TestUser1',
-      redirectTo: 'http://localhost:3000/profile',
-    });
-  };
+  const router = useRouter();
+
+  const credentialsActionLogin = () => router.push(getPath('signin'));
+
+  const credentialsActionRegister = () => router.push(getPath('signup'));
+
   return (
-    <button type="button" onClick={credentialsAction}>
-      123
-    </button>
+    <main className={styles.homePage}>
+      <section className={styles.buttonGroup}>
+        <h1>Budget Tracker</h1>
+        <button type="button" className={styles.button} onClick={credentialsActionLogin}>
+          Войти
+        </button>
+        <button type="button" className={styles.button} onClick={credentialsActionRegister}>
+          Зарегистрироваться
+        </button>
+      </section>
+    </main>
   );
 }

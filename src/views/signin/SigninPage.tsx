@@ -1,7 +1,9 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
+import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 import { Input } from 'shared/ui/input';
 
@@ -10,14 +12,21 @@ import styles from './signinpage.module.scss';
 export const SignInPage = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
+  const router = useRouter();
 
-  const handleLogin = () => {
-    signIn('credentials', {
+  const handleLogin = async () => {
+    const response = await signIn('credentials', {
       redirect: false,
-      login: 'TestUser1',
-      password: 'TestUser1',
-      redirectTo: 'http://localhost:3000/profile',
+      login,
+      password,
     });
+
+    if (response?.error) {
+      // eslint-disable-next-line no-alert
+      alert('Неверный логин или пароль');
+    } else {
+      router.push(getPath('profile'));
+    }
   };
 
   return (
