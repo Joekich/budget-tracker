@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 import { siteUrl } from '@/config/env';
 
-import { checkResponseData } from './model/check-response-data';
-import { methods as sitemapApi } from './model/fetch-sitemap';
+import { checkResponseData } from '../shared/lib/fetch/check-response-data';
+import { methods as sitemapApi } from './model/sitemap.fetch';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const data = checkResponseData(await sitemapApi.get());

@@ -3,13 +3,12 @@ import './styles/variables.scss';
 import './styles/app.scss';
 
 import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import type { ReactNode } from 'react';
 import { getMetadata } from 'shared/lib/metadata';
 
-import { auth } from '@/auth';
-
 import { inter } from './fonts';
-import { SessionProvider } from './SessionProvider';
+import { auth } from './model/auth';
 
 export async function generateMetadata(): Promise<Metadata> {
   // const globals = await globalsApi.get();

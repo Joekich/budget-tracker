@@ -1,27 +1,19 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { getPath } from 'shared/routing/paths';
 
 import styles from './homepage.module.scss';
 
 export function HomePage() {
-  const router = useRouter();
-
-  const credentialsActionLogin = () => router.push(getPath('signin'));
-
-  const credentialsActionRegister = () => router.push(getPath('signup'));
-
   return (
     <main className={styles.homePage}>
       <section className={styles.buttonGroup}>
         <h1>Budget Tracker</h1>
-        <button type="button" className={styles.button} onClick={credentialsActionLogin}>
+        <Link href={getPath('signin')} className={styles.button}>
           Войти
-        </button>
-        <button type="button" className={styles.button} onClick={credentialsActionRegister}>
+        </Link>
+        <Link href={getPath('signup')} className={styles.button}>
           Зарегистрироваться
-        </button>
+        </Link>
       </section>
     </main>
   );

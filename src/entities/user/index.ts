@@ -1,1 +1,1 @@
-export { isPasswordConfirmed, validateLogin, validatePassword } from './model/validation';
+export { findUser } from './model/user';

@@ -1,27 +1,44 @@
 'use client';
 
-import { isPasswordConfirmed, validateLogin, validatePassword } from 'entities/user';
-import { signup } from 'features/auth';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { fetch } from 'shared/lib/fetch';
 import { Button } from 'shared/ui/button';
 import { Input } from 'shared/ui/input';
 
+import { schemaSignupValidation } from '../model/SignupPage.types';
 import styles from './signuppage.module.scss';
 
 export const SignUpPage = () => {
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
+  const [state, setState] = useState({
+    login: '',
+    password: '',
+    confirmPassword: '',
+  });
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
+  const isFormValid = () =>
+    schemaSignupValidation.safeParse({
+      login: state.login,
+      password: state.password,
+      confirmPassword: state.confirmPassword,
+    }).success;
 
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value);
+  const handleInputChange = (key: keyof typeof state) => (e: React.ChangeEvent<HTMLInputElement>) =>
+    setState((prev) => ({
+      ...prev,
+      [key]: e.target.value,
+    }));
 
   const handleSubmit = async () => {
+    if (!isFormValid()) return;
+
     try {
-      await signup(login, password, confirmPassword);
+      await fetch.post('/api/signup', {
+        data: { login: state.login, password: state.password },
+        json: true,
+      });
+
       router.push('/');
       // eslint-disable-next-line no-alert
       alert('Теперь вы можете войти, используя свои данные');
@@ -31,9 +48,6 @@ export const SignUpPage = () => {
     }
   };
 
-  const isFormValid = () =>
-    validateLogin(login) && validatePassword(password) && isPasswordConfirmed(password, confirmPassword);
-
   return (
     <main className={styles.authPage}>
       <header>
@@ -42,28 +56,32 @@ export const SignUpPage = () => {
       <section className={styles.authContainer}>
         <Input
           placeholder="Логин"
-          value={login}
+          value={state.login}
           className={styles.authInput}
-          onChange={(e) => setLogin(e.target.value)}
+          onChange={handleInputChange('login')}
         />
         <Input
           placeholder="Пароль"
           type="password"
-          value={password}
+          value={state.password}
           className={styles.authInput}
-          onChange={handlePasswordChange}
+          onChange={handleInputChange('password')}
         />
         <Input
           placeholder="Подтвердите пароль"
           type="password"
-          value={confirmPassword}
+          value={state.confirmPassword}
           className={styles.authInput}
-          onChange={handleConfirmPasswordChange}
+          onChange={handleInputChange('confirmPassword')}
         />
       </section>
       <section className={styles.buttonGroup}>
-        <Button label="Зарегистрироваться" className={styles.button} disabled={!isFormValid()} onClick={handleSubmit} />
-        <Button label="Отмена" className={`${styles.button} ${styles.cancelButton}`} onClick={() => router.push('/')} />
+        <Button className={styles.button} onClick={handleSubmit}>
+          Зарегистрироваться
+        </Button>
+        <Button className={`${styles.button} ${styles.cancelButton}`} onClick={() => router.push('/')}>
+          Отмена
+        </Button>
       </section>
     </main>
   );

@@ -21,12 +21,18 @@ export const SignInPage = () => {
       password,
     });
 
-    if (response?.error) {
+    if (!response) {
+      alert('Ошибка сервера');
+      return;
+    }
+
+    if (response.error) {
       // eslint-disable-next-line no-alert
       alert('Неверный логин или пароль');
-    } else {
-      router.push(getPath('profile'));
+      return;
     }
+
+    router.push(getPath('profile'));
   };
 
   return (
@@ -50,7 +56,9 @@ export const SignInPage = () => {
         />
       </section>
       <section className={styles.buttonGroup}>
-        <Button label="Войти" className={styles.button} onClick={handleLogin} />
+        <Button className={styles.button} onClick={handleLogin}>
+          Войти
+        </Button>
       </section>
     </main>
   );

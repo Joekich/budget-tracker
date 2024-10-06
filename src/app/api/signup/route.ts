@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { findUser } from 'entities/user';
 import { NextResponse } from 'next/server';
 import { prisma } from 'shared/lib/prisma';
 
@@ -9,7 +10,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Логин и пароль обязательны' }, { status: 400 });
   }
 
-  const existingUser = await prisma.user.findUnique({ where: { login } });
+  const existingUser = await findUser(login);
   if (existingUser) {
     return NextResponse.json({ error: 'Пользователь уже существует' }, { status: 400 });
   }
