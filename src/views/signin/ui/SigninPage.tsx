@@ -32,7 +32,7 @@ export const SignInPage = () => {
       return;
     }
 
-    router.push(getPath('profile'));
+    router.push(getPath('dashboard'));
   };
 
   return (

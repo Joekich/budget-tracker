@@ -4,6 +4,9 @@ const routes = {
   profile: '/profile',
   signin: '/signin',
   signup: '/signup',
+  dashboard: '/profile/dashboard',
+  transactions: '/profile/transactions',
+  settings: '/profile/settings',
 };
 
 export type RoutePaths = keyof typeof routes;
