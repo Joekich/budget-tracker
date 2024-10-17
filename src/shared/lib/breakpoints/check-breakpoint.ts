@@ -36,7 +36,7 @@ const checkBreakpointRange = (breakpoint: BreakpointKey, range: string) => {
   return breakPointNumber >= min && breakPointNumber < max;
 };
 
-export const checkBreakpoint = (breakpoint: BreakpointKey | null, range: Array<string> | string) => {
+export const checkBreakpoint = (breakpoint: BreakpointKey | null, range: string[] | string) => {
   if (!breakpoint) {
     return null;
   }

@@ -1,5 +1,7 @@
 import { SignUpPage } from 'views/signup';
 
-const SignUp = () => <SignUpPage />;
+function SignUp() {
+  return <SignUpPage />;
+}
 
 export default SignUp;

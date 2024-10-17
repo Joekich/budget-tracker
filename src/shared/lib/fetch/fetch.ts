@@ -1,27 +1,29 @@
-import isEmpty from 'lodash/isEmpty';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 
-type Url = RequestInfo | URL;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Body = string | Record<string, any>;
-type ErrorCustomFields = Partial<{
-  body: Body;
-  url: Url;
-  status: number;
-}>;
+type Body = Record<string, any>;
+type ErrorCustomFields = Error &
+  Partial<{
+    body: Body;
+    url: string;
+    status: number;
+  }>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-async function handleResponse({ url, options }: { url: Url; options: RequestInit }): Promise<any> {
+async function handleResponse({ url, options }: { url: string; options: RequestInit }) {
   const response = await fetch(url, options);
 
   let errors;
 
-  let body: Body = await response.text();
+  const responseText = await response.text();
+  let body: Body = {};
 
   try {
-    body = JSON.parse(body);
-    if (typeof body === 'object' && !isEmpty(body.errors)) {
-      errors = body.errors;
-    }
+    body = JSON.parse(responseText, (key, value) => {
+      if (key === 'errors') {
+        errors = value;
+      }
+      return value;
+    });
   } catch (err) {
     console.error(err);
   }
@@ -29,7 +31,7 @@ async function handleResponse({ url, options }: { url: Url; options: RequestInit
   const allOk = response.ok && !errors;
 
   if (!allOk) {
-    const error: Error & ErrorCustomFields = new Error(response.statusText);
+    const error: ErrorCustomFields = new Error(response.statusText);
     error.url = url;
     error.body = body;
     error.status = response.ok ? 500 : response.status;
@@ -40,9 +42,18 @@ async function handleResponse({ url, options }: { url: Url; options: RequestInit
   return body;
 }
 
+type GraphQLRequest = {
+  query: string;
+  operationName: string;
+  variables?: Record<string, any>;
+  extensions?: Record<string, any>;
+  http?: Pick<Request, 'url' | 'method' | 'headers'>;
+};
+
 type Config = {
-  params?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  data?: Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+  params?: Record<string, any>;
+  data?: Record<string, any>;
+  gql?: GraphQLRequest | string;
   formData?: FormData;
   json?: boolean;
   headers?: HeadersInit;
@@ -54,10 +65,11 @@ type Method = 'get' | 'post' | 'put' | 'patch' | 'del';
 
 async function generateMethod(
   method: Method,
-  path: Url,
-  { options: _options, params, data, formData, json, headers, noEncode }: Config = {},
+  path: string,
+  { options: _options, params, data, gql, formData, json, headers, noEncode }: Config = {},
 ) {
-  const url: Url = noEncode ? path.toString() : encodeURI(path.toString());
+  const stringPath = path.toString();
+  const url = noEncode ? stringPath : encodeURI(stringPath);
   const options: RequestInit = { method, ..._options };
   const newHeaders = new Headers(headers);
 
@@ -68,6 +80,10 @@ async function generateMethod(
 
   if (data) {
     options.body = JSON.stringify(data);
+  }
+
+  if (gql) {
+    options.body = JSON.stringify(gql);
   }
 
   if (formData) {
@@ -87,7 +103,7 @@ async function generateMethod(
   } catch (err) {
     console.error(err);
 
-    const error: Error & ErrorCustomFields = new Error(String(err));
+    const error: ErrorCustomFields = new Error(String(err));
     error.url = url;
     error.body = error;
     error.status = 500;
@@ -96,10 +112,10 @@ async function generateMethod(
   }
 }
 
-export const methods: Record<Method, (path: Url, config?: Config) => ReturnType<typeof generateMethod>> = {
-  get: (path, options) => generateMethod('get', path, options),
-  del: (path, options) => generateMethod('del', path, options),
-  put: (path, options) => generateMethod('put', path, options),
-  post: (path, options) => generateMethod('post', path, options),
-  patch: (path, options) => generateMethod('patch', path, options),
+export const methods: Record<Method, (path: string, config?: Config) => ReturnType<typeof generateMethod>> = {
+  get: async (...args) => generateMethod('get', ...args),
+  del: async (...args) => generateMethod('del', ...args),
+  put: async (...args) => generateMethod('put', ...args),
+  post: async (...args) => generateMethod('post', ...args),
+  patch: async (...args) => generateMethod('patch', ...args),
 };

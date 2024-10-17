@@ -6,6 +6,8 @@ export async function generateMetadata(): Promise<Metadata> {
   return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'dashboard' });
 }
 
-const Dashboard = () => <DashboardPage />;
+function Dashboard() {
+  return <DashboardPage />;
+}
 
 export default Dashboard;

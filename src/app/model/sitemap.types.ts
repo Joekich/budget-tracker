@@ -1,4 +1,4 @@
-import type { MetadataRoute } from 'next';
+import { type MetadataRoute } from 'next';
 import { z } from 'zod';
 
 export const schemaSitemap = z.custom<MetadataRoute.Sitemap>();

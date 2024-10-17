@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { Sidebar } from 'widgets/sidebar';
 
 export default async function ProfileLayout({ children }: { children: ReactNode }) {

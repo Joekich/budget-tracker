@@ -16,7 +16,9 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
         type="button"
         onClick={
           // Attempt to recover by trying to re-render the segment
-          () => reset()
+          () => {
+            reset();
+          }
         }
       >
         {translations.techPages.errorPageButtonLabel}

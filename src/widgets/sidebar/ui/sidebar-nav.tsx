@@ -14,10 +14,12 @@ import { TransactionsPageIcon } from 'shared/ui/icons/transactions-page-icon';
 
 import styles from './sidebar-nav.module.scss';
 
-export const Sidebar = () => {
+export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const toggleSidebar = () => setIsOpen((prev) => !prev);
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   const signOutHandler = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
@@ -56,4 +58,4 @@ export const Sidebar = () => {
       </nav>
     </aside>
   );
-};
+}

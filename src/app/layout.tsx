@@ -2,9 +2,9 @@ import './styles/normalize.css';
 import './styles/variables.scss';
 import './styles/app.scss';
 
-import type { Metadata } from 'next';
+import { type Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { getMetadata } from 'shared/lib/metadata';
 
 import { inter } from './fonts';

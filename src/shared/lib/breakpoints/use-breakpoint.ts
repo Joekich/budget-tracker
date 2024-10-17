@@ -9,7 +9,7 @@ export function useBreakpoint(defaultBreakpoint?: BreakpointKey) {
 
   return {
     current: currentBreakpoint,
-    multiple: (k: Array<BreakpointKey>) => checkBreakpoint(currentBreakpoint, k),
+    multiple: (k: BreakpointKey[]) => checkBreakpoint(currentBreakpoint, k),
     equal: (k: BreakpointKey) => checkBreakpoint(currentBreakpoint, k),
     between: (a: BreakpointKey, b: BreakpointKey) => checkBreakpoint(currentBreakpoint, `${a}-${b}`),
     greater: (k: BreakpointKey) => checkBreakpoint(currentBreakpoint, `${k}+`),

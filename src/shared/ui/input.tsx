@@ -1,5 +1,5 @@
 import { type InputHTMLAttributes } from 'react';
 
-export const Input = ({ type = 'text', ...props }: InputHTMLAttributes<HTMLInputElement>) => (
-  <input type={type} {...props} />
-);
+export function Input({ type = 'text', ...props }: InputHTMLAttributes<HTMLInputElement>) {
+  return <input type={type} {...props} />;
+}

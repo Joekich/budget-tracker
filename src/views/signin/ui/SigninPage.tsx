@@ -9,7 +9,7 @@ import { Input } from 'shared/ui/input';
 
 import styles from './signinpage.module.scss';
 
-export const SignInPage = () => {
+export function SignInPage() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -22,6 +22,7 @@ export const SignInPage = () => {
     });
 
     if (!response) {
+      // eslint-disable-next-line no-alert
       alert('Ошибка сервера');
       return;
     }
@@ -45,14 +46,18 @@ export const SignInPage = () => {
           placeholder="Логин"
           value={login}
           className={styles.authInput}
-          onChange={(e) => setLogin(e.target.value)}
+          onChange={(e) => {
+            setLogin(e.target.value);
+          }}
         />
         <Input
           placeholder="Пароль"
           type="password"
           value={password}
           className={styles.authInput}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
         />
       </section>
       <section className={styles.buttonGroup}>
@@ -62,4 +67,4 @@ export const SignInPage = () => {
       </section>
     </main>
   );
-};
+}

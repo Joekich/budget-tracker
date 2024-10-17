@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 import styles from './dashboard-page.module.scss';
 
-export const DashboardPage = () => {
+export function DashboardPage() {
   const { data: session } = useSession();
 
   if (!session) {
@@ -24,4 +24,4 @@ export const DashboardPage = () => {
       </div>
     </main>
   );
-};
+}

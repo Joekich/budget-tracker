@@ -5,7 +5,7 @@ import { signOut, useSession } from 'next-auth/react';
 
 import styles from './ProfilePage.module.scss';
 
-export const ProfilePage = () => {
+export function ProfilePage() {
   const { data: session } = useSession();
 
   if (!session) {
@@ -22,11 +22,11 @@ export const ProfilePage = () => {
       <div className={styles.contentWrapper}>
         <Link href="/">Home</Link>
         <h1>Здравствуйте, {session.user?.name || 'Пользователь'}</h1>
-        <button type="button" onClick={() => signOut()}>
+        <button type="button" onClick={async () => signOut()}>
           {' '}
           Sign Out
         </button>
       </div>
     </main>
   );
-};
+}

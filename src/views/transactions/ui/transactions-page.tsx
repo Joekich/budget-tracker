@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 
 import styles from './transactions-page.module.scss';
 
-export const TransactionsPage = () => {
+export function TransactionsPage() {
   const { data: session } = useSession();
 
   if (!session) {
@@ -24,4 +24,4 @@ export const TransactionsPage = () => {
       </div>
     </main>
   );
-};
+}

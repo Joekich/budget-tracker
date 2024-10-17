@@ -9,7 +9,7 @@ import { Input } from 'shared/ui/input';
 import { schemaSignupValidation } from '../model/SignupPage.types';
 import styles from './SignupPage.module.scss';
 
-export const SignUpPage = () => {
+export function SignUpPage() {
   const router = useRouter();
   const [state, setState] = useState({
     login: '',
@@ -24,11 +24,12 @@ export const SignUpPage = () => {
       confirmPassword: state.confirmPassword,
     }).success;
 
-  const handleInputChange = (key: keyof typeof state) => (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleInputChange = (key: keyof typeof state) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prev) => ({
       ...prev,
       [key]: e.target.value,
     }));
+  };
 
   const handleSubmit = async () => {
     if (!isFormValid()) return;
@@ -42,7 +43,7 @@ export const SignUpPage = () => {
       router.push('/');
       // eslint-disable-next-line no-alert
       alert('Теперь вы можете войти, используя свои данные');
-    } catch (error) {
+    } catch {
       // eslint-disable-next-line no-alert
       alert('Ошибка регистрации');
     }
@@ -79,10 +80,15 @@ export const SignUpPage = () => {
         <Button className={styles.button} onClick={handleSubmit}>
           Зарегистрироваться
         </Button>
-        <Button className={`${styles.button} ${styles.cancelButton}`} onClick={() => router.push('/')}>
+        <Button
+          className={`${styles.button} ${styles.cancelButton}`}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
           Отмена
         </Button>
       </section>
     </main>
   );
-};
+}
