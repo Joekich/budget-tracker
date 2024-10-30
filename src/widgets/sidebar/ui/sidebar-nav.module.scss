@@ -53,6 +53,10 @@
 
 .logout {
   margin-top: auto;
+
+    &:hover {
+      color: var(--color-red);
+}
 }
 
 .sidebar:not(.open) {
@@ -72,3 +76,4 @@
     }
   }
 }
+

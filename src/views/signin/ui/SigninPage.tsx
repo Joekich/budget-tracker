@@ -15,6 +15,12 @@ export function SignInPage() {
   const router = useRouter();
 
   const handleLogin = async () => {
+    if (!login || !password) {
+      // eslint-disable-next-line no-alert
+      alert('Введите логин и пароль');
+      return;
+    }
+
     const response = await signIn('credentials', {
       redirect: false,
       login,

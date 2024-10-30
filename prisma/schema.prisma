@@ -12,4 +12,16 @@ model User {
   id       Int      @id @default(autoincrement())
   login    String   @unique
   password String
+  transactions  Transaction[]
+}
+
+model Transaction {
+  id        Int      @id @default(autoincrement())
+  title     String
+  amount    Float
+  date      DateTime
+  category  String
+  type      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }

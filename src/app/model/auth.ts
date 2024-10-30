@@ -1,4 +1,5 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import bcrypt from 'bcryptjs';
 import { findUser } from 'entities/user';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
@@ -10,6 +11,22 @@ export const { handlers, auth } = NextAuth({
     strategy: 'jwt',
   },
   secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    session: async ({ session }) => {
+      const user = await findUser(String(session.user.name));
+      const transactions = await prisma.transaction.findMany({
+        where: { userId: user?.id },
+      });
+      return {
+        ...session,
+        user: {
+          id: user?.id.toString(),
+          name: user?.login,
+        },
+        transactions,
+      };
+    },
+  },
   providers: [
     Credentials({
       name: 'credentials',
@@ -18,11 +35,22 @@ export const { handlers, auth } = NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       authorize: async (credentials) => {
-        if (!credentials) return null;
+        const login = credentials?.login as string;
+        const password = credentials?.password as string;
 
-        const user = await findUser(String(credentials.login));
+        if (!credentials?.login || !credentials?.password) {
+          throw new Error('Invalid login or password');
+        }
 
-        return user ? { id: String(user.id), name: user.login } : null;
+        const user = await findUser(login);
+
+        if (user && typeof user.password === 'string') {
+          const isPasswordValid = await bcrypt.compare(password, user.password);
+          if (isPasswordValid) {
+            return { id: String(user.id), name: user.login };
+          }
+        }
+        throw new Error('Неверный логин или пароль');
       },
     }),
   ],

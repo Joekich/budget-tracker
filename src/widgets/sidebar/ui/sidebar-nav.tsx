@@ -17,6 +17,12 @@ import styles from './sidebar-nav.module.scss';
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const navItems = [
+    { href: getPath('dashboard'), icon: <DashboardPageIcon />, label: 'Статистика' },
+    { href: getPath('transactions'), icon: <TransactionsPageIcon />, label: 'Транзакции' },
+    { href: getPath('settings'), icon: <ProfilePageIcon />, label: 'Настройки' },
+  ];
+
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
@@ -34,19 +40,12 @@ export function Sidebar() {
         <NavSidebarIcon />
       </Button>
       <nav className={styles.navGroup}>
-        <Link href={getPath('dashboard')} className={styles.navItem}>
-          <DashboardPageIcon />
-          {isOpen && <span>Статистика</span>}
-        </Link>
-        <Link href={getPath('transactions')} className={styles.navItem}>
-          <TransactionsPageIcon />
-          {isOpen && <span>Транзакции</span>}
-        </Link>
-
-        <Link href={getPath('settings')} className={styles.navItem}>
-          <ProfilePageIcon />
-          {isOpen && <span>Настройки</span>}
-        </Link>
+        {navItems.map((item) => (
+          <Link key={item.href} href={item.href} className={styles.navItem}>
+            {item.icon}
+            {isOpen && <span>{item.label}</span>}
+          </Link>
+        ))}
         <Button
           className={clsx(styles.navItem, styles.logout, isOpen && styles.clickable)}
           onClick={signOutHandler}

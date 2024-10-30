@@ -1,0 +1,90 @@
+.block {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+  }
+  
+  .buttonsBlock {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+  }
+  
+  .greeting {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    height: 5rem;
+    margin-right: 1rem;
+    padding: 1rem;
+  }
+  
+  .buttons {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+
+    height: 5rem;
+    padding: 1rem;
+  }
+  
+  .buttons button {
+    width: 8rem;
+    height: 3rem;
+    margin-left: 1rem;
+  }
+  
+  .balanceBlock {
+    flex-direction: column;
+    width: 80%;
+  }
+  
+  .balancePart {
+    flex: 1;
+
+    height: 5rem;
+    margin-right: 1rem;
+    padding: 1rem;
+
+    text-align: center;
+
+    border: 0.125rem solid black;
+    border-radius: 0.5rem;
+  }
+  
+  .balancePart:last-child {
+    margin-right: 0;
+  }
+  
+  .chartBlock {
+    width: 80%;
+    height: 40rem;
+    padding: 1rem;
+
+    border: 0.125rem solid black;
+    border-radius: 0.5rem;
+  }
+  
+  .categoriesBlock {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+  }
+  
+  .categoryPart {
+    flex: 1;
+
+    height: 25rem;
+    margin-right: 1rem;
+    padding: 1rem;
+
+    text-align: center;
+
+    border: 0.125rem solid black;
+    border-radius: 0.5rem;
+  }
+  
+  .categoryPart:last-child {
+    margin-right: 0;
+  }
