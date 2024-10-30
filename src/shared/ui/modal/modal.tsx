@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { createPortal } from 'react-dom';
 
-import styles from './Modal.module.scss';
+import styles from './modal.module.scss';
 
 type ModalProps = {
   onClose: () => void;
