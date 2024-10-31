@@ -4,13 +4,9 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
+import { FiBarChart2, FiList, FiLogOut, FiMenu, FiUser } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
-import { DashboardPageIcon } from 'shared/ui/icons/dashboard-page-icon';
-import { LogoutIcon } from 'shared/ui/icons/logout-icon';
-import { NavSidebarIcon } from 'shared/ui/icons/nav-sidebar-icon';
-import { ProfilePageIcon } from 'shared/ui/icons/profile-page-icon';
-import { TransactionsPageIcon } from 'shared/ui/icons/transactions-page-icon';
 
 import styles from './sidebar-nav.module.scss';
 
@@ -18,9 +14,9 @@ export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { href: getPath('dashboard'), icon: <DashboardPageIcon />, label: 'Статистика' },
-    { href: getPath('transactions'), icon: <TransactionsPageIcon />, label: 'Транзакции' },
-    { href: getPath('settings'), icon: <ProfilePageIcon />, label: 'Настройки' },
+    { href: getPath('dashboard'), icon: <FiBarChart2 size={32} />, label: 'Статистика' },
+    { href: getPath('transactions'), icon: <FiList size={32} />, label: 'Транзакции' },
+    { href: getPath('settings'), icon: <FiUser size={32} />, label: 'Настройки' },
   ];
 
   const toggleSidebar = () => {
@@ -37,7 +33,7 @@ export function Sidebar() {
   return (
     <aside className={clsx(styles.sidebar, isOpen && styles.open)}>
       <Button aria-label="Menu" className={styles.navItem} onClick={toggleSidebar} onKeyDown={toggleSidebar}>
-        <NavSidebarIcon />
+        <FiMenu size={32} />
       </Button>
       <nav className={styles.navGroup}>
         {navItems.map((item) => (
@@ -51,7 +47,7 @@ export function Sidebar() {
           onClick={signOutHandler}
           onKeyDown={signOutHandler}
         >
-          <LogoutIcon />
+          <FiLogOut size={32} />
           {isOpen && 'Выйти'}
         </Button>
       </nav>
