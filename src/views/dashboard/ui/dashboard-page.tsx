@@ -3,10 +3,10 @@
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
-import { Modal } from 'shared/ui/modal/modal';
+import { Modal } from 'shared/ui';
 
 import styles from './dashboard-page.module.scss';
-import { DashboardBalanceBlock, DashboardButtonsBlock, DashboardCategoriesBlock, DashboardChartsBlock } from './index';
+import * as blocks from './index';
 
 export function DashboardPage() {
   const { data: session } = useSession();
@@ -22,7 +22,7 @@ export function DashboardPage() {
     <main className={styles.pageWrapper}>
       {session ? (
         <div className={styles.contentWrapper}>
-          <DashboardButtonsBlock
+          <blocks.DashboardButtonsBlock
             username={session?.user?.name || null}
             onIncomeClick={() => {
               openModal('income');
@@ -31,9 +31,9 @@ export function DashboardPage() {
               openModal('expense');
             }}
           />
-          <DashboardBalanceBlock />
-          <DashboardChartsBlock />
-          <DashboardCategoriesBlock />
+          <blocks.DashboardBalanceBlock />
+          <blocks.DashboardChartsBlock />
+          <blocks.DashboardCategoriesBlock />
 
           {isModalOpen && (
             <Modal
