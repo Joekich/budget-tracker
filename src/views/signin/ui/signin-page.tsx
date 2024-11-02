@@ -9,7 +9,7 @@ import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 import { Input } from 'shared/ui/input';
 
-import styles from './signinpage.module.scss';
+import styles from './signin-page.module.scss';
 
 export function SignInPage() {
   const [login, setLogin] = useState('');

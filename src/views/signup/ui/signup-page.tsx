@@ -7,7 +7,7 @@ import { Button } from 'shared/ui/button';
 import { Input } from 'shared/ui/input';
 
 import { schemaSignupValidation } from '../model/signin.types';
-import styles from './SignupPage.module.scss';
+import styles from './signup-page.module.scss';
 
 export function SignUpPage() {
   const router = useRouter();
