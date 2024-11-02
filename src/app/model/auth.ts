@@ -38,19 +38,17 @@ export const { handlers, auth } = NextAuth({
         const login = credentials?.login as string;
         const password = credentials?.password as string;
 
-        if (!credentials?.login || !credentials?.password) {
-          throw new Error('Invalid login or password');
+        if (!login || !password) {
+          throw new Error('Empty login or password');
         }
 
         const user = await findUser(login);
+        if (!user) throw new Error('Пользователь не найден');
 
-        if (user && typeof user.password === 'string') {
-          const isPasswordValid = await bcrypt.compare(password, user.password);
-          if (isPasswordValid) {
-            return { id: String(user.id), name: user.login };
-          }
-        }
-        throw new Error('Неверный логин или пароль');
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) throw new Error('Неверный пароль');
+
+        return { id: String(user.id), name: user.login };
       },
     }),
   ],

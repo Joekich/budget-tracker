@@ -6,7 +6,7 @@ import { fetch } from 'shared/lib/fetch';
 import { Button } from 'shared/ui/button';
 import { Input } from 'shared/ui/input';
 
-import { schemaSignupValidation } from '../model/SignupPage.types';
+import { schemaSignupValidation } from '../model/signin.types';
 import styles from './SignupPage.module.scss';
 
 export function SignUpPage() {

@@ -14,9 +14,9 @@ export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { href: getPath('dashboard'), icon: <FiBarChart2 size={32} />, label: 'Статистика' },
-    { href: getPath('transactions'), icon: <FiList size={32} />, label: 'Транзакции' },
-    { href: getPath('settings'), icon: <FiUser size={32} />, label: 'Настройки' },
+    { href: getPath('dashboard'), icon: FiBarChart2, label: 'Статистика' },
+    { href: getPath('transactions'), icon: FiList, label: 'Транзакции' },
+    { href: getPath('settings'), icon: FiUser, label: 'Настройки' },
   ];
 
   const toggleSidebar = () => {
@@ -37,15 +37,15 @@ export function Sidebar() {
       </Button>
       <nav className={styles.navGroup}>
         {navItems.map((item) => (
-          <Link key={item.href} href={item.href} className={styles.navItem}>
-            {item.icon}
+          <Link key={item.href} href={item.href} className={styles.navItem} aria-label={item.label}>
+            <item.icon size={32} />
             {isOpen && <span>{item.label}</span>}
           </Link>
         ))}
         <Button
           className={clsx(styles.navItem, styles.logout, isOpen && styles.clickable)}
           onClick={signOutHandler}
-          onKeyDown={signOutHandler}
+          // onKeyDown={signOutHandler}
         >
           <FiLogOut size={32} />
           {isOpen && 'Выйти'}

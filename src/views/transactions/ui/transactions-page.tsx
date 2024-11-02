@@ -21,7 +21,7 @@ export function TransactionsPage({ transactions }: TransactionsPageProps) {
       <div className={styles.contentWrapper}>
         <h1>Транзакции</h1>
         <ul className={styles.transactionList}>
-          {transactions && transactions.length > 0 ? (
+          {transactions.length > 0 ? (
             transactions.map((transaction) => (
               <li key={transaction.id} className={styles.transactionItem}>
                 <span>{transaction.title}</span>
