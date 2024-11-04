@@ -65,26 +65,20 @@
   pointer-events: none;
 
   position: absolute;
-  top: 50%;
   left: 1rem;
-  transform: translateY(-50%);
+  transform-origin: left center;
+  transform: scale(1);
 
   font-size: 1.5rem;
   color: #999;
 
-  transition: 0.2s ease all;
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .placeholderActive {
-  top: -0.25rem;
-  left: 0.5rem;
-
-  padding: 0 0.25rem;
-
-  font-size: 1rem;
+  transform: translateY(-2.3rem) scale(0.85);
   color: #333;
-
-  background: #fff;
+  background-color: white;
 }
 
 .iconWrapper {
@@ -131,4 +125,12 @@
 .roundedRight {
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
+}
+
+.cancelButton {
+  background-color: #ccc;
+
+  &:hover {
+    background-color: #bbb;
+  }
 }

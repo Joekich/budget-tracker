@@ -25,7 +25,7 @@ export function SignInPage() {
 
   const handleLogin = async () => {
     if (!login || !password) {
-      //eslint-disable-next-line
+      // eslint-disable-next-line no-alert
       alert('Введите логин и пароль');
       return;
     }
@@ -37,7 +37,7 @@ export function SignInPage() {
     });
 
     if (response?.error) {
-      //eslint-disable-next-line
+      // eslint-disable-next-line no-alert
       alert('Неверный логин или пароль');
       return;
     }
@@ -51,7 +51,7 @@ export function SignInPage() {
         <header>
           <h1>Вход в личный кабинет</h1>
         </header>
-        <section className={styles.authContainer}>
+        <form className={styles.authContainer}>
           <div className={styles.inputWrapper}>
             <Input
               value={login}
@@ -92,9 +92,17 @@ export function SignInPage() {
               {isPasswordVisible ? <FiEyeOff size={24} /> : <FiEye size={24} />}
             </Button>
           </div>
-        </section>
+        </form>
         <Button className={styles.submitButton} onClick={handleLogin}>
           Войти
+        </Button>
+        <Button
+          className={`${styles.submitButton} ${styles.cancelButton}`}
+          onClick={() => {
+            router.push('/');
+          }}
+        >
+          Отмена
         </Button>
       </div>
     </main>
