@@ -23,6 +23,10 @@ export function Sidebar() {
     setIsOpen((prev) => !prev);
   };
 
+  const closeSidebar = () => {
+    setIsOpen(false);
+  };
+
   const signOutHandler = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
     if (isOpen) {
@@ -37,7 +41,13 @@ export function Sidebar() {
       </Button>
       <nav className={styles.navGroup}>
         {navItems.map((item) => (
-          <Link key={item.href} href={item.href} className={styles.navItem} aria-label={item.label}>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={styles.navItem}
+            aria-label={item.label}
+            onClick={closeSidebar}
+          >
             <item.icon size={32} />
             {isOpen && <span>{item.label}</span>}
           </Link>

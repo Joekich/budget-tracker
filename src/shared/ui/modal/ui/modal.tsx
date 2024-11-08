@@ -111,6 +111,9 @@ export const Modal = ({ onClose, transactionType }: ModalProps) => {
             onChange={(selectedDate) => {
               setDate(selectedDate);
             }}
+            onKeyDown={(e) => {
+              e.preventDefault();
+            }}
           />
         </div>
         <div className={styles.modalButtons}>
