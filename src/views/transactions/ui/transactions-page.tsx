@@ -35,6 +35,7 @@ export function TransactionsPage({ transactions }: TransactionsPageProps) {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    setCurrentPage(1);
   };
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber);
