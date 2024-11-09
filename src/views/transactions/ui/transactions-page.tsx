@@ -1,8 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import { Filter } from 'features/transactions-filter';
-import { Pagination } from 'features/transactions-pagination';
+import { TransactionsPagination } from 'features/transactions-pagination';
+import { TransactionsSearch } from 'features/transactions-search';
 import { useState } from 'react';
 
 import styles from './transactions-page.module.scss';
@@ -45,7 +45,7 @@ export function TransactionsPage({ transactions }: TransactionsPageProps) {
     <main className={styles.pageWrapper}>
       <div className={styles.contentWrapper}>
         <h1 className={styles.title}>Транзакции</h1>
-        <Filter onSearch={handleSearch} />
+        <TransactionsSearch onSearch={handleSearch} />
         <ul className={styles.transactionList}>
           {transactions.length > 0 ? (
             currentTransactions.map((transaction) => (
@@ -64,7 +64,7 @@ export function TransactionsPage({ transactions }: TransactionsPageProps) {
             <li>Нет транзакций для отображения</li>
           )}
         </ul>
-        <Pagination
+        <TransactionsPagination
           currentPage={currentPage}
           totalTransactions={filteredTransactions.length}
           transactionsPerPage={transactionsPerPage}

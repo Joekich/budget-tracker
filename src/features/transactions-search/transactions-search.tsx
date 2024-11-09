@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import styles from './transactions-filter.module.scss';
+import styles from './transactions-search.module.scss';
 
-type FilterProps = {
+type SearchProps = {
   onSearch: (query: string) => void;
 };
 
-export function Filter({ onSearch }: FilterProps) {
+export function TransactionsSearch({ onSearch }: SearchProps) {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

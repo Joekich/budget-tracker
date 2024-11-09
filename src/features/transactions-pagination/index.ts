@@ -1,1 +1,1 @@
-export { Pagination } from './transactions-pagination';
+export { TransactionsPagination } from './transactions-pagination';

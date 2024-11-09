@@ -3,14 +3,19 @@ import { BiChevronLeft, BiChevronRight, BiFirstPage, BiLastPage } from 'react-ic
 
 import styles from './transactions-pagination.module.scss';
 
-type PaginationProps = {
+type TransactionsPaginationProps = {
   currentPage: number;
   totalTransactions: number;
   transactionsPerPage: number;
   onPageChange: (pageNumber: number) => void;
 };
 
-export function Pagination({ currentPage, totalTransactions, transactionsPerPage, onPageChange }: PaginationProps) {
+export function TransactionsPagination({
+  currentPage,
+  totalTransactions,
+  transactionsPerPage,
+  onPageChange,
+}: TransactionsPaginationProps) {
   const totalPages = Math.ceil(totalTransactions / transactionsPerPage);
 
   const handlePageChange = (pageNumber: number) => {
