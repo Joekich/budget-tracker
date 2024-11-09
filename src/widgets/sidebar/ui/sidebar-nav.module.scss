@@ -1,5 +1,6 @@
 .sidebar {
-  position: sticky;
+  position: fixed;
+  z-index: var(--z-top-layer);
   top: 0;
   left: 0;
 
@@ -67,7 +68,7 @@
 }
 
 .open {
-  width: 20rem;
+  width: 19rem;
 
   & .navItem {
     & span {
