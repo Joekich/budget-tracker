@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { BiChevronLeft, BiChevronRight, BiFirstPage, BiLastPage } from 'react-icons/bi';
+import { Button } from 'shared/ui/button';
 
 import styles from './transactions-pagination.module.scss';
 
@@ -39,56 +40,51 @@ export function TransactionsPagination({
 
   return (
     <div className={styles.paginationWrapper}>
-      <button
-        type="button"
+      <Button
         className={clsx(styles.paginationButton, currentPage === 1 && styles.disabled)}
         onClick={() => {
           handlePageChange(1);
         }}
       >
-        <BiFirstPage size={24} />
-      </button>
-      <button
-        type="button"
+        <BiFirstPage size={20} />
+      </Button>
+      <Button
         className={clsx(styles.paginationButton, currentPage === 1 && styles.disabled)}
         onClick={() => {
           handlePageChange(currentPage - 1);
         }}
       >
-        <BiChevronLeft size={24} />
-      </button>
+        <BiChevronLeft size={20} />
+      </Button>
 
       {pages.map((page) => (
-        <button
+        <Button
           key={page}
-          type="button"
           className={clsx(styles.paginationButton, page === currentPage && styles.activePage)}
           onClick={() => {
             handlePageChange(page);
           }}
         >
           {page}
-        </button>
+        </Button>
       ))}
 
-      <button
-        type="button"
+      <Button
         className={clsx(styles.paginationButton, currentPage === totalPages && styles.disabled)}
         onClick={() => {
           handlePageChange(currentPage + 1);
         }}
       >
-        <BiChevronRight size={24} />
-      </button>
-      <button
-        type="button"
+        <BiChevronRight size={20} />
+      </Button>
+      <Button
         className={clsx(styles.paginationButton, currentPage === totalPages && styles.disabled)}
         onClick={() => {
           handlePageChange(totalPages);
         }}
       >
-        <BiLastPage size={24} />
-      </button>
+        <BiLastPage size={20} />
+      </Button>
     </div>
   );
 }

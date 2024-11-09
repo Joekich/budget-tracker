@@ -64,12 +64,14 @@ export function TransactionsPage({ transactions }: TransactionsPageProps) {
             <li>Нет транзакций для отображения</li>
           )}
         </ul>
-        <TransactionsPagination
-          currentPage={currentPage}
-          totalTransactions={filteredTransactions.length}
-          transactionsPerPage={transactionsPerPage}
-          onPageChange={handlePageChange}
-        />
+        {filteredTransactions.length > transactionsPerPage && (
+          <TransactionsPagination
+            currentPage={currentPage}
+            totalTransactions={filteredTransactions.length}
+            transactionsPerPage={transactionsPerPage}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </main>
   );
