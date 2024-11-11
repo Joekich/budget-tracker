@@ -3,7 +3,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import clsx from 'clsx';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { Button } from 'shared/ui/button';
+import { Button } from 'shared/ui/button/ui/button';
 import { z } from 'zod';
 
 import styles from './transaction-add.module.scss';

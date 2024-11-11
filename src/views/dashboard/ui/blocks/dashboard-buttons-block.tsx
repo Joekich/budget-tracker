@@ -1,4 +1,4 @@
-import { Button } from 'shared/ui/button';
+import { Button } from 'shared/ui/button/ui/button';
 
 import styles from './dashboard-blocks.module.scss';
 

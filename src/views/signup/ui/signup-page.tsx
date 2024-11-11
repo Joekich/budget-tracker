@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { fetch } from 'shared/lib/fetch';
-import { Button } from 'shared/ui/button';
+import { Button } from 'shared/ui/button/ui/button';
 import { Input } from 'shared/ui/input';
 
 import { schemaSignupValidation } from '../model/signin.types';

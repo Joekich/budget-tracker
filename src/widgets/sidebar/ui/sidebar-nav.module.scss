@@ -15,6 +15,17 @@
   background-color: #333;
 
   transition: width 0.3s ease-in-out;
+
+  & .navItem {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    margin: 1.6rem 0;
+
+    font-size: 1.6rem;
+    text-decoration: none;
+  }
 }
 
 .navGroup {
@@ -24,23 +35,7 @@
   align-items: flex-start;
 }
 
-.navItem {
-  cursor: pointer;
-
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-
-  margin: 1.6rem 0;
-  padding: 0;
-
-  font-size: 1.6rem;
-  color: white;
-  text-decoration: none;
-
-  background-color: transparent;
-  border: 0;
-
+.navItems {
   & span {
     transform: translateX(-1rem);
     opacity: 0;
@@ -52,12 +47,13 @@
   }
 }
 
-.logout {
+.sidebar .logout {
   margin-top: auto;
+  margin-bottom: 1.6rem;
 
-    &:hover {
-      color: var(--color-red);
-}
+  &:hover {
+    color: var(--color-red);
+  }
 }
 
 .sidebar:not(.open) {

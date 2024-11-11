@@ -1,6 +1,5 @@
-import clsx from 'clsx';
 import { BiChevronLeft, BiChevronRight, BiFirstPage, BiLastPage } from 'react-icons/bi';
-import { Button } from 'shared/ui/button';
+import { Button } from 'shared/ui/button/ui/button';
 
 import styles from './transactions-pagination.module.scss';
 
@@ -41,7 +40,8 @@ export function TransactionsPagination({
   return (
     <div className={styles.paginationWrapper}>
       <Button
-        className={clsx(styles.paginationButton, currentPage === 1 && styles.disabled)}
+        disabled={currentPage === 1}
+        theme="secondary"
         onClick={() => {
           handlePageChange(1);
         }}
@@ -49,7 +49,8 @@ export function TransactionsPagination({
         <BiFirstPage size={20} />
       </Button>
       <Button
-        className={clsx(styles.paginationButton, currentPage === 1 && styles.disabled)}
+        disabled={currentPage === 1}
+        theme="secondary"
         onClick={() => {
           handlePageChange(currentPage - 1);
         }}
@@ -60,7 +61,8 @@ export function TransactionsPagination({
       {pages.map((page) => (
         <Button
           key={page}
-          className={clsx(styles.paginationButton, page === currentPage && styles.activePage)}
+          theme={page === currentPage ? 'primary' : 'secondary'}
+          className={styles.paginationButton}
           onClick={() => {
             handlePageChange(page);
           }}
@@ -70,7 +72,8 @@ export function TransactionsPagination({
       ))}
 
       <Button
-        className={clsx(styles.paginationButton, currentPage === totalPages && styles.disabled)}
+        disabled={currentPage === totalPages}
+        theme="secondary"
         onClick={() => {
           handlePageChange(currentPage + 1);
         }}
@@ -78,7 +81,8 @@ export function TransactionsPagination({
         <BiChevronRight size={20} />
       </Button>
       <Button
-        className={clsx(styles.paginationButton, currentPage === totalPages && styles.disabled)}
+        disabled={currentPage === totalPages}
+        theme="secondary"
         onClick={() => {
           handlePageChange(totalPages);
         }}

@@ -6,7 +6,7 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
-import { Button } from 'shared/ui/button';
+import { Button } from 'shared/ui/button/ui/button';
 import { Input } from 'shared/ui/input';
 
 import styles from './signin-page.module.scss';

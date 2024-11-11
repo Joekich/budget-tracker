@@ -1,12 +1,11 @@
 'use client';
 
 import clsx from 'clsx';
-import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 import { FiBarChart2, FiList, FiLogOut, FiMenu, FiUser } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
-import { Button } from 'shared/ui/button';
+import { Button } from 'shared/ui/button/ui/button';
 
 import styles from './sidebar-nav.module.scss';
 
@@ -36,13 +35,20 @@ export function Sidebar() {
 
   return (
     <aside className={clsx(styles.sidebar, isOpen && styles.open)}>
-      <Button aria-label="Menu" className={styles.navItem} onClick={toggleSidebar} onKeyDown={toggleSidebar}>
+      <Button
+        aria-label="Menu"
+        theme="icon"
+        className={styles.navItem}
+        onClick={toggleSidebar}
+        onKeyDown={toggleSidebar}
+      >
         <FiMenu size={32} />
       </Button>
       <nav className={styles.navGroup}>
         {navItems.map((item) => (
-          <Link
+          <Button
             key={item.href}
+            theme="icon"
             href={item.href}
             className={styles.navItem}
             aria-label={item.label}
@@ -50,9 +56,10 @@ export function Sidebar() {
           >
             <item.icon size={32} />
             {isOpen && <span>{item.label}</span>}
-          </Link>
+          </Button>
         ))}
         <Button
+          theme="icon"
           className={clsx(styles.navItem, styles.logout, isOpen && styles.clickable)}
           onClick={signOutHandler}
           // onKeyDown={signOutHandler}

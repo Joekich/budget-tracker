@@ -1,80 +1,74 @@
 .wrapper {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    width: 100%;
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
 
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-  }
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
 
 .wrapper:focus-within {
-    border-color: #000;
-  }
+  border-color: #000;
+}
 
-  .input {
-    width: 100%;
+.input {
+  width: 100%;
 
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 
-    background: transparent;
-    border: none;
-    outline: none;
-  }
+  background: transparent;
+  border: none;
+  outline: none;
+}
 
 .select {
-    width: 100%;
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
 
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 
-    background-color: #f7f7f7;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-  }
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
 
 .buttonWrapper {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: space-between;
-    width: 100%;
-  }
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+  width: 100%;
+}
 
 .buttonAdd,
 .buttonCancel {
-    cursor: pointer;
-
-    width: 100%;
-    padding: 1.5rem;
-
-    font-size: 1.5rem;
-
-    border-radius: 0.5rem;
-
-    transition: background-color 0.2s;
-  }
+  width: 100%;
+  padding: 1.5rem;
+  font-size: 1.5rem;
+  transition-duration: 0.2s;
+}
 
 .buttonAdd {
-    color: #fff;
-    background-color: #333;
-  }
+  color: #fff;
+  background-color: #333;
+}
 
 .buttonAdd:hover {
-    background-color: #4d4d4d;
-  }
+  background-color: #4d4d4d;
+}
 
 .buttonCancel {
-    color: #333;
-    background-color: #ccc;
-  }
+  color: #333;
+  background-color: #ccc;
+}
 
 .transactionsButtonCancel:hover {
-    background-color: #bbb;
-  }
+  background-color: #bbb;
+}
 
 .errorBorder {
   border: 1px solid red;
