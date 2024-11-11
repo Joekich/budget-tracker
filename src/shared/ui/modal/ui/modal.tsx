@@ -1,131 +1,46 @@
-import 'react-datepicker/dist/react-datepicker.css';
-
-import { useEffect, useState } from 'react';
-import DatePicker from 'react-datepicker';
+import { type ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import styles from './modal.module.scss';
+import styles from './shared-modal.module.scss';
 
 type ModalProps = {
   onClose: () => void;
-  transactionType: 'income' | 'expense';
+  children: ReactNode;
 };
 
-export const Modal = ({ onClose, transactionType }: ModalProps) => {
-  const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState('');
-  const [title, setTitle] = useState('');
-  const [date, setDate] = useState<Date | null>(new Date());
-  const categories =
-    transactionType === 'income'
-      ? ['Зарплата', 'Фриланс', 'Доход от инвестиций']
-      : [
-          'Жилье и коммунальные услуги',
-          'Еда',
-          'Развлечения',
-          'Штрафы и налоги',
-          'Медицина',
-          'Образование',
-          'Сбережения',
-        ];
+export const Modal = ({ onClose, children }: ModalProps) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (event.target instanceof HTMLElement && event.target.closest(`.${styles.modal}`) === null) {
-        onClose();
-      }
-    };
+    const dialog = dialogRef.current;
+    if (dialog) {
+      dialog.showModal();
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+      const handleMouseDown = (event: MouseEvent) => {
+        if (event.target === dialog) onClose();
+      };
+
+      const handleCancel = (event: Event) => {
+        event.preventDefault();
+        onClose();
+      };
+
+      dialog.addEventListener('mousedown', handleMouseDown);
+      dialog.addEventListener('cancel', handleCancel);
+
+      return () => {
+        dialog.removeEventListener('mousedown', handleMouseDown);
+        dialog.removeEventListener('cancel', handleCancel);
+        dialog.close();
+      };
+    }
+    return undefined;
   }, [onClose]);
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch('/api/transaction', {
-        method: 'POST',
-        body: JSON.stringify({
-          title,
-          amount: parseFloat(amount) || 0,
-          date: date ? date.toISOString() : null,
-          category,
-          type: transactionType,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Ошибка при отправке запроса:', errorData);
-        throw new Error(`Ошибка сервера: ${response.status}`);
-      }
-
-      onClose();
-    } catch (error) {
-      console.error('Ошибка при отправке данных:', error);
-    }
-  };
-
   return createPortal(
-    <div className={styles.modalContainer}>
-      <div className={styles.modal}>
-        <div className={styles.modalHeader}>{transactionType === 'income' ? 'Добавить доход' : 'Добавить расход'}</div>
-        <div className={styles.modalContent}>
-          <input
-            type="text"
-            value={title}
-            placeholder="Название операции"
-            className={styles.input}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-          <input
-            type="number"
-            value={amount}
-            placeholder="Количество"
-            className={styles.input}
-            onChange={(e) => {
-              setAmount(e.target.value);
-            }}
-          />
-          <select
-            value={category}
-            className={styles.select}
-            onChange={(e) => {
-              setCategory(e.target.value);
-            }}
-          >
-            <option value="">Выберите категорию</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-          <DatePicker
-            selected={date}
-            className={styles.input}
-            placeholderText="Выберите дату"
-            onChange={(selectedDate) => {
-              setDate(selectedDate);
-            }}
-            onKeyDown={(e) => {
-              e.preventDefault();
-            }}
-          />
-        </div>
-        <div className={styles.modalButtons}>
-          <button type="button" className={styles.buttonCancel} onClick={onClose}>
-            Отмена
-          </button>
-          <button type="button" className={styles.buttonAdd} onClick={handleSubmit}>
-            Добавить
-          </button>
-        </div>
-      </div>
-    </div>,
+    <dialog ref={dialogRef} className={styles.dialogContainer}>
+      <div className={styles.sharedModal}>{children}</div>
+    </dialog>,
     document.body,
   );
 };

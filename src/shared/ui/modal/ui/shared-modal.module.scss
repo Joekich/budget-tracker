@@ -1,0 +1,86 @@
+.sharedModalContainer {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgb(0 0 0 / 50%);
+}
+
+.sharedModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 90%;
+  max-width: 500px;
+  padding: 1.5rem;
+
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 10%);
+}
+
+.sharedModalHeader {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.sharedModalContent {
+  margin-bottom: 1.5rem;
+}
+
+.sharedModalButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.sharedButton {
+  cursor: pointer;
+
+  padding: 0.5rem 1rem;
+
+  font-size: 1.2rem;
+
+  border: none;
+  border-radius: 0.25rem;
+
+  transition: background-color 0.2s;
+}
+
+.sharedButtonPrimary {
+  color: #fff;
+  background-color: #333;
+}
+
+.sharedButtonPrimary:hover {
+  background-color: #4d4d4d;
+}
+
+.sharedButtonSecondary {
+  color: #333;
+  background-color: #ccc;
+}
+
+.sharedButtonSecondary:hover {
+  background-color: #bbb;
+}
+
+.dialogContainer {
+  min-width: 50rem;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
+
+.dialogContainer::backdrop {
+  background: rgb(0 0 0 / 50%);
+}

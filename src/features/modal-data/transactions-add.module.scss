@@ -1,0 +1,82 @@
+.transactionsInputWrapper {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+  }
+  
+.transactionsInputWrapper:focus-within {
+    border-color: #000;
+  }
+  
+  .transactionsModalInput {
+    width: 100%;
+
+    font-size: 1.5rem;
+
+    background: transparent;
+    border: none;
+    outline: none;
+  }
+  
+.transactionsSelect {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+
+    font-size: 1.5rem;
+
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+  }
+  
+.transactionsButtonWrapper {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+.transactionsButtonAdd,
+.transactionsButtonCancel {
+    cursor: pointer;
+
+    width: 100%;
+    padding: 1.5rem;
+
+    font-size: 1.5rem;
+
+    border-radius: 0.5rem;
+
+    transition: background-color 0.2s;
+  }
+  
+.transactionsButtonAdd {
+    color: #fff;
+    background-color: #333;
+  }
+  
+.transactionsButtonAdd:hover {
+    background-color: #4d4d4d;
+  }
+  
+.transactionsButtonCancel {
+    color: #333;
+    background-color: #ccc;
+  }
+  
+.transactionsButtonCancel:hover {
+    background-color: #bbb;
+  }
+
+.errorBorder {
+  border: 1px solid red;
+  }
+  
