@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import styles from './shared-modal.module.scss';
+import styles from './modal.module.scss';
 
 type ModalProps = {
   onClose: () => void;
@@ -13,28 +13,27 @@ export const Modal = ({ onClose, children }: ModalProps) => {
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (dialog) {
-      dialog.showModal();
+    if (!dialog) return undefined;
 
-      const handleMouseDown = (event: MouseEvent) => {
-        if (event.target === dialog) onClose();
-      };
+    dialog.showModal();
 
-      const handleCancel = (event: Event) => {
-        event.preventDefault();
-        onClose();
-      };
+    const handleMouseDown = (event: MouseEvent) => {
+      if (event.target === dialog) onClose();
+    };
 
-      dialog.addEventListener('mousedown', handleMouseDown);
-      dialog.addEventListener('cancel', handleCancel);
+    const handleCancel = (event: Event) => {
+      event.preventDefault();
+      onClose();
+    };
 
-      return () => {
-        dialog.removeEventListener('mousedown', handleMouseDown);
-        dialog.removeEventListener('cancel', handleCancel);
-        dialog.close();
-      };
-    }
-    return undefined;
+    dialog.addEventListener('mousedown', handleMouseDown);
+    dialog.addEventListener('cancel', handleCancel);
+
+    return () => {
+      dialog.removeEventListener('mousedown', handleMouseDown);
+      dialog.removeEventListener('cancel', handleCancel);
+      dialog.close();
+    };
   }, [onClose]);
 
   return createPortal(

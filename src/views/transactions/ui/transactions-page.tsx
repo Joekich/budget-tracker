@@ -1,10 +1,10 @@
 'use client';
 
 import clsx from 'clsx';
-import { TransactionsPagination } from 'features/transactions-pagination';
-import { TransactionsSearch } from 'features/transactions-search';
 import { useState } from 'react';
 
+import { TransactionsPagination } from './pagination/transactions-pagination';
+import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
 
 type Transaction = {

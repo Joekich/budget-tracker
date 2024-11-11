@@ -6,28 +6,31 @@ import DatePicker from 'react-datepicker';
 import { Button } from 'shared/ui/button';
 import { z } from 'zod';
 
-import styles from './transactions-add.module.scss';
+import styles from './transaction-add.module.scss';
 
-type TransactionsAddProps = {
-  transactionType: 'income' | 'expense';
+type TransactionAddProps = {
+  type: 'income' | 'expense';
   onClose: () => void;
 };
 
-const transactionAddValidationSchema = z.object({
+const transactionSchema = z.object({
   title: z.string().min(1, 'Поле должно быть заполнено'),
   amount: z.string().min(1, 'Поле должно быть заполнено'),
   category: z.string().min(1, ''),
 });
 
-export function TransactionsAdd({ transactionType, onClose }: TransactionsAddProps) {
+type TransactionFormFields = keyof z.infer<typeof transactionSchema>;
+type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
+
+export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [title, setTitle] = useState('');
   const [date, setDate] = useState<Date | null>(new Date());
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<ErrorsStateProps>({});
 
   const categories =
-    transactionType === 'income'
+    type === 'income'
       ? ['Зарплата', 'Фриланс', 'Доход от инвестиций']
       : [
           'Жилье и коммунальные услуги',
@@ -40,75 +43,72 @@ export function TransactionsAdd({ transactionType, onClose }: TransactionsAddPro
         ];
 
   const handleSubmit = async () => {
-    const result = transactionAddValidationSchema.safeParse({ title, amount, category });
+    const result = transactionSchema.safeParse({ title, amount, category });
 
     if (!result.success) {
       const { fieldErrors } = result.error.formErrors;
       setErrors({
-        title: fieldErrors.title?.[0] || '',
-        amount: fieldErrors.amount?.[0] || '',
-        category: fieldErrors.category?.[0] || '',
+        title: fieldErrors.title?.[0],
+        amount: fieldErrors.amount?.[0],
+        category: fieldErrors.category?.[0],
       });
       return;
     }
-    setErrors({});
 
     await fetch('/api/transaction', {
       method: 'POST',
       body: JSON.stringify({
         title,
-        amount: parseFloat(amount) || 0,
-        date: date ? date.toISOString() : null,
+        amount: parseFloat(amount),
+        date: date?.toISOString(),
         category,
-        type: transactionType,
+        type,
       }),
     });
     onClose();
   };
 
+  const handleChange = (field: TransactionFormFields) => () => {
+    setErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
   return (
     <>
-      <h2>{transactionType === 'income' ? 'Добавить доход' : 'Добавить расход'}</h2>
+      <h2>{type === 'income' ? 'Добавить доход' : 'Добавить расход'}</h2>
 
-      <div className={clsx(styles.transactionsInputWrapper, errors.title && styles.errorBorder)}>
+      <div className={clsx(styles.wrapper, errors.title && styles.errorBorder)}>
         <input
           type="text"
           placeholder={errors.title || 'Название операции'}
           value={title}
-          className={styles.transactionsModalInput}
+          className={styles.input}
           onChange={(e) => {
             setTitle(e.target.value);
           }}
-          onFocus={() => {
-            setErrors((prev) => ({ ...prev, title: '' }));
-          }}
+          onFocus={handleChange('title')}
         />
       </div>
 
-      <div className={clsx(styles.transactionsInputWrapper, errors.amount && styles.errorBorder)}>
+      <div className={clsx(styles.wrapper, errors.amount && styles.errorBorder)}>
         <input
           type="number"
           placeholder={errors.amount || 'Количество'}
           value={amount}
-          className={styles.transactionsModalInput}
+          className={styles.input}
           onChange={(e) => {
             setAmount(e.target.value);
           }}
-          onFocus={() => {
-            setErrors((prev) => ({ ...prev, amount: '' }));
-          }}
+          onFocus={handleChange('amount')}
         />
       </div>
 
       <select
         value={category}
-        className={clsx(styles.transactionsSelect, errors.category && styles.errorBorder)}
+        className={clsx(styles.select, errors.category && styles.errorBorder)}
         onChange={(e) => {
           setCategory(e.target.value);
         }}
-        onFocus={() => {
-          setErrors((prev) => ({ ...prev, category: '' }));
-        }}
+        onFocus={handleChange('category')}
       >
         <option value="">Выберите категорию</option>
         {categories.map((cat) => (
@@ -118,21 +118,21 @@ export function TransactionsAdd({ transactionType, onClose }: TransactionsAddPro
         ))}
       </select>
 
-      <div className={styles.transactionsInputWrapper}>
+      <div className={styles.wrapper}>
         <DatePicker
           selected={date}
-          className={styles.transactionsModalInput}
+          className={styles.input}
           onChange={(d) => {
             setDate(d);
           }}
         />
       </div>
 
-      <div className={styles.transactionsButtonWrapper}>
-        <Button className={styles.transactionsButtonAdd} onClick={handleSubmit}>
+      <div className={styles.wrapper}>
+        <Button className={styles.buttonAdd} onClick={handleSubmit}>
           Добавить
         </Button>
-        <Button className={styles.transactionsButtonCancel} onClick={onClose}>
+        <Button className={styles.buttonCancel} onClick={onClose}>
           Отмена
         </Button>
       </div>

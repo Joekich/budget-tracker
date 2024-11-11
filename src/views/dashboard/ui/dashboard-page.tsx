@@ -1,6 +1,6 @@
 'use client';
 
-import { TransactionsAdd } from 'features/modal-data/transactions-add';
+import { TransactionAdd } from 'features/transaction-add/ui/transaction-add';
 import { type Session } from 'next-auth';
 import { useState } from 'react';
 import { Modal } from 'shared/ui/modal';
@@ -42,8 +42,8 @@ export function DashboardPage({ session }: { session: Session }) {
               setIsModalOpen(false);
             }}
           >
-            <TransactionsAdd
-              transactionType={transactionType}
+            <TransactionAdd
+              type={transactionType}
               onClose={() => {
                 setIsModalOpen(false);
               }}
