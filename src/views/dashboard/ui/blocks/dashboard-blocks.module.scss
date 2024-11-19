@@ -1,7 +1,11 @@
 .block {
     display: flex;
+    gap: 1rem;
+    align-items: stretch;
     justify-content: space-between;
+
     width: 80%;
+    margin: 0 auto;
   }
   
   .buttonsBlock {
@@ -10,29 +14,21 @@
     width: 80%;
   }
   
-  .greeting {
-    display: flex;
-    flex: 1;
-    align-items: center;
-
-    height: 5rem;
-    margin-right: 1rem;
-    padding: 1rem;
-  }
-  
+  .greeting,
+  .middleBlock,
   .buttons {
     display: flex;
     flex: 1;
-    justify-content: flex-end;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
 
     height: 5rem;
-    padding: 1rem;
   }
   
   .buttons button {
-    width: 8rem;
-    height: 3rem;
-    margin-left: 1rem;
+    width: 100%;
+    height: 100%;
   }
   
   .balanceBlock {
@@ -44,12 +40,11 @@
     flex: 1;
 
     height: 5rem;
-    margin-right: 1rem;
     padding: 1rem;
 
     text-align: center;
 
-    border: 0.125rem solid black;
+    border: 1px solid black;
     border-radius: 0.5rem;
   }
   
@@ -62,7 +57,7 @@
     height: 40rem;
     padding: 1rem;
 
-    border: 0.125rem solid black;
+    border: 1px solid black;
     border-radius: 0.5rem;
   }
   
@@ -81,10 +76,26 @@
 
     text-align: center;
 
-    border: 0.125rem solid black;
+    border: 1px solid black;
     border-radius: 0.5rem;
   }
   
   .categoryPart:last-child {
     margin-right: 0;
+  }
+
+  .block .incomeButton {
+    background-color: rgb(34 126 34);
+  
+    &:hover {
+      background-color: rgb(61 179 61);
+    }
+  }
+
+  .block .expenseButton {
+    background-color: rgb(150 15 15);
+
+    &:hover{
+      background-color: rgb(196 32 32);
+    }
   }

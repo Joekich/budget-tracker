@@ -20,7 +20,7 @@ export function TransactionsSearch({ onSearch }: SearchProps) {
       <input
         type="text"
         value={searchQuery}
-        placeholder="Поиск..."
+        placeholder="Поиск по названию..."
         className={styles.searchInput}
         onChange={handleSearch}
       />

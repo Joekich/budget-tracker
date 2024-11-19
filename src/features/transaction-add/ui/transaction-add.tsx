@@ -128,11 +128,11 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
         />
       </div>
 
-      <div className={styles.wrapper}>
-        <Button className={styles.buttonAdd} onClick={handleSubmit}>
+      <div className={styles.buttonWrapper}>
+        <Button theme="primary" className={styles.buttonAdd} onClick={handleSubmit}>
           Добавить
         </Button>
-        <Button className={styles.buttonCancel} onClick={onClose}>
+        <Button theme="secondary" className={styles.buttonCancel} onClick={onClose}>
           Отмена
         </Button>
       </div>

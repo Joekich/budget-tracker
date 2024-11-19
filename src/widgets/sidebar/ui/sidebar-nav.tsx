@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import { signOut } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FiBarChart2, FiList, FiLogOut, FiMenu, FiUser } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button/ui/button';
@@ -11,6 +11,7 @@ import styles from './sidebar-nav.module.scss';
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
     { href: getPath('dashboard'), icon: FiBarChart2, label: 'Статистика' },
@@ -33,8 +34,26 @@ export function Sidebar() {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        closeSidebar();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <aside className={clsx(styles.sidebar, isOpen && styles.open)}>
+    <aside ref={sidebarRef} className={clsx(styles.sidebar, isOpen && styles.open)}>
       <Button
         aria-label="Menu"
         theme="icon"

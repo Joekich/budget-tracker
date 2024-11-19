@@ -10,13 +10,18 @@ type DashboardButtonsBlockProps = {
 
 export function DashboardButtonsBlock({ username, onExpenseClick, onIncomeClick }: DashboardButtonsBlockProps) {
   return (
-    <div className={styles.buttonsBlock}>
+    <div className={styles.block}>
       <div className={styles.greeting}>
         <h1>Здравствуйте, {username || 'Пользователь'}</h1>
       </div>
+      <div className={styles.middleBlock}>filter</div>
       <div className={styles.buttons}>
-        <Button onClick={onIncomeClick}>Приход</Button>
-        <Button onClick={onExpenseClick}>Расход</Button>
+        <Button theme="primary" className={styles.incomeButton} onClick={onIncomeClick}>
+          Поступление
+        </Button>
+        <Button theme="primary" className={styles.expenseButton} onClick={onExpenseClick}>
+          Расход
+        </Button>
       </div>
     </div>
   );

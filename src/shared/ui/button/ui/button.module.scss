@@ -3,7 +3,7 @@
 
   padding: 0.5rem 1rem;
 
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #333;
 
@@ -29,8 +29,13 @@
   }
 
   &:hover {
-    background-color: #e0e0e0;
+    background-color: #4d4d4d;
     border-color: #bbb;
+  }
+
+  &[disabled]:hover {
+    background-color: #333;
+    border-color: #333;
   }
 }
 
@@ -42,6 +47,11 @@
     background-color: #e0e0e0;
     border-color: #bbb;
   }
+
+  &[disabled]:hover {
+    background-color: #f7f7f7;
+    border-color: #ddd;
+  }
 }
 
 .icon {
@@ -49,4 +59,14 @@
   color: var(--color-white);
   background-color: transparent;
   border: 0;
+
+  &:hover {
+    color:#bbb;
+    text-decoration: underline;
+  }
+
+  &[disabled]:hover {
+    color: var(--color-white);
+    text-decoration: none;
+  }
 }

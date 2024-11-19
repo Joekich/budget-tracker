@@ -9,6 +9,7 @@ export const { handlers, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
+    maxAge: 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
