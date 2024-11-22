@@ -22,13 +22,7 @@ async function Transactions({ searchParams }: { searchParams: { page?: string; s
   const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery);
 
   return (
-    <TransactionsPage
-      transactions={transactions || []}
-      currentPage={page}
-      totalTransactions={totalTransactions}
-      transactionsPerPage={perPage}
-      searchQuery={searchQuery}
-    />
+    <TransactionsPage transactions={transactions} totalTransactions={totalTransactions} transactionsPerPage={perPage} />
   );
 }
 

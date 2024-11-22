@@ -1,23 +1,24 @@
-import { useState } from 'react';
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useRef } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { Button } from 'shared/ui/button';
 
 import styles from './transactions-search.module.scss';
 
-type SearchProps = {
-  onSearch: (query: string) => void;
-  defaultQuery?: string;
-};
-
-export function TransactionsSearch({ onSearch, defaultQuery = '' }: SearchProps) {
-  const [searchQuery, setSearchQuery] = useState(defaultQuery);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
+export function TransactionsSearch() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleSearchClick = () => {
-    onSearch(searchQuery.trim());
+    if (!inputRef.current) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('searchQuery', inputRef.current.value);
+    params.set('page', '1');
+    router.push(`?${params.toString()}`);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -30,11 +31,10 @@ export function TransactionsSearch({ onSearch, defaultQuery = '' }: SearchProps)
     <div className={styles.searchWrapper}>
       <div className={styles.searchContainer}>
         <input
+          ref={inputRef}
           type="text"
-          value={searchQuery}
           placeholder="Поиск по названию..."
           className={styles.searchInput}
-          onChange={handleInputChange}
           onKeyDown={handleKeyDown}
         />
         <Button theme="primary" className={styles.searchButton} onClick={handleSearchClick}>

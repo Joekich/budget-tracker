@@ -41,16 +41,11 @@ export function Sidebar() {
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen]);
+  }, []);
 
   return (
     <aside ref={sidebarRef} className={clsx(styles.sidebar, isOpen && styles.open)}>
@@ -59,7 +54,7 @@ export function Sidebar() {
         theme="icon"
         className={styles.navItem}
         onClick={toggleSidebar}
-        onKeyDown={toggleSidebar}
+        // onKeyDown={toggleSidebar}
       >
         <FiMenu size={32} />
       </Button>

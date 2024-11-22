@@ -1,8 +1,4 @@
-'use client';
-
 import clsx from 'clsx';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
 
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
@@ -19,48 +15,16 @@ type Transaction = {
 
 type TransactionsPageProps = {
   transactions: Transaction[];
-  currentPage: number;
   totalTransactions: number;
   transactionsPerPage: number;
-  searchQuery: string;
 };
 
-export function TransactionsPage({
-  transactions,
-  currentPage,
-  totalTransactions,
-  transactionsPerPage,
-  searchQuery,
-}: TransactionsPageProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    if (!searchParams.has('page') && transactions.length > 0) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('page', '1');
-      router.replace(`?${params.toString()}`);
-    }
-  }, [searchParams, transactions, router]);
-
-  const handlePageChange = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', page.toString());
-    router.push(`?${params.toString()}`);
-  };
-
-  const handleSearch = (query: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('searchQuery', query);
-    params.set('page', '1');
-    router.push(`?${params.toString()}`);
-  };
-
+export function TransactionsPage({ transactions, totalTransactions, transactionsPerPage }: TransactionsPageProps) {
   return (
     <main className={styles.pageWrapper}>
       <div className={styles.contentWrapper}>
         <h1 className={styles.title}>Транзакции</h1>
-        <TransactionsSearch defaultQuery={searchQuery} onSearch={handleSearch} />
+        <TransactionsSearch />
         <ul className={styles.transactionList}>
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
@@ -79,12 +43,7 @@ export function TransactionsPage({
             <li>Нет транзакций для отображения</li>
           )}
         </ul>
-        <TransactionsPagination
-          currentPage={currentPage}
-          totalTransactions={totalTransactions}
-          transactionsPerPage={transactionsPerPage}
-          onPageChange={handlePageChange}
-        />
+        <TransactionsPagination totalTransactions={totalTransactions} transactionsPerPage={transactionsPerPage} />
       </div>
     </main>
   );

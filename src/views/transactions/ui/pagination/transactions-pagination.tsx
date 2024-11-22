@@ -1,26 +1,29 @@
+'use client';
+
+import { useRouter, useSearchParams } from 'next/navigation';
 import { BiChevronLeft, BiChevronRight, BiFirstPage, BiLastPage } from 'react-icons/bi';
 import { Button } from 'shared/ui/button/ui/button';
 
 import styles from './transactions-pagination.module.scss';
 
 type TransactionsPaginationProps = {
-  currentPage: number;
   totalTransactions: number;
   transactionsPerPage: number;
-  onPageChange: (pageNumber: number) => void;
 };
 
-export function TransactionsPagination({
-  currentPage,
-  totalTransactions,
-  transactionsPerPage,
-  onPageChange,
-}: TransactionsPaginationProps) {
+export function TransactionsPagination({ totalTransactions, transactionsPerPage }: TransactionsPaginationProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+
   const totalPages = Math.ceil(totalTransactions / transactionsPerPage);
+  if (totalPages < 2) return null;
 
   const handlePageChange = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
-      onPageChange(pageNumber);
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', pageNumber.toString());
+      router.push(`?${params.toString()}`);
     }
   };
 
