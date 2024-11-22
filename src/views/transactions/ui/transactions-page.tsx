@@ -1,7 +1,8 @@
 'use client';
 
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
@@ -18,37 +19,51 @@ type Transaction = {
 
 type TransactionsPageProps = {
   transactions: Transaction[];
+  currentPage: number;
+  totalTransactions: number;
+  transactionsPerPage: number;
+  searchQuery: string;
 };
 
-export function TransactionsPage({ transactions }: TransactionsPageProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const transactionsPerPage = 10;
+export function TransactionsPage({
+  transactions,
+  currentPage,
+  totalTransactions,
+  transactionsPerPage,
+  searchQuery,
+}: TransactionsPageProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const filteredTransactions = transactions.filter((transaction) =>
-    transaction.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  useEffect(() => {
+    if (!searchParams.has('page') && transactions.length > 0) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', '1');
+      router.replace(`?${params.toString()}`);
+    }
+  }, [searchParams, transactions, router]);
 
-  const indexOfLastTransaction = currentPage * transactionsPerPage;
-  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
-  const currentTransactions = filteredTransactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+  const handlePageChange = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('page', page.toString());
+    router.push(`?${params.toString()}`);
+  };
 
   const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setCurrentPage(1);
-  };
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('searchQuery', query);
+    params.set('page', '1');
+    router.push(`?${params.toString()}`);
   };
 
   return (
     <main className={styles.pageWrapper}>
       <div className={styles.contentWrapper}>
         <h1 className={styles.title}>Транзакции</h1>
-        <TransactionsSearch onSearch={handleSearch} />
+        <TransactionsSearch defaultQuery={searchQuery} onSearch={handleSearch} />
         <ul className={styles.transactionList}>
           {transactions.length > 0 ? (
-            currentTransactions.map((transaction) => (
+            transactions.map((transaction) => (
               <li
                 key={transaction.id}
                 className={clsx(styles.transactionItem, transaction.type === 'income' ? styles.income : styles.expense)}
@@ -64,14 +79,12 @@ export function TransactionsPage({ transactions }: TransactionsPageProps) {
             <li>Нет транзакций для отображения</li>
           )}
         </ul>
-        {filteredTransactions.length > transactionsPerPage && (
-          <TransactionsPagination
-            currentPage={currentPage}
-            totalTransactions={filteredTransactions.length}
-            transactionsPerPage={transactionsPerPage}
-            onPageChange={handlePageChange}
-          />
-        )}
+        <TransactionsPagination
+          currentPage={currentPage}
+          totalTransactions={totalTransactions}
+          transactionsPerPage={transactionsPerPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </main>
   );

@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { title, amount, date, category, type } = body;
+  const { title, titleSearch, amount, date, category, type } = body;
   const userId = session.user.id ? parseInt(session.user.id, 10) : null;
 
   if (!title || Number.isNaN(parseFloat(amount)) || !date || !category || !type || !userId) {
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     const transaction = await prisma.transaction.create({
       data: {
         title,
+        titleSearch,
         amount: parseFloat(amount),
         date: new Date(date),
         category,

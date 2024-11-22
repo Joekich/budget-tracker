@@ -55,10 +55,13 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
       return;
     }
 
-    await fetch('/api/transaction', {
+    const normalizedTitle = title.toLowerCase().trim();
+
+    await fetch('/api/create-transaction', {
       method: 'POST',
       body: JSON.stringify({
         title,
+        titleSearch: normalizedTitle,
         amount: parseFloat(amount),
         date: date?.toISOString(),
         category,

@@ -18,6 +18,7 @@ model User {
 model Transaction {
   id        Int      @id @default(autoincrement())
   title     String
+  titleSearch String   @default("")
   amount    Float
   date      DateTime
   category  String

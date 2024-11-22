@@ -9,14 +9,27 @@ export async function generateMetadata(): Promise<Metadata> {
   return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'transactions' });
 }
 
-async function Transactions() {
+async function Transactions({ searchParams }: { searchParams: { page?: string; searchQuery?: string } }) {
   const session = await auth();
   const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;
 
   if (!session || userId === null) redirect(getPath('homepage'));
 
-  const transactions = await getUserTransactions(userId);
-  return <TransactionsPage transactions={transactions || []} />;
+  const page = parseInt(searchParams.page || '1', 10);
+  const perPage = 10;
+  const searchQuery = searchParams.searchQuery || '';
+
+  const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery);
+
+  return (
+    <TransactionsPage
+      transactions={transactions || []}
+      currentPage={page}
+      totalTransactions={totalTransactions}
+      transactionsPerPage={perPage}
+      searchQuery={searchQuery}
+    />
+  );
 }
 
 export default Transactions;
