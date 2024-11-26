@@ -1,4 +1,5 @@
 import { auth } from 'app/model/auth';
+import { type TransactionType } from 'entities/transaction';
 import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'shared/lib/metadata';
@@ -15,7 +16,7 @@ async function Transactions({
   searchParams: {
     page?: string;
     searchQuery?: string;
-    type?: 'income' | 'expense';
+    type?: TransactionType;
     categories?: string;
     amountMin?: string;
     amountMax?: string;
@@ -33,7 +34,7 @@ async function Transactions({
   const searchQuery = searchParams.searchQuery || '';
 
   const filters = {
-    type: searchParams.type as 'income' | 'expense' | null,
+    type: searchParams.type as TransactionType | null,
     categories: searchParams.categories ? searchParams.categories.split(',') : [],
     amountRange: {
       min: searchParams.amountMin ? parseFloat(searchParams.amountMin) : null,

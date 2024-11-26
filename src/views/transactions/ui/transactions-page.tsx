@@ -6,7 +6,7 @@ import { TbSquareRoundedNumber1, TbSquareRoundedNumber2, TbSquareRoundedNumber3 
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
-import { Filters } from '../filters/transaction-filters';
+import { TransactionFilters } from '../filters/transaction-filters';
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
@@ -86,7 +86,7 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
             setIsFiltersOpen(false);
           }}
         >
-          <Filters
+          <TransactionFilters
             onClose={() => {
               setIsFiltersOpen(false);
             }}

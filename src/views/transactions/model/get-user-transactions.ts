@@ -1,7 +1,8 @@
+import { type TransactionType } from 'entities/transaction';
 import { prisma } from 'shared/lib/prisma';
 
 type Filters = {
-  type?: 'income' | 'expense' | null;
+  type?: TransactionType | null;
   categories?: string[];
   amountRange?: { min: number | null; max: number | null };
   dateRange?: { start: Date | null; end: Date | null };

@@ -1,4 +1,12 @@
+'use client';
+
 import clsx from 'clsx';
+import {
+  TRANSACTION_EXPENSE_CATEGORIES,
+  TRANSACTION_INCOME_CATEGORIES,
+  type TransactionType,
+} from 'entities/transaction';
+import isNumber from 'lodash/isNumber';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from 'shared/ui/button';
@@ -6,20 +14,26 @@ import { Button } from 'shared/ui/button';
 import styles from './transaction-filters.module.scss';
 
 export type FiltersState = {
-  type: 'income' | 'expense' | null;
+  type: TransactionType | null;
   categories: string[];
   amountRange: { min: number | null; max: number | null };
   dateRange: { start: Date | null; end: Date | null };
 };
+
+const FILTERS_STORAGE_KEY = 'transactionFilters';
+
+const normalizeDateRange = (dateRange: { start: Date | null; end: Date | null }) => ({
+  start: dateRange.start ? new Date(dateRange.start) : null,
+  end: dateRange.end ? new Date(dateRange.end) : null,
+});
 
 type FiltersProps = {
   onClose: () => void;
   onFiltersChange: (activeFiltersCount: number) => void;
 };
 
-const FILTERS_STORAGE_KEY = 'transactionFilters';
-
-export function Filters({ onClose, onFiltersChange }: FiltersProps) {
+export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
+  // ToDo: transfer session storage state to url state
   const [filters, setFilters] = useState<FiltersState>({
     type: null,
     categories: [],
@@ -27,14 +41,19 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
     dateRange: { start: null, end: null },
   });
 
-  const normalizeDateRange = (dateRange: { start: Date | null; end: Date | null }) => ({
-    start: dateRange.start ? new Date(dateRange.start) : null,
-    end: dateRange.end ? new Date(dateRange.end) : null,
-  });
+  const activeFiltersCount = [
+    !!filters.type,
+    isNumber(filters.amountRange.min) && isNumber(filters.amountRange.max),
+    filters.dateRange.start && filters.dateRange.end,
+  ].filter((cond) => cond === true).length;
+
+  const router = useRouter();
+  const isIncomeSelected = filters.type === 'income';
 
   useEffect(() => {
     const storedFilters = sessionStorage.getItem(FILTERS_STORAGE_KEY);
     if (storedFilters) {
+      // ToDo: validation or modal forceMount
       const parsedFilters: FiltersState = JSON.parse(storedFilters);
       setFilters({
         ...parsedFilters,
@@ -42,31 +61,6 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
       });
     }
   }, []);
-
-  const calculateActiveFilters = () => {
-    let count = 0;
-
-    if (filters.type) count += 1;
-    if (filters.amountRange.min !== null || filters.amountRange.max !== null) count += 1;
-    if (filters.dateRange.start !== null || filters.dateRange.end !== null) count += 1;
-
-    return count;
-  };
-
-  const router = useRouter();
-
-  const incomeCategories = ['Зарплата', 'Фриланс', 'Доход от инвестиций', 'Подарки'];
-  const expenseCategories = [
-    'Жилье и коммунальные услуги',
-    'Еда',
-    'Развлечения',
-    'Штрафы и налоги',
-    'Медицина',
-    'Образование',
-    'Одежда',
-    'Электроника',
-    'Транспорт и передвижение',
-  ];
 
   const handleApply = () => {
     const params = new URLSearchParams(window.location.search);
@@ -78,7 +72,6 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
       ['amountMax', filters.amountRange.max?.toString() || null],
       ['dateStart', filters.dateRange.start?.toISOString().slice(0, 10) || null],
       ['dateEnd', filters.dateRange.end?.toISOString().slice(0, 10) || null],
-      ['page', '1'],
     ];
 
     filterEntries.forEach(([key, value]) => {
@@ -88,24 +81,17 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
         params.delete(key);
       }
     });
+    params.delete('page');
 
     sessionStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
     router.push(`?${params.toString()}`);
 
-    const activeFiltersCount = calculateActiveFilters();
     onFiltersChange(activeFiltersCount);
 
-    onClose();
+    // onClose();
   };
 
   const handleReset = () => {
-    setFilters({
-      type: null,
-      categories: [],
-      amountRange: { min: null, max: null },
-      dateRange: { start: null, end: null },
-    });
-
     sessionStorage.removeItem(FILTERS_STORAGE_KEY);
 
     const params = new URLSearchParams(window.location.search);
@@ -115,19 +101,18 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
 
     router.push(`?${params.toString()}`);
     onFiltersChange(0);
-    onClose();
+    // onClose();
   };
 
   const toggleCategory = (category: string) => {
     setFilters((prev) => ({
       ...prev,
+      // ToDo: rewrite to new Set() or transfer array to object
       categories: prev.categories.includes(category)
         ? prev.categories.filter((cat) => cat !== category)
         : [...prev.categories, category],
     }));
   };
-
-  const isIncomeSelected = filters.type === 'income';
 
   return (
     <div>
@@ -144,7 +129,7 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
             className={clsx(styles.select)}
             value={filters.type || ''}
             onChange={(e) => {
-              setFilters((prev) => ({ ...prev, type: e.target.value as 'income' | 'expense' | null }));
+              setFilters((prev) => ({ ...prev, type: e.target.value as TransactionType | null }));
             }}
           >
             <option value="">Все</option>
@@ -158,7 +143,7 @@ export function Filters({ onClose, onFiltersChange }: FiltersProps) {
         <div className={clsx(styles.categoryBlock)}>
           <fieldset>
             <legend>{isIncomeSelected ? 'Доходы' : 'Расходы'}</legend>
-            {(isIncomeSelected ? incomeCategories : expenseCategories).map((cat) => (
+            {(isIncomeSelected ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES).map((cat) => (
               <label key={cat} className={clsx(styles.checkboxLabel)}>
                 <input
                   type="checkbox"

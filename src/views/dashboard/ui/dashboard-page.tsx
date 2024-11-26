@@ -1,5 +1,6 @@
 'use client';
 
+import { type TransactionType } from 'entities/transaction';
 import { TransactionAdd } from 'features/transaction-add/ui/transaction-add';
 import { type Session } from 'next-auth';
 import { useState } from 'react';
@@ -13,9 +14,9 @@ import styles from './dashboard-page.module.scss';
 
 export function DashboardPage({ session }: { session: Session }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactionType, setTransactionType] = useState<'income' | 'expense'>('income');
+  const [transactionType, setTransactionType] = useState<TransactionType>('income');
 
-  const openModal = (type: 'income' | 'expense') => {
+  const openModal = (type: TransactionType) => {
     setTransactionType(type);
     setIsModalOpen(true);
   };

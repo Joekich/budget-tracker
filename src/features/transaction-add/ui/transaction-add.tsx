@@ -1,6 +1,11 @@
 import 'react-datepicker/dist/react-datepicker.css';
 
 import clsx from 'clsx';
+import {
+  TRANSACTION_EXPENSE_CATEGORIES,
+  TRANSACTION_INCOME_CATEGORIES,
+  type TransactionType,
+} from 'entities/transaction';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { Button } from 'shared/ui/button/ui/button';
@@ -9,7 +14,7 @@ import { z } from 'zod';
 import styles from './transaction-add.module.scss';
 
 type TransactionAddProps = {
-  type: 'income' | 'expense';
+  type: TransactionType;
   onClose: () => void;
 };
 
@@ -29,20 +34,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const [date, setDate] = useState<Date | null>(new Date());
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
-  const categories =
-    type === 'income'
-      ? ['Зарплата', 'Фриланс', 'Доход от инвестиций', 'Подарки']
-      : [
-          'Жилье и коммунальные услуги',
-          'Еда',
-          'Развлечения',
-          'Штрафы и налоги',
-          'Медицина',
-          'Образование',
-          'Одежда',
-          'Электроника',
-          'Транспорт и передвижение',
-        ];
+  const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
 
   const handleSubmit = async () => {
     const result = transactionSchema.safeParse({ title, amount, category });
