@@ -16,7 +16,14 @@ export function TransactionsSearch() {
     if (!inputRef.current) return;
 
     const params = new URLSearchParams(searchParams.toString());
-    params.set('searchQuery', inputRef.current.value);
+    const searchValue = inputRef.current.value.trim();
+
+    if (searchValue) {
+      params.set('searchQuery', searchValue);
+    } else {
+      params.delete('searchQuery');
+    }
+
     params.set('page', '1');
     router.push(`?${params.toString()}`);
   };

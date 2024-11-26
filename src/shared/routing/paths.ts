@@ -6,6 +6,7 @@ const routes = {
   signup: '/signup',
   dashboard: '/profile/dashboard',
   transactions: '/profile/transactions',
+  savings: '/profile/savings',
   settings: '/profile/settings',
 };
 

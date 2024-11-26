@@ -31,7 +31,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
 
   const categories =
     type === 'income'
-      ? ['Зарплата', 'Фриланс', 'Доход от инвестиций']
+      ? ['Зарплата', 'Фриланс', 'Доход от инвестиций', 'Подарки']
       : [
           'Жилье и коммунальные услуги',
           'Еда',
@@ -39,7 +39,9 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
           'Штрафы и налоги',
           'Медицина',
           'Образование',
-          'Сбережения',
+          'Одежда',
+          'Электроника',
+          'Транспорт и передвижение',
         ];
 
   const handleSubmit = async () => {
@@ -73,6 +75,13 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
 
   const handleChange = (field: TransactionFormFields) => () => {
     setErrors((prev) => ({ ...prev, [field]: undefined }));
+  };
+
+  const handleDateWrapperClick = (e: React.MouseEvent) => {
+    if (e.target instanceof HTMLElement && !e.target.closest('.react-datepicker')) {
+      const input = e.currentTarget.querySelector('input');
+      if (input) input.click();
+    }
   };
 
   return (
@@ -121,7 +130,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
         ))}
       </select>
 
-      <div className={styles.wrapper}>
+      <Button className={styles.wrapper} onClick={handleDateWrapperClick}>
         <DatePicker
           selected={date}
           className={styles.input}
@@ -129,7 +138,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
             setDate(d);
           }}
         />
-      </div>
+      </Button>
 
       <div className={styles.buttonWrapper}>
         <Button theme="primary" className={styles.buttonAdd} onClick={handleSubmit}>

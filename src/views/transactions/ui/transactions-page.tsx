@@ -1,5 +1,12 @@
-import clsx from 'clsx';
+'use client';
 
+import clsx from 'clsx';
+import { useState } from 'react';
+import { TbSquareRoundedNumber1, TbSquareRoundedNumber2, TbSquareRoundedNumber3 } from 'react-icons/tb';
+import { Button } from 'shared/ui/button';
+import { Modal } from 'shared/ui/modal';
+
+import { Filters } from '../filters/transaction-filters';
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
@@ -20,11 +27,39 @@ type TransactionsPageProps = {
 };
 
 export function TransactionsPage({ transactions, totalTransactions, transactionsPerPage }: TransactionsPageProps) {
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+
+  const renderFilterIcon = () => {
+    switch (activeFiltersCount) {
+      case 1:
+        return <TbSquareRoundedNumber1 className={styles.filterIcon} size={20} />;
+      case 2:
+        return <TbSquareRoundedNumber2 className={styles.filterIcon} size={20} />;
+      case 3:
+        return <TbSquareRoundedNumber3 className={styles.filterIcon} size={20} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <main className={styles.pageWrapper}>
       <div className={styles.contentWrapper}>
         <h1 className={styles.title}>Транзакции</h1>
-        <TransactionsSearch />
+        <div className={styles.actions}>
+          <TransactionsSearch />
+          <Button
+            theme="primary"
+            className={styles.filterButton}
+            onClick={() => {
+              setIsFiltersOpen(true);
+            }}
+          >
+            Фильтры
+            {renderFilterIcon()}
+          </Button>
+        </div>
         <ul className={styles.transactionList}>
           {transactions.length > 0 ? (
             transactions.map((transaction) => (
@@ -45,6 +80,20 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
         </ul>
         <TransactionsPagination totalTransactions={totalTransactions} transactionsPerPage={transactionsPerPage} />
       </div>
+      {isFiltersOpen && (
+        <Modal
+          onClose={() => {
+            setIsFiltersOpen(false);
+          }}
+        >
+          <Filters
+            onClose={() => {
+              setIsFiltersOpen(false);
+            }}
+            onFiltersChange={setActiveFiltersCount}
+          />
+        </Modal>
+      )}
     </main>
   );
 }

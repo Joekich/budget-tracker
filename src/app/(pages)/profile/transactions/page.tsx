@@ -9,7 +9,20 @@ export async function generateMetadata(): Promise<Metadata> {
   return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'transactions' });
 }
 
-async function Transactions({ searchParams }: { searchParams: { page?: string; searchQuery?: string } }) {
+async function Transactions({
+  searchParams,
+}: {
+  searchParams: {
+    page?: string;
+    searchQuery?: string;
+    type?: 'income' | 'expense';
+    categories?: string;
+    amountMin?: string;
+    amountMax?: string;
+    dateStart?: string;
+    dateEnd?: string;
+  };
+}) {
   const session = await auth();
   const userId = session?.user?.id ? parseInt(session.user.id, 10) : null;
 
@@ -19,7 +32,20 @@ async function Transactions({ searchParams }: { searchParams: { page?: string; s
   const perPage = 10;
   const searchQuery = searchParams.searchQuery || '';
 
-  const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery);
+  const filters = {
+    type: searchParams.type as 'income' | 'expense' | null,
+    categories: searchParams.categories ? searchParams.categories.split(',') : [],
+    amountRange: {
+      min: searchParams.amountMin ? parseFloat(searchParams.amountMin) : null,
+      max: searchParams.amountMax ? parseFloat(searchParams.amountMax) : null,
+    },
+    dateRange: {
+      start: searchParams.dateStart ? new Date(searchParams.dateStart) : null,
+      end: searchParams.dateEnd ? new Date(searchParams.dateEnd) : null,
+    },
+  };
+
+  const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery, filters);
 
   return (
     <TransactionsPage transactions={transactions} totalTransactions={totalTransactions} transactionsPerPage={perPage} />
