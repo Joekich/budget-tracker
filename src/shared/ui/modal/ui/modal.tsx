@@ -13,9 +13,14 @@ type ModalProps = {
   forceMount?: boolean;
 };
 
-export function Modal({ onClose, children, isOpen, forceMount }: ModalProps) {
+export function Modal({ isOpen, children, onClose = undefined, forceMount = false }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [initial, setInitial] = useState(forceMount);
+
+  const selectorRef = useRef<Element | null>(null);
+  useEffect(() => {
+    selectorRef.current = document.body;
+  }, []);
 
   useEffect(() => {
     const handleBackdropClick = (event: MouseEvent) => {
@@ -34,13 +39,12 @@ export function Modal({ onClose, children, isOpen, forceMount }: ModalProps) {
     if (isOpen && !forceMount) setInitial(true);
   }, [forceMount, isOpen]);
 
-  return (
-    (forceMount || (initial && isOpen)) &&
-    createPortal(
-      <div ref={modalRef} className={clsx(styles.modalBackdrop, isOpen && styles.open)}>
-        <div className={styles.modalContent}>{children}</div>
-      </div>,
-      document.body,
-    )
-  );
+  return (forceMount || (initial && isOpen)) && selectorRef.current
+    ? createPortal(
+        <div ref={modalRef} className={clsx(styles.modalBackdrop, isOpen && styles.open)}>
+          <div className={styles.modalContent}>{children}</div>
+        </div>,
+        selectorRef.current,
+      )
+    : null;
 }
