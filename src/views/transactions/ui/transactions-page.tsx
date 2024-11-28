@@ -88,7 +88,8 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
         <TransactionsPagination totalTransactions={totalTransactions} transactionsPerPage={transactionsPerPage} />
       </div>
       <Modal
-        isVisible={isFiltersOpen}
+        forceMount
+        isOpen={isFiltersOpen}
         onClose={() => {
           setIsFiltersOpen(false);
         }}

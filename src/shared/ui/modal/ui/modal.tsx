@@ -1,46 +1,46 @@
+'use client';
+
 import clsx from 'clsx';
-import { type ReactNode, useEffect, useRef } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import styles from './modal.module.scss';
 
 type ModalProps = {
-  onClose: () => void;
+  isOpen: boolean;
   children: ReactNode;
-  isVisible: boolean;
+  onClose?: () => void;
+  forceMount?: boolean;
 };
 
-export function Modal({ onClose, children, isVisible }: ModalProps) {
+export function Modal({ onClose, children, isOpen, forceMount }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [initial, setInitial] = useState(forceMount);
 
   useEffect(() => {
     const handleBackdropClick = (event: MouseEvent) => {
       if (modalRef.current && event.target === modalRef.current) {
-        onClose();
+        onClose?.();
       }
     };
 
-    if (isVisible) {
-      document.body.style.overflow = 'hidden';
-      window.addEventListener('mousedown', handleBackdropClick);
-    } else {
-      document.body.style.overflow = '';
-    }
-
+    window.addEventListener('mousedown', handleBackdropClick);
     return () => {
-      document.body.style.overflow = '';
       window.removeEventListener('mousedown', handleBackdropClick);
     };
-  }, [isVisible, onClose]);
+  }, [onClose]);
 
-  if (!isVisible) {
-    return null;
-  }
+  useEffect(() => {
+    if (isOpen && !forceMount) setInitial(true);
+  }, [forceMount, isOpen]);
 
-  return createPortal(
-    <div ref={modalRef} className={clsx(styles.modalBackdrop)}>
-      <div className={clsx(styles.modalContent)}>{children}</div>
-    </div>,
-    document.body,
+  return (
+    (forceMount || (initial && isOpen)) &&
+    createPortal(
+      <div ref={modalRef} className={clsx(styles.modalBackdrop, isOpen && styles.open)}>
+        <div className={styles.modalContent}>{children}</div>
+      </div>,
+      document.body,
+    )
   );
 }

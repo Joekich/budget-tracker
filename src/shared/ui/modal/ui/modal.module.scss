@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
 
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
 
@@ -24,4 +24,8 @@
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+}
+
+.open {
+  display: flex;
 }

@@ -38,7 +38,8 @@ export function DashboardPage({ session }: { session: Session }) {
         <DashboardCategoriesBlock />
 
         <Modal
-          isVisible={isModalOpen}
+          forceMount
+          isOpen={isModalOpen}
           onClose={() => {
             setIsModalOpen(false);
           }}
