@@ -22,18 +22,25 @@ export type FiltersState = {
 
 const parseArrayFromString = (value: string | null): string[] => (value ? value.split(',') : []);
 
-const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => ({
-  type: (params.get('type') as TransactionType) || null,
-  categories: parseArrayFromString(params.get('categories')),
-  amountRange: {
-    min: params.get('amountMin') ? Number(params.get('amountMin')) : null,
-    max: params.get('amountMax') ? Number(params.get('amountMax')) : null,
-  },
-  dateRange: {
-    start: params.get('dateStart') ? new Date(params.get('dateStart')!) : null,
-    end: params.get('dateEnd') ? new Date(params.get('dateEnd')!) : null,
-  },
-});
+const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
+  const amountMin = params.get('amountMin');
+  const amountMax = params.get('amountMax');
+  const dateStart = params.get('dateStart');
+  const dateEnd = params.get('dateEnd');
+
+  return {
+    type: (params.get('type') as TransactionType) || null,
+    categories: parseArrayFromString(params.get('categories')),
+    amountRange: {
+      min: amountMin ? Number(amountMin) : null,
+      max: amountMax ? Number(amountMax) : null,
+    },
+    dateRange: {
+      start: dateStart ? new Date(dateStart) : null,
+      end: dateEnd ? new Date(dateEnd) : null,
+    },
+  };
+};
 
 type FiltersProps = {
   onClose: () => void;
@@ -43,10 +50,7 @@ type FiltersProps = {
 export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [filters, setFilters] = useState<FiltersState>(() => {
-    const params = new URLSearchParams(window.location.search);
-    return parseFiltersFromUrl(params);
-  });
+  const [filters, setFilters] = useState<FiltersState>(parseFiltersFromUrl(searchParams));
 
   const activeFiltersCount = (currentFilters: FiltersState): number =>
     [
