@@ -7,7 +7,7 @@ import {
   type TransactionType,
 } from 'entities/transaction';
 import isNumber from 'lodash/isNumber';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from 'shared/ui/button';
 
@@ -20,11 +20,19 @@ export type FiltersState = {
   dateRange: { start: Date | null; end: Date | null };
 };
 
-const FILTERS_STORAGE_KEY = 'transactionFilters';
+const parseArrayFromString = (value: string | null): string[] => (value ? value.split(',') : []);
 
-const normalizeDateRange = (dateRange: { start: Date | null; end: Date | null }) => ({
-  start: dateRange.start ? new Date(dateRange.start) : null,
-  end: dateRange.end ? new Date(dateRange.end) : null,
+const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => ({
+  type: (params.get('type') as TransactionType) || null,
+  categories: parseArrayFromString(params.get('categories')),
+  amountRange: {
+    min: params.get('amountMin') ? Number(params.get('amountMin')) : null,
+    max: params.get('amountMax') ? Number(params.get('amountMax')) : null,
+  },
+  dateRange: {
+    start: params.get('dateStart') ? new Date(params.get('dateStart')!) : null,
+    end: params.get('dateEnd') ? new Date(params.get('dateEnd')!) : null,
+  },
 });
 
 type FiltersProps = {
@@ -33,85 +41,96 @@ type FiltersProps = {
 };
 
 export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
-  // ToDo: transfer session storage state to url state
-  const [filters, setFilters] = useState<FiltersState>({
-    type: null,
-    categories: [],
-    amountRange: { min: null, max: null },
-    dateRange: { start: null, end: null },
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<FiltersState>(() => {
+    const params = new URLSearchParams(window.location.search);
+    return parseFiltersFromUrl(params);
   });
 
-  const activeFiltersCount = [
-    !!filters.type,
-    isNumber(filters.amountRange.min) && isNumber(filters.amountRange.max),
-    filters.dateRange.start && filters.dateRange.end,
-  ].filter((cond) => cond === true).length;
+  const activeFiltersCount = (currentFilters: FiltersState): number =>
+    [
+      !!currentFilters.type,
+      currentFilters.categories.length > 0,
+      isNumber(currentFilters.amountRange.min) || isNumber(currentFilters.amountRange.max),
+      !!currentFilters.dateRange.start || !!currentFilters.dateRange.end,
+    ].filter(Boolean).length;
 
-  const router = useRouter();
   const isIncomeSelected = filters.type === 'income';
 
   useEffect(() => {
-    const storedFilters = sessionStorage.getItem(FILTERS_STORAGE_KEY);
-    if (storedFilters) {
-      // ToDo: validation or modal forceMount
-      const parsedFilters: FiltersState = JSON.parse(storedFilters);
-      setFilters({
-        ...parsedFilters,
-        dateRange: normalizeDateRange(parsedFilters.dateRange),
-      });
-    }
-  }, []);
+    const params = new URLSearchParams(window.location.search);
+    const parsedFilters = parseFiltersFromUrl(params);
+    setFilters(parsedFilters);
+
+    onFiltersChange(activeFiltersCount(parsedFilters));
+  }, [searchParams, onFiltersChange]);
 
   const handleApply = () => {
     const params = new URLSearchParams(window.location.search);
 
-    const filterEntries: [string, string | null][] = [
-      ['type', filters.type],
-      ['categories', filters.categories.length ? filters.categories.join(',') : null],
-      ['amountMin', filters.amountRange.min?.toString() || null],
-      ['amountMax', filters.amountRange.max?.toString() || null],
-      ['dateStart', filters.dateRange.start?.toISOString().slice(0, 10) || null],
-      ['dateEnd', filters.dateRange.end?.toISOString().slice(0, 10) || null],
-    ];
+    const filterEntries = {
+      type: filters.type,
+      categories: filters.categories.length ? filters.categories.join(',') : null,
+      amountMin: filters.amountRange.min?.toString() || null,
+      amountMax: filters.amountRange.max?.toString() || null,
+      dateStart: filters.dateRange.start?.toISOString().slice(0, 10) || null,
+      dateEnd: filters.dateRange.end?.toISOString().slice(0, 10) || null,
+    };
 
-    filterEntries.forEach(([key, value]) => {
+    Object.entries(filterEntries).forEach(([key, value]) => {
       if (value) {
         params.set(key, value);
       } else {
         params.delete(key);
       }
     });
-    params.delete('page');
 
-    sessionStorage.setItem(FILTERS_STORAGE_KEY, JSON.stringify(filters));
     router.push(`?${params.toString()}`);
-
-    onFiltersChange(activeFiltersCount);
-
-    // onClose();
+    onFiltersChange(activeFiltersCount(filters));
+    onClose();
   };
 
   const handleReset = () => {
-    sessionStorage.removeItem(FILTERS_STORAGE_KEY);
-
     const params = new URLSearchParams(window.location.search);
-    ['type', 'categories', 'amountMin', 'amountMax', 'dateStart', 'dateEnd', 'page'].forEach((key) => {
+
+    const filterKeys = {
+      type: null,
+      categories: null,
+      amountMin: null,
+      amountMax: null,
+      dateStart: null,
+      dateEnd: null,
+    };
+
+    Object.keys(filterKeys).forEach((key) => {
       params.delete(key);
     });
 
     router.push(`?${params.toString()}`);
+    setFilters({
+      type: null,
+      categories: [],
+      amountRange: { min: null, max: null },
+      dateRange: { start: null, end: null },
+    });
     onFiltersChange(0);
-    // onClose();
+    onClose();
   };
 
   const toggleCategory = (category: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      // ToDo: rewrite to new Set() or transfer array to object
-      categories: prev.categories.includes(category)
-        ? prev.categories.filter((cat) => cat !== category)
-        : [...prev.categories, category],
-    }));
+    setFilters((prev) => {
+      const updatedCategories = new Set(prev.categories);
+      if (updatedCategories.has(category)) {
+        updatedCategories.delete(category);
+      } else {
+        updatedCategories.add(category);
+      }
+      return {
+        ...prev,
+        categories: Array.from(updatedCategories),
+      };
+    });
   };
 
   return (

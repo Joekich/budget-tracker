@@ -1,5 +1,3 @@
-import 'react-datepicker/dist/react-datepicker.css';
-
 import clsx from 'clsx';
 import {
   TRANSACTION_EXPENSE_CATEGORIES,
@@ -7,7 +5,6 @@ import {
   type TransactionType,
 } from 'entities/transaction';
 import { useState } from 'react';
-import DatePicker from 'react-datepicker';
 import { Button } from 'shared/ui/button/ui/button';
 import { z } from 'zod';
 
@@ -22,6 +19,7 @@ const transactionSchema = z.object({
   title: z.string().min(1, 'Поле должно быть заполнено'),
   amount: z.string().min(1, 'Поле должно быть заполнено'),
   category: z.string().min(1, ''),
+  date: z.string().min(1, 'Дата должна быть указана'),
 });
 
 type TransactionFormFields = keyof z.infer<typeof transactionSchema>;
@@ -31,7 +29,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState<Date | null>(new Date());
+  const [date, setDate] = useState('');
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
   const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
@@ -45,6 +43,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
         title: fieldErrors.title?.[0],
         amount: fieldErrors.amount?.[0],
         category: fieldErrors.category?.[0],
+        date: fieldErrors.date?.[0],
       });
       return;
     }
@@ -57,7 +56,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
         title,
         titleSearch: normalizedTitle,
         amount: parseFloat(amount),
-        date: date?.toISOString(),
+        date,
         category,
         type,
       }),
@@ -67,13 +66,6 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
 
   const handleChange = (field: TransactionFormFields) => () => {
     setErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
-
-  const handleDateWrapperClick = (e: React.MouseEvent) => {
-    if (e.target instanceof HTMLElement && !e.target.closest('.react-datepicker')) {
-      const input = e.currentTarget.querySelector('input');
-      if (input) input.click();
-    }
   };
 
   return (
@@ -122,15 +114,17 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
         ))}
       </select>
 
-      <Button className={styles.wrapper} onClick={handleDateWrapperClick}>
-        <DatePicker
-          selected={date}
+      <div className={clsx(styles.wrapper, errors.date && styles.errorBorder)}>
+        <input
+          type="date"
+          value={date}
           className={styles.input}
-          onChange={(d) => {
-            setDate(d);
+          onChange={(e) => {
+            setDate(e.target.value);
           }}
+          onFocus={handleChange('date')}
         />
-      </Button>
+      </div>
 
       <div className={styles.buttonWrapper}>
         <Button theme="primary" className={styles.buttonAdd} onClick={handleSubmit}>

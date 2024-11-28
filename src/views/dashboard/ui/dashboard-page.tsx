@@ -37,20 +37,19 @@ export function DashboardPage({ session }: { session: Session }) {
         <DashboardChartsBlock />
         <DashboardCategoriesBlock />
 
-        {isModalOpen && (
-          <Modal
+        <Modal
+          isVisible={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+          }}
+        >
+          <TransactionAdd
+            type={transactionType}
             onClose={() => {
               setIsModalOpen(false);
             }}
-          >
-            <TransactionAdd
-              type={transactionType}
-              onClose={() => {
-                setIsModalOpen(false);
-              }}
-            />
-          </Modal>
-        )}
+          />
+        </Modal>
       </div>
     </main>
   );

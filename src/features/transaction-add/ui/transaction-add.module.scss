@@ -1,14 +1,8 @@
 .wrapper {
   display: flex;
   align-items: center;
-
   width: 100%;
   margin-bottom: 1.5rem;
-  padding: 1.25rem;
-
-  background-color: #f7f7f7;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
 }
 
 .wrapper:focus-within {
@@ -17,16 +11,23 @@
 
 .input {
   width: 100%;
+  height: 5rem;
+  padding: 1rem;
 
   font-size: 1.5rem;
 
-  background: transparent;
-  border: none;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
+
+.input:focus {
+  border-color: #333;
   outline: none;
 }
 
 .select {
   width: 100%;
+  height: 5rem;
   margin-bottom: 1.5rem;
   padding: 1.25rem;
 

@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { type ReactNode, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -6,40 +7,40 @@ import styles from './modal.module.scss';
 type ModalProps = {
   onClose: () => void;
   children: ReactNode;
+  isVisible: boolean;
 };
 
-export const Modal = ({ onClose, children }: ModalProps) => {
-  const dialogRef = useRef<HTMLDialogElement>(null);
+export function Modal({ onClose, children, isVisible }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return undefined;
-
-    dialog.showModal();
-
-    const handleMouseDown = (event: MouseEvent) => {
-      if (event.target === dialog) onClose();
+    const handleBackdropClick = (event: MouseEvent) => {
+      if (modalRef.current && event.target === modalRef.current) {
+        onClose();
+      }
     };
 
-    const handleCancel = (event: Event) => {
-      event.preventDefault();
-      onClose();
-    };
-
-    dialog.addEventListener('mousedown', handleMouseDown);
-    dialog.addEventListener('cancel', handleCancel);
+    if (isVisible) {
+      document.body.style.overflow = 'hidden';
+      window.addEventListener('mousedown', handleBackdropClick);
+    } else {
+      document.body.style.overflow = '';
+    }
 
     return () => {
-      dialog.removeEventListener('mousedown', handleMouseDown);
-      dialog.removeEventListener('cancel', handleCancel);
-      dialog.close();
+      document.body.style.overflow = '';
+      window.removeEventListener('mousedown', handleBackdropClick);
     };
-  }, [onClose]);
+  }, [isVisible, onClose]);
+
+  if (!isVisible) {
+    return null;
+  }
 
   return createPortal(
-    <dialog ref={dialogRef} className={styles.dialogContainer}>
-      <div className={styles.sharedModal}>{children}</div>
-    </dialog>,
+    <div ref={modalRef} className={clsx(styles.modalBackdrop)}>
+      <div className={clsx(styles.modalContent)}>{children}</div>
+    </div>,
     document.body,
   );
-};
+}

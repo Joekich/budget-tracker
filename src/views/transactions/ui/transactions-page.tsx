@@ -2,7 +2,12 @@
 
 import clsx from 'clsx';
 import { useState } from 'react';
-import { TbSquareRoundedNumber1, TbSquareRoundedNumber2, TbSquareRoundedNumber3 } from 'react-icons/tb';
+import {
+  TbSquareRoundedNumber1,
+  TbSquareRoundedNumber2,
+  TbSquareRoundedNumber3,
+  TbSquareRoundedNumber4,
+} from 'react-icons/tb';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
@@ -38,6 +43,8 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
         return <TbSquareRoundedNumber2 className={styles.filterIcon} size={20} />;
       case 3:
         return <TbSquareRoundedNumber3 className={styles.filterIcon} size={20} />;
+      case 4:
+        return <TbSquareRoundedNumber4 className={styles.filterIcon} size={20} />;
       default:
         return null;
     }
@@ -80,20 +87,19 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
         </ul>
         <TransactionsPagination totalTransactions={totalTransactions} transactionsPerPage={transactionsPerPage} />
       </div>
-      {isFiltersOpen && (
-        <Modal
+      <Modal
+        isVisible={isFiltersOpen}
+        onClose={() => {
+          setIsFiltersOpen(false);
+        }}
+      >
+        <TransactionFilters
           onClose={() => {
             setIsFiltersOpen(false);
           }}
-        >
-          <TransactionFilters
-            onClose={() => {
-              setIsFiltersOpen(false);
-            }}
-            onFiltersChange={setActiveFiltersCount}
-          />
-        </Modal>
-      )}
+          onFiltersChange={setActiveFiltersCount}
+        />
+      </Modal>
     </main>
   );
 }
