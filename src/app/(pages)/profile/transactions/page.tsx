@@ -41,8 +41,14 @@ async function Transactions({
       max: searchParams.amountMax ? parseFloat(searchParams.amountMax) : null,
     },
     dateRange: {
-      start: searchParams.dateStart ? new Date(searchParams.dateStart) : null,
-      end: searchParams.dateEnd ? new Date(searchParams.dateEnd) : null,
+      start:
+        searchParams.dateStart && /^\d{4}-\d{2}-\d{2}$/.test(searchParams.dateStart)
+          ? new Date(`${searchParams.dateStart}T00:00:00Z`)
+          : null,
+      end:
+        searchParams.dateEnd && /^\d{4}-\d{2}-\d{2}$/.test(searchParams.dateEnd)
+          ? new Date(`${searchParams.dateEnd}T00:00:00Z`)
+          : null,
     },
   };
 

@@ -22,6 +22,18 @@ export type FiltersState = {
 
 const parseArrayFromString = (value: string | null): string[] => (value ? value.split(',') : []);
 
+const parseDate = (value: string | null): Date | null => {
+  if (!value) return null;
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+const parseNumber = (value: string | null): number | null => {
+  if (!value) return null;
+  const number = Number(value);
+  return Number.isNaN(number) ? null : number;
+};
+
 const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
   const amountMin = params.get('amountMin');
   const amountMax = params.get('amountMax');
@@ -32,12 +44,12 @@ const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
     type: (params.get('type') as TransactionType) || null,
     categories: parseArrayFromString(params.get('categories')),
     amountRange: {
-      min: amountMin ? Number(amountMin) : null,
-      max: amountMax ? Number(amountMax) : null,
+      min: parseNumber(amountMin),
+      max: parseNumber(amountMax),
     },
     dateRange: {
-      start: dateStart ? new Date(dateStart) : null,
-      end: dateEnd ? new Date(dateEnd) : null,
+      start: parseDate(dateStart),
+      end: parseDate(dateEnd),
     },
   };
 };
@@ -65,8 +77,8 @@ export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const parsedFilters = parseFiltersFromUrl(params);
-    setFilters(parsedFilters);
 
+    setFilters(parsedFilters);
     onFiltersChange(activeFiltersCount(parsedFilters));
   }, [searchParams, onFiltersChange]);
 
@@ -220,9 +232,10 @@ export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
               type="date"
               value={filters.dateRange.start ? filters.dateRange.start.toISOString().slice(0, 10) : ''}
               onChange={(e) => {
+                const dateValue = e.target.value ? parseDate(e.target.value) : null;
                 setFilters((prev) => ({
                   ...prev,
-                  dateRange: { ...prev.dateRange, start: e.target.value ? new Date(e.target.value) : null },
+                  dateRange: { ...prev.dateRange, start: dateValue },
                 }));
               }}
             />
@@ -231,9 +244,10 @@ export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
               type="date"
               value={filters.dateRange.end ? filters.dateRange.end.toISOString().slice(0, 10) : ''}
               onChange={(e) => {
+                const dateValue = e.target.value ? parseDate(e.target.value) : null;
                 setFilters((prev) => ({
                   ...prev,
-                  dateRange: { ...prev.dateRange, end: e.target.value ? new Date(e.target.value) : null },
+                  dateRange: { ...prev.dateRange, end: dateValue },
                 }));
               }}
             />
