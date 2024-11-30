@@ -1,36 +1,27 @@
 'use client';
 
+import isNumber from 'lodash/isNumber';
+import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
-import {
-  TbSquareRoundedNumber1,
-  TbSquareRoundedNumber2,
-  TbSquareRoundedNumber3,
-  TbSquareRoundedNumber4,
-} from 'react-icons/tb';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
-import { TransactionFilters } from '../filters/transaction-filters';
+import { type FiltersState, parseFiltersFromUrl, TransactionFilters } from '../filters/transaction-filters';
 import styles from './filters-manager.module.scss';
+
+const activeFiltersCount = (currentFilters: FiltersState): number =>
+  [
+    !!currentFilters.type,
+    currentFilters.categories.length > 0,
+    isNumber(currentFilters.amountRange.min) || isNumber(currentFilters.amountRange.max),
+    !!currentFilters.dateRange.start || !!currentFilters.dateRange.end,
+  ].filter(Boolean).length;
 
 export function FiltersManager() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
-  const [activeFiltersCount, setActiveFiltersCount] = useState(0);
+  const searchParams = useSearchParams();
 
-  const renderFilterIcon = () => {
-    switch (activeFiltersCount) {
-      case 1:
-        return <TbSquareRoundedNumber1 className={styles.filterIcon} size={20} />;
-      case 2:
-        return <TbSquareRoundedNumber2 className={styles.filterIcon} size={20} />;
-      case 3:
-        return <TbSquareRoundedNumber3 className={styles.filterIcon} size={20} />;
-      case 4:
-        return <TbSquareRoundedNumber4 className={styles.filterIcon} size={20} />;
-      default:
-        return null;
-    }
-  };
+  const filtersCount = activeFiltersCount(parseFiltersFromUrl(searchParams));
 
   return (
     <>
@@ -42,7 +33,7 @@ export function FiltersManager() {
         }}
       >
         Фильтры
-        {renderFilterIcon()}
+        <div>{filtersCount}</div>
       </Button>
 
       <Modal
@@ -55,7 +46,6 @@ export function FiltersManager() {
           onClose={() => {
             setIsFiltersOpen(false);
           }}
-          onFiltersChange={setActiveFiltersCount}
         />
       </Modal>
     </>

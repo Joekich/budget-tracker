@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button/ui/button';
@@ -29,7 +29,8 @@ export function SignInPage() {
     setIsPasswordVisible((prev) => !prev);
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const validation = schemaLoginValidation.safeParse({ login, password });
 
     if (!validation.success) {
@@ -44,7 +45,6 @@ export function SignInPage() {
     }
 
     setFieldErrors({});
-    setGlobalError(null);
 
     const response = await signIn('credentials', {
       redirect: false,
@@ -57,6 +57,7 @@ export function SignInPage() {
       return;
     }
 
+    setGlobalError(null);
     router.push(getPath('dashboard'));
   };
 
@@ -66,13 +67,7 @@ export function SignInPage() {
         <header>
           <h1>Вход в личный кабинет</h1>
         </header>
-        <form
-          className={styles.authContainer}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleLogin();
-          }}
-        >
+        <form className={styles.authContainer} onSubmit={handleLogin}>
           <div className={clsx(styles.inputWrapper, fieldErrors.login && styles.inputError)}>
             <Input
               value={login}
@@ -113,7 +108,7 @@ export function SignInPage() {
           </Button>
           <Button
             theme="secondary"
-            className={`${styles.submitButton} ${styles.cancelButton}`}
+            className={clsx(styles.submitButton, styles.cancelButton)}
             onClick={() => {
               router.push('/');
             }}

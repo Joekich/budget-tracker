@@ -6,7 +6,6 @@ import {
   TRANSACTION_INCOME_CATEGORIES,
   type TransactionType,
 } from 'entities/transaction';
-import isNumber from 'lodash/isNumber';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from 'shared/ui/button';
@@ -22,11 +21,7 @@ export type FiltersState = {
 
 const parseArrayFromString = (value: string | null): string[] => (value ? value.split(',') : []);
 
-const parseDate = (value: string | null): Date | null => {
-  if (!value) return null;
-  const date = new Date(`${value}T00:00:00Z`);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
+const parseDate = (value: string | null) => new Date(`${value}T00:00:00Z`);
 
 const parseNumber = (value: string | null): number | null => {
   if (!value) return null;
@@ -34,7 +29,7 @@ const parseNumber = (value: string | null): number | null => {
   return Number.isNaN(number) ? null : number;
 };
 
-const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
+export const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
   const amountMin = params.get('amountMin');
   const amountMax = params.get('amountMax');
   const dateStart = params.get('dateStart');
@@ -56,31 +51,19 @@ const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
 
 type FiltersProps = {
   onClose: () => void;
-  onFiltersChange: (activeFiltersCount: number) => void;
 };
 
-export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
+export function TransactionFilters({ onClose }: FiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<FiltersState>(parseFiltersFromUrl(searchParams));
 
-  const activeFiltersCount = (currentFilters: FiltersState): number =>
-    [
-      !!currentFilters.type,
-      currentFilters.categories.length > 0,
-      isNumber(currentFilters.amountRange.min) || isNumber(currentFilters.amountRange.max),
-      !!currentFilters.dateRange.start || !!currentFilters.dateRange.end,
-    ].filter(Boolean).length;
-
   const isIncomeSelected = filters.type === 'income';
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const parsedFilters = parseFiltersFromUrl(params);
-
+    const parsedFilters = parseFiltersFromUrl(searchParams);
     setFilters(parsedFilters);
-    onFiltersChange(activeFiltersCount(parsedFilters));
-  }, [searchParams, onFiltersChange]);
+  }, [searchParams]);
 
   const handleApply = () => {
     const params = new URLSearchParams(window.location.search);
@@ -103,7 +86,6 @@ export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
     });
 
     router.push(`?${params.toString()}`);
-    onFiltersChange(activeFiltersCount(filters));
     onClose();
   };
 
@@ -130,7 +112,6 @@ export function TransactionFilters({ onClose, onFiltersChange }: FiltersProps) {
       amountRange: { min: null, max: null },
       dateRange: { start: null, end: null },
     });
-    onFiltersChange(0);
     onClose();
   };
 
