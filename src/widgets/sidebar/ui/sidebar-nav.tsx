@@ -11,6 +11,7 @@ import styles from './sidebar-nav.module.scss';
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFullOpen, setIsFullOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
@@ -19,6 +20,19 @@ export function Sidebar() {
     { href: getPath('savings'), icon: FiDollarSign, label: 'Сбережения' },
     { href: getPath('settings'), icon: FiUser, label: 'Настройки' },
   ];
+
+  useEffect(() => {
+    if (isOpen) {
+      const timeout = setTimeout(() => {
+        setIsFullOpen(true);
+      }, 100);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
+    setIsFullOpen(false);
+    return undefined;
+  }, [isOpen]);
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
@@ -30,9 +44,7 @@ export function Sidebar() {
 
   const signOutHandler = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
-    if (isOpen) {
-      signOut({ callbackUrl: '/' });
-    }
+    signOut({ callbackUrl: '/' });
   };
 
   useEffect(() => {
@@ -50,13 +62,7 @@ export function Sidebar() {
 
   return (
     <aside ref={sidebarRef} className={clsx(styles.sidebar, isOpen && styles.open)}>
-      <Button
-        aria-label="Menu"
-        theme="icon"
-        className={styles.navItem}
-        onClick={toggleSidebar}
-        // onKeyDown={toggleSidebar}
-      >
+      <Button aria-label="Menu" theme="icon" className={styles.navItem} onClick={toggleSidebar}>
         <FiMenu size={32} />
       </Button>
       <nav className={styles.navGroup}>
@@ -70,14 +76,13 @@ export function Sidebar() {
             onClick={closeSidebar}
           >
             <item.icon size={32} />
-            {isOpen && <span>{item.label}</span>}
+            {isFullOpen && <span>{item.label}</span>}
           </Button>
         ))}
         <Button
           theme="icon"
           className={clsx(styles.navItem, styles.logout, isOpen && styles.clickable)}
           onClick={signOutHandler}
-          // onKeyDown={signOutHandler}
         >
           <FiLogOut size={32} />
           {isOpen && 'Выйти'}

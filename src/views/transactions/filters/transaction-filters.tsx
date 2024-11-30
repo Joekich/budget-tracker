@@ -21,7 +21,13 @@ export type FiltersState = {
 
 const parseArrayFromString = (value: string | null): string[] => (value ? value.split(',') : []);
 
-const parseDate = (value: string | null) => new Date(`${value}T00:00:00Z`);
+// const parseDate = (value: string | null) => new Date(`${value}T00:00:00Z`);
+
+const parseDate = (value: string | null): Date | null => {
+  if (!value) return null;
+  const date = new Date(`${value}T00:00:00Z`);
+  return Number.isNaN(date.getTime()) ? null : date;
+};
 
 const parseNumber = (value: string | null): number | null => {
   if (!value) return null;

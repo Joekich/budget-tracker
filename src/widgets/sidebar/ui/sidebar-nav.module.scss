@@ -14,7 +14,7 @@
 
   background-color: #333;
 
-  transition: width 0.3s ease-in-out;
+  transition: width 0.2s ease-in-out;
 
   & .navItem {
     display: flex;
@@ -39,7 +39,7 @@
   & span {
     transform: translateX(-1rem);
     opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    transition: opacity 0.2s ease-in-out 0.2s, transform 0.2s ease-in-out 0.2s;
   }
 
   &:hover span {
@@ -53,13 +53,6 @@
 
   &:hover {
     color: var(--color-red);
-  }
-}
-
-.sidebar:not(.open) {
-  a.navItem {
-    pointer-events: none;
-    cursor: default;
   }
 }
 
