@@ -8,6 +8,7 @@ import {
 } from 'entities/transaction';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 
 import styles from './transaction-filters.module.scss';
@@ -19,22 +20,6 @@ export type FiltersState = {
   dateRange: { start: Date | null; end: Date | null };
 };
 
-const parseArrayFromString = (value: string | null): string[] => (value ? value.split(',') : []);
-
-// const parseDate = (value: string | null) => new Date(`${value}T00:00:00Z`);
-
-const parseDate = (value: string | null): Date | null => {
-  if (!value) return null;
-  const date = new Date(`${value}T00:00:00Z`);
-  return Number.isNaN(date.getTime()) ? null : date;
-};
-
-const parseNumber = (value: string | null): number | null => {
-  if (!value) return null;
-  const number = Number(value);
-  return Number.isNaN(number) ? null : number;
-};
-
 export const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
   const amountMin = params.get('amountMin');
   const amountMax = params.get('amountMax');
@@ -43,14 +28,14 @@ export const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
 
   return {
     type: (params.get('type') as TransactionType) || null,
-    categories: parseArrayFromString(params.get('categories')),
+    categories: params.get('categories')?.split(',') || [],
     amountRange: {
-      min: parseNumber(amountMin),
-      max: parseNumber(amountMax),
+      min: amountMin ? parseFloat(amountMin) : null,
+      max: amountMax ? parseFloat(amountMax) : null,
     },
     dateRange: {
-      start: parseDate(dateStart),
-      end: parseDate(dateEnd),
+      start: dateStart ? new Date(dateStart) : null,
+      end: dateEnd ? new Date(dateEnd) : null,
     },
   };
 };
@@ -62,7 +47,12 @@ type FiltersProps = {
 export function TransactionFilters({ onClose }: FiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [filters, setFilters] = useState<FiltersState>(parseFiltersFromUrl(searchParams));
+  const [filters, setFilters] = useState<FiltersState>({
+    type: null,
+    categories: [],
+    amountRange: { min: null, max: null },
+    dateRange: { start: null, end: null },
+  });
 
   const isIncomeSelected = filters.type === 'income';
 
@@ -72,46 +62,19 @@ export function TransactionFilters({ onClose }: FiltersProps) {
   }, [searchParams]);
 
   const handleApply = () => {
-    const params = new URLSearchParams(window.location.search);
-
-    const filterEntries = {
-      type: filters.type,
-      categories: filters.categories.length ? filters.categories.join(',') : null,
-      amountMin: filters.amountRange.min?.toString() || null,
-      amountMax: filters.amountRange.max?.toString() || null,
-      dateStart: filters.dateRange.start?.toISOString().slice(0, 10) || null,
-      dateEnd: filters.dateRange.end?.toISOString().slice(0, 10) || null,
-    };
-
-    Object.entries(filterEntries).forEach(([key, value]) => {
-      if (value) {
-        params.set(key, value);
-      } else {
-        params.delete(key);
-      }
-    });
+    const params = new URLSearchParams();
+    if (filters.type) params.set('type', filters.type);
+    if (filters.categories.length) params.set('categories', filters.categories.join(','));
+    if (filters.amountRange.min) params.set('amountMin', filters.amountRange.min.toString());
+    if (filters.amountRange.max) params.set('amountMax', filters.amountRange.max.toString());
+    if (filters.dateRange.start) params.set('dateStart', filters.dateRange.start.toISOString().slice(0, 10));
+    if (filters.dateRange.end) params.set('dateEnd', filters.dateRange.end.toISOString().slice(0, 10));
 
     router.push(`?${params.toString()}`);
     onClose();
   };
-
   const handleReset = () => {
-    const params = new URLSearchParams(window.location.search);
-
-    const filterKeys = {
-      type: null,
-      categories: null,
-      amountMin: null,
-      amountMax: null,
-      dateStart: null,
-      dateEnd: null,
-    };
-
-    Object.keys(filterKeys).forEach((key) => {
-      params.delete(key);
-    });
-
-    router.push(`?${params.toString()}`);
+    router.push(getPath('transactions'));
     setFilters({
       type: null,
       categories: [],
@@ -219,10 +182,12 @@ export function TransactionFilters({ onClose }: FiltersProps) {
               type="date"
               value={filters.dateRange.start ? filters.dateRange.start.toISOString().slice(0, 10) : ''}
               onChange={(e) => {
-                const dateValue = e.target.value ? parseDate(e.target.value) : null;
                 setFilters((prev) => ({
                   ...prev,
-                  dateRange: { ...prev.dateRange, start: dateValue },
+                  dateRange: {
+                    ...prev.dateRange,
+                    start: e.target.value ? new Date(e.target.value) : null,
+                  },
                 }));
               }}
             />
@@ -231,10 +196,12 @@ export function TransactionFilters({ onClose }: FiltersProps) {
               type="date"
               value={filters.dateRange.end ? filters.dateRange.end.toISOString().slice(0, 10) : ''}
               onChange={(e) => {
-                const dateValue = e.target.value ? parseDate(e.target.value) : null;
                 setFilters((prev) => ({
                   ...prev,
-                  dateRange: { ...prev.dateRange, end: dateValue },
+                  dateRange: {
+                    ...prev.dateRange,
+                    end: e.target.value ? new Date(e.target.value) : null,
+                  },
                 }));
               }}
             />

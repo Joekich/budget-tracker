@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button/ui/button';
@@ -23,21 +23,17 @@ export function SignInPage() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ login?: string; password?: string }>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
+  const loginRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const form = document.querySelector('form');
-    if (!form) return;
-
-    const loginInput = form.querySelector('input[name="login"]');
-    const passwordInput = form.querySelector('input[name="password"]');
-
-    if (loginInput instanceof HTMLInputElement) {
-      setLogin(loginInput.value);
+    if (loginRef.current) {
+      setLogin(loginRef.current.value);
     }
 
-    if (passwordInput instanceof HTMLInputElement) {
-      setPassword(passwordInput.value);
+    if (passwordRef.current) {
+      setPassword(passwordRef.current.value);
     }
   }, []);
 
@@ -86,7 +82,7 @@ export function SignInPage() {
         <form className={styles.authContainer} onSubmit={handleLogin}>
           <div className={clsx(styles.inputWrapper, fieldErrors.login && styles.inputError)}>
             <Input
-              name="login"
+              ref={loginRef}
               value={login}
               className={styles.authInput}
               onFocus={() => {
@@ -102,7 +98,7 @@ export function SignInPage() {
           </div>
           <div className={clsx(styles.inputWrapper, fieldErrors.password && styles.inputError)}>
             <Input
-              name="password"
+              ref={passwordRef}
               type={isPasswordVisible ? 'text' : 'password'}
               value={password}
               className={styles.authInput}

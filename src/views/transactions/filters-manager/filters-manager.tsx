@@ -33,7 +33,7 @@ export function FiltersManager() {
         }}
       >
         Фильтры
-        <div className={styles.filterCount}>{filtersCount}</div>
+        <div className={styles.filterCount}>{filtersCount > 0 && filtersCount}</div>
       </Button>
 
       <Modal

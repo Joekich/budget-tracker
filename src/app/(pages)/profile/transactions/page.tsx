@@ -1,10 +1,39 @@
 import { auth } from 'app/model/auth';
-import { type TransactionType } from 'entities/transaction';
+import {
+  TRANSACTION_EXPENSE_CATEGORIES,
+  TRANSACTION_INCOME_CATEGORIES,
+  type TransactionType,
+} from 'entities/transaction';
 import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'shared/lib/metadata';
 import { getPath } from 'shared/routing/paths';
 import { getUserTransactions, TransactionsPage } from 'views/transactions';
+import { z } from 'zod';
+
+const ALL_CATEGORIES = [...TRANSACTION_INCOME_CATEGORIES, ...TRANSACTION_EXPENSE_CATEGORIES];
+
+const filtersSchema = z.object({
+  page: z.string().regex(/^\d+$/).optional(),
+  searchQuery: z.string().optional(),
+  type: z.enum(['income', 'expense']).optional(),
+  categories: z.preprocess(
+    (value) => (typeof value === 'string' ? value.split(',') : []),
+    z.array(z.enum(ALL_CATEGORIES as [string, ...string[]])).default([]),
+  ),
+  amountMin: z
+    .string()
+    .regex(/^\d+?$/, 'Введите корректное число')
+    .transform((value) => parseInt(value, 10))
+    .optional(),
+  amountMax: z
+    .string()
+    .regex(/^\d+$/, 'Введите корректное число')
+    .transform((value) => parseInt(value, 10))
+    .optional(),
+  dateStart: z.preprocess((value) => (typeof value === 'string' ? new Date(value) : value), z.date().optional()),
+  dateEnd: z.preprocess((value) => (typeof value === 'string' ? new Date(value) : value), z.date().optional()),
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'transactions' });
@@ -29,28 +58,30 @@ async function Transactions({
 
   if (!session || userId === null) redirect(getPath('homepage'));
 
+  let validatedFilters;
+  try {
+    validatedFilters = filtersSchema.parse(searchParams);
+  } catch (error) {
+    console.error('Ошибка валидации:', error);
+    throw new Error('Некорректные параметры фильтров');
+  }
+
+  const filters = {
+    type: validatedFilters.type as TransactionType | null,
+    categories: validatedFilters.categories || [],
+    amountRange: {
+      min: validatedFilters.amountMin || null,
+      max: validatedFilters.amountMax || null,
+    },
+    dateRange: {
+      start: validatedFilters.dateStart || null,
+      end: validatedFilters.dateEnd || null,
+    },
+  };
+
   const page = parseInt(searchParams.page || '1', 10);
   const perPage = 10;
   const searchQuery = searchParams.searchQuery || '';
-
-  const filters = {
-    type: searchParams.type as TransactionType | null,
-    categories: searchParams.categories ? searchParams.categories.split(',') : [],
-    amountRange: {
-      min: searchParams.amountMin ? parseFloat(searchParams.amountMin) : null,
-      max: searchParams.amountMax ? parseFloat(searchParams.amountMax) : null,
-    },
-    dateRange: {
-      start:
-        searchParams.dateStart && /^\d{4}-\d{2}-\d{2}$/.test(searchParams.dateStart)
-          ? new Date(`${searchParams.dateStart}T00:00:00Z`)
-          : null,
-      end:
-        searchParams.dateEnd && /^\d{4}-\d{2}-\d{2}$/.test(searchParams.dateEnd)
-          ? new Date(`${searchParams.dateEnd}T00:00:00Z`)
-          : null,
-    },
-  };
 
   const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery, filters);
 
