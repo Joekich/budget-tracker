@@ -31,7 +31,7 @@ export async function PUT(req: NextRequest) {
       },
     });
 
-    revalidatePath(getPath('transactions'));
+    revalidatePath(getPath('transactions'), 'page');
 
     return new Response(JSON.stringify({ transaction }));
   } catch {

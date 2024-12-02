@@ -7,6 +7,7 @@ import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
 
+// ToDo: duplicate
 type Transaction = {
   id: number;
   title: string;

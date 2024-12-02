@@ -6,6 +6,7 @@ import {
   TRANSACTION_INCOME_CATEGORIES,
   type TransactionType,
 } from 'entities/transaction';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
 import { z } from 'zod';
@@ -36,6 +37,7 @@ type TransactionFormFields = keyof z.infer<typeof transactionSchema>;
 type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
 
 export function TransactionEdit({ transaction, onClose, onSave }: TransactionEditProps) {
+  const router = useRouter();
   const [title, setTitle] = useState(transaction.title);
   const [amount, setAmount] = useState(transaction.amount.toString());
   const [category, setCategory] = useState(transaction.category);
@@ -73,6 +75,8 @@ export function TransactionEdit({ transaction, onClose, onSave }: TransactionEdi
       }),
     });
     onSave();
+
+    router.refresh();
   };
 
   const handleChange = (field: TransactionFormFields) => () => {

@@ -58,17 +58,11 @@ async function Transactions({
 
   if (!session || userId === null) redirect(getPath('homepage'));
 
-  let validatedFilters;
-  try {
-    validatedFilters = filtersSchema.parse(searchParams);
-  } catch (error) {
-    console.error('Ошибка валидации:', error);
-    throw new Error('Некорректные параметры фильтров');
-  }
+  const validatedFilters = filtersSchema.parse(searchParams);
 
   const filters = {
-    type: validatedFilters.type as TransactionType | null,
-    categories: validatedFilters.categories || [],
+    type: validatedFilters.type || null,
+    categories: validatedFilters.categories,
     amountRange: {
       min: validatedFilters.amountMin || null,
       max: validatedFilters.amountMax || null,
@@ -83,18 +77,7 @@ async function Transactions({
   const perPage = 10;
   const searchQuery = searchParams.searchQuery || '';
 
-  const { transactions: untypedTransactions, totalTransactions } = await getUserTransactions(
-    userId,
-    page,
-    perPage,
-    searchQuery,
-    filters,
-  );
-
-  const transactions = untypedTransactions.map((transaction) => ({
-    ...transaction,
-    type: transaction.type as TransactionType,
-  }));
+  const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery, filters);
 
   return (
     <TransactionsPage transactions={transactions} totalTransactions={totalTransactions} transactionsPerPage={perPage} />

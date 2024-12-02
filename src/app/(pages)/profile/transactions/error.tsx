@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 
 import styles from './error.module.scss';
@@ -10,14 +11,9 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
   const router = useRouter();
 
   useEffect(() => {
+    router.push(getPath('transactions'));
     console.error(error);
-  }, [error]);
-
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    url.search = '';
-    router.replace(url.toString());
-  }, [router]);
+  }, [router, error]);
 
   return (
     <div className={styles.errorBlock}>
