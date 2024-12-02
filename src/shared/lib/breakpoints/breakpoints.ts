@@ -1,7 +1,7 @@
 import b from 'styles/_breakpoints.module.scss';
 
 export type BreakpointKey = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
-type Breakpoints = { [p in BreakpointKey]: number };
+type Breakpoints = Record<BreakpointKey, number>;
 
 function convertBreakpoints(obj: Record<string, string>) {
   const res: Breakpoints = {} as Breakpoints;
