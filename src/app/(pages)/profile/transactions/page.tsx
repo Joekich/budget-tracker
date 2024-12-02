@@ -83,7 +83,18 @@ async function Transactions({
   const perPage = 10;
   const searchQuery = searchParams.searchQuery || '';
 
-  const { transactions, totalTransactions } = await getUserTransactions(userId, page, perPage, searchQuery, filters);
+  const { transactions: untypedTransactions, totalTransactions } = await getUserTransactions(
+    userId,
+    page,
+    perPage,
+    searchQuery,
+    filters,
+  );
+
+  const transactions = untypedTransactions.map((transaction) => ({
+    ...transaction,
+    type: transaction.type as TransactionType,
+  }));
 
   return (
     <TransactionsPage transactions={transactions} totalTransactions={totalTransactions} transactionsPerPage={perPage} />

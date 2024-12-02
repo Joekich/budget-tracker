@@ -1,6 +1,8 @@
 import clsx from 'clsx';
+import { type TransactionType } from 'entities/transaction';
 
 import { FiltersManager } from '../filters-manager/filters-manager';
+import { TransactionEditManager } from '../transaction-edit-manager/transaction-edit-manager';
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
@@ -11,7 +13,7 @@ type Transaction = {
   amount: number;
   date: Date;
   category: string;
-  type: string;
+  type: TransactionType;
 };
 
 type TransactionsPageProps = {
@@ -41,6 +43,9 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
                 <div className={styles.transactionCategory}>{transaction.category}</div>
                 <div className={styles.transactionType}>{transaction.type === 'income' ? 'Доход' : 'Расход'}</div>
                 <div className={styles.transactionDate}>{new Date(transaction.date).toLocaleDateString()}</div>
+                <div className={styles.editButton}>
+                  <TransactionEditManager transaction={transaction} />
+                </div>
               </li>
             ))
           ) : (
