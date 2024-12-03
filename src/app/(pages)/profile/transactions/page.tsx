@@ -1,4 +1,3 @@
-import { auth } from 'app/model/auth';
 import {
   TRANSACTION_EXPENSE_CATEGORIES,
   TRANSACTION_INCOME_CATEGORIES,
@@ -10,6 +9,8 @@ import { getMetadata } from 'shared/lib/metadata';
 import { getPath } from 'shared/routing/paths';
 import { getUserTransactions, TransactionsPage } from 'views/transactions';
 import { z } from 'zod';
+
+import { auth } from '../../../model/auth';
 
 const ALL_CATEGORIES = [...TRANSACTION_INCOME_CATEGORIES, ...TRANSACTION_EXPENSE_CATEGORIES];
 

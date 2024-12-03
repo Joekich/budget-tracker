@@ -1,21 +1,12 @@
 import clsx from 'clsx';
-import { type TransactionType } from 'entities/transaction';
+import { type Transaction } from 'entities/transaction';
 
 import { FiltersManager } from '../filters-manager/filters-manager';
+import { TransactionDeleteManager } from '../transaction-delete-manager/transaction-delete-manager';
 import { TransactionEditManager } from '../transaction-edit-manager/transaction-edit-manager';
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
-
-// ToDo: duplicate
-type Transaction = {
-  id: number;
-  title: string;
-  amount: number;
-  date: Date;
-  category: string;
-  type: TransactionType;
-};
 
 type TransactionsPageProps = {
   transactions: Transaction[];
@@ -46,6 +37,7 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
                 <div className={styles.transactionDate}>{new Date(transaction.date).toLocaleDateString()}</div>
                 <div className={styles.editButton}>
                   <TransactionEditManager transaction={transaction} />
+                  <TransactionDeleteManager transaction={transaction} />
                 </div>
               </li>
             ))

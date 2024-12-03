@@ -3,11 +3,9 @@ import wizardryFsd from 'eslint-plugin-wizardry-fsd';
 
 const config = [
   ...wizardryConfig,
+  wizardryFsd.configs.flat.next,
   {
     ignores: ['out/', 'dist/'],
-    plugins: {
-      'wizardry-fsd': wizardryFsd,
-    },
   },
 ];
 

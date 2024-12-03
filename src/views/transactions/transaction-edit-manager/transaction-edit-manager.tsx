@@ -1,20 +1,11 @@
 'use client';
 
-import { type TransactionType } from 'entities/transaction';
+import { type Transaction } from 'entities/transaction';
 import { TransactionEdit } from 'features/transaction-edit';
 import { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
-
-type Transaction = {
-  id: number;
-  title: string;
-  amount: number;
-  date: Date;
-  category: string;
-  type: TransactionType;
-};
 
 type TransactionEditManagerProps = {
   transaction: Transaction;

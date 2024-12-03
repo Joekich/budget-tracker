@@ -1,7 +1,7 @@
 'use client';
 
 import { type TransactionType } from 'entities/transaction';
-import { TransactionAdd } from 'features/transaction-add/ui/transaction-add';
+import { TransactionAdd } from 'features/transaction-add';
 import { type Session } from 'next-auth';
 import { useState } from 'react';
 import { Modal } from 'shared/ui/modal';

@@ -5,7 +5,7 @@ import { getPath } from 'shared/routing/paths';
 
 import { auth } from '../../model/auth';
 
-export async function PUT(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
   const session = await auth();
 
   if (!session?.user) {
@@ -13,29 +13,22 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { id, title, titleSearch, amount, date, category, type } = body;
+  const { id } = body;
 
-  if (!id || !title || Number.isNaN(parseFloat(amount)) || !date || !category || !type) {
+  if (!id) {
     return new Response('Некорректные данные', { status: 400 });
   }
 
   try {
-    const transaction = await prisma.transaction.update({
+    await prisma.transaction.delete({
       where: { id: parseInt(id, 10) },
-      data: {
-        title,
-        titleSearch,
-        amount: parseFloat(amount),
-        date: new Date(date),
-        category,
-        type,
-      },
     });
 
     revalidatePath(getPath('transactions'), 'page');
 
-    return new Response(JSON.stringify({ transaction }));
-  } catch {
-    return new Response('Не получилось обновить транзакцию', { status: 500 });
+    return new Response('Транзакция успешно удалена', { status: 200 });
+  } catch (error) {
+    console.error('Ошибка при удалении транзакции:', error);
+    return new Response('Не удалось удалить транзакцию', { status: 500 });
   }
 }
