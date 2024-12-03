@@ -11,7 +11,6 @@ import styles from './sidebar-nav.module.scss';
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isFullOpen, setIsFullOpen] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
@@ -20,19 +19,6 @@ export function Sidebar() {
     { href: getPath('savings'), icon: FiDollarSign, label: 'Сбережения' },
     { href: getPath('settings'), icon: FiUser, label: 'Настройки' },
   ];
-
-  useEffect(() => {
-    if (isOpen) {
-      const timeout = setTimeout(() => {
-        setIsFullOpen(true);
-      }, 100);
-      return () => {
-        clearTimeout(timeout);
-      };
-    }
-    setIsFullOpen(false);
-    return undefined;
-  }, [isOpen]);
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
@@ -76,7 +62,7 @@ export function Sidebar() {
             onClick={closeSidebar}
           >
             <item.icon size={32} />
-            {isFullOpen && <span>{item.label}</span>}
+            <span>{item.label}</span>
           </Button>
         ))}
         <Button
@@ -85,7 +71,7 @@ export function Sidebar() {
           onClick={signOutHandler}
         >
           <FiLogOut size={32} />
-          {isOpen && 'Выйти'}
+          <span>Выйти</span>
         </Button>
       </nav>
     </aside>
