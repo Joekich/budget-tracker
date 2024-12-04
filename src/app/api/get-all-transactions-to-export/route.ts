@@ -1,16 +1,11 @@
 import { getAllUserTransactions } from 'views/transactions';
 import * as XLSX from 'xlsx-js-style';
+import { type CellStyle } from 'xlsx-js-style';
 
 import { auth } from '../../model/auth';
 
 type TypedCell = {
-  v: string;
-  s?: {
-    font?: object;
-    alignment?: object;
-    border?: object;
-    fill?: object;
-  };
+  s?: CellStyle;
 };
 
 export async function GET() {
@@ -37,20 +32,19 @@ export async function GET() {
     const sheetData = [headers, ...data];
     const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
 
-    const columnWidths = headers.map((_, colIndex) => {
+    worksheet['!cols'] = headers.map((_, colIndex) => {
       const maxLength = sheetData.reduce((max, row) => {
         const cellValue = row[colIndex];
         return Math.max(max, cellValue?.toString().length || 0);
       }, 0);
       return { wch: maxLength + 4 };
     });
-    worksheet['!cols'] = columnWidths;
 
     headers.forEach((_, colIndex) => {
       const headerCellAddress = XLSX.utils.encode_cell({ r: 0, c: colIndex });
-      const headerCell = worksheet[headerCellAddress];
+      const headerCell: TypedCell = worksheet[headerCellAddress];
       if (headerCell) {
-        (headerCell as TypedCell).s = {
+        headerCell.s = {
           font: { bold: true },
           alignment: { horizontal: 'center', vertical: 'center' },
           border: {
@@ -64,9 +58,9 @@ export async function GET() {
     data.forEach((row, rowIndex) => {
       row.forEach((cellValue, colIndex) => {
         const cellAddress = XLSX.utils.encode_cell({ r: rowIndex + 1, c: colIndex });
-        const cell = worksheet[cellAddress];
+        const cell: TypedCell = worksheet[cellAddress];
         if (cell) {
-          (cell as TypedCell).s = {
+          cell.s = {
             alignment: { horizontal: 'center', vertical: 'center' },
             border: {
               right: { style: 'thin', color: { rgb: '000000' } },
@@ -74,7 +68,7 @@ export async function GET() {
           };
 
           if (colIndex === 1) {
-            (cell as TypedCell).s!.fill = {
+            cell.s.fill = {
               fgColor: { rgb: cellValue === 'Доход' ? 'D4FCD8' : 'FCD8D8' },
             };
           }
