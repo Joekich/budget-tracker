@@ -4,6 +4,7 @@ import { type Transaction } from 'entities/transaction';
 import { FiltersManager } from '../filters-manager/filters-manager';
 import { TransactionDeleteManager } from '../transaction-delete-manager/transaction-delete-manager';
 import { TransactionEditManager } from '../transaction-edit-manager/transaction-edit-manager';
+import { TransactionExportToExcel } from '../transaction-export-to-excel/transaction-export-to-excel';
 import { TransactionsPagination } from './pagination/transactions-pagination';
 import { TransactionsSearch } from './search/transactions-search';
 import styles from './transactions-page.module.scss';
@@ -22,6 +23,7 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
         <div className={styles.actions}>
           <TransactionsSearch />
           <FiltersManager />
+          <TransactionExportToExcel />
         </div>
         <ul className={styles.transactionList}>
           {transactions.length > 0 ? (
