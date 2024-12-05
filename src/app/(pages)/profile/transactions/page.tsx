@@ -10,7 +10,7 @@ import { getPath } from 'shared/routing/paths';
 import { getUserTransactions, TransactionsPage } from 'views/transactions';
 import { z } from 'zod';
 
-import { auth } from '../../../model/auth';
+import { auth } from '@/prisma/auth';
 
 const ALL_CATEGORIES = [...TRANSACTION_INCOME_CATEGORIES, ...TRANSACTION_EXPENSE_CATEGORIES];
 

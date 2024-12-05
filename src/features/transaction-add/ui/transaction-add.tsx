@@ -1,3 +1,5 @@
+'use client';
+
 import clsx from 'clsx';
 import {
   TRANSACTION_EXPENSE_CATEGORIES,
@@ -6,8 +8,10 @@ import {
 } from 'entities/transaction';
 import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
-import { z } from 'zod';
+import { type z } from 'zod';
 
+import { createTransactionAction } from '../api/createTransaction.action';
+import { createTransactionClientValidation } from '../model/createTransaction.validation';
 import styles from './transaction-add.module.scss';
 
 type TransactionAddProps = {
@@ -15,14 +19,7 @@ type TransactionAddProps = {
   onClose: () => void;
 };
 
-const transactionSchema = z.object({
-  title: z.string().min(1, 'Поле должно быть заполнено'),
-  amount: z.string().min(1, 'Поле должно быть заполнено'),
-  category: z.string().min(1, ''),
-  date: z.string().min(1, 'Дата должна быть указана'),
-});
-
-type TransactionFormFields = keyof z.infer<typeof transactionSchema>;
+type TransactionFormFields = keyof z.infer<typeof createTransactionClientValidation>;
 type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
 
 export function TransactionAdd({ type, onClose }: TransactionAddProps) {
@@ -35,7 +32,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
 
   const handleSubmit = async () => {
-    const result = transactionSchema.safeParse({ title, amount, category, date });
+    const result = createTransactionClientValidation.safeParse({ title, amount, category, date });
 
     if (!result.success) {
       const { fieldErrors } = result.error.formErrors;
@@ -48,19 +45,14 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
       return;
     }
 
-    const normalizedTitle = title.toLowerCase().trim();
-
-    await fetch('/api/create-transaction', {
-      method: 'POST',
-      body: JSON.stringify({
-        title,
-        titleSearch: normalizedTitle,
-        amount: parseFloat(amount),
-        date,
-        category,
-        type,
-      }),
+    await createTransactionAction({
+      title,
+      amount,
+      date,
+      category,
+      type,
     });
+
     onClose();
   };
 

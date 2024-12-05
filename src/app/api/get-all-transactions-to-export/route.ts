@@ -2,7 +2,7 @@ import { getAllUserTransactions } from 'views/transactions';
 import * as XLSX from 'xlsx-js-style';
 import { type CellStyle } from 'xlsx-js-style';
 
-import { auth } from '../../model/auth';
+import { auth } from '@/prisma/auth';
 
 type TypedCell = {
   s?: CellStyle;

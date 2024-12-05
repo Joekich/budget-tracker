@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { HomePage } from 'views/home';
 
-import { auth } from '../../model/auth';
+import { auth } from '@/prisma/auth';
 
 export default async function Home() {
   const session = await auth();

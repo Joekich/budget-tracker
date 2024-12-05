@@ -3,7 +3,7 @@ import { type NextRequest } from 'next/server';
 import { prisma } from 'shared/lib/prisma';
 import { getPath } from 'shared/routing/paths';
 
-import { auth } from '../../model/auth';
+import { auth } from '@/prisma/auth';
 
 export async function PUT(req: NextRequest) {
   const session = await auth();

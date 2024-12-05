@@ -7,8 +7,8 @@ import { SessionProvider } from 'next-auth/react';
 import { type ReactNode } from 'react';
 import { getMetadata } from 'shared/lib/metadata';
 
+import { auth } from '../../prisma/auth';
 import { inter } from './fonts';
-import { auth } from './model/auth';
 
 export async function generateMetadata(): Promise<Metadata> {
   // const globals = await globalsApi.get();

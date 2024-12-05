@@ -4,7 +4,7 @@ import { getMetadata } from 'shared/lib/metadata';
 import { getPath } from 'shared/routing/paths';
 import { DashboardPage } from 'views/dashboard';
 
-import { auth } from '../../../model/auth';
+import { auth } from '@/prisma/auth';
 
 export async function generateMetadata(): Promise<Metadata> {
   return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'dashboard' });

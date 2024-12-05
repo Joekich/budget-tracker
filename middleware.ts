@@ -1,1 +1,1 @@
-export { auth as middleware } from "app/model/auth"
+export { auth as middleware } from "@/prisma/auth"
