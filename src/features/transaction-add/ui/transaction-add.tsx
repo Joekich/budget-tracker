@@ -35,7 +35,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
 
   const handleSubmit = async () => {
-    const result = transactionSchema.safeParse({ title, amount, category });
+    const result = transactionSchema.safeParse({ title, amount, category, date });
 
     if (!result.success) {
       const { fieldErrors } = result.error.formErrors;
