@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
 import { z } from 'zod';
 
+import { EditTransactionAction } from '../api/editTransaction.action';
 import styles from './transaction-edit.module.scss';
 
 type TransactionEditProps = {
@@ -41,7 +42,7 @@ export function TransactionEdit({ transaction, onClose, onSave }: TransactionEdi
   const [title, setTitle] = useState(transaction.title);
   const [amount, setAmount] = useState(transaction.amount.toString());
   const [category, setCategory] = useState(transaction.category);
-  const [date, setDate] = useState(transaction.date.toISOString().split('T')[0]);
+  const [date, setDate] = useState(transaction.date.toISOString().split('T')[0] || '');
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
   const categories = transaction.type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
@@ -60,22 +61,15 @@ export function TransactionEdit({ transaction, onClose, onSave }: TransactionEdi
       return;
     }
 
-    const normalizedTitle = title.toLowerCase().trim();
-
-    await fetch('/api/update-transaction', {
-      method: 'PUT',
-      body: JSON.stringify({
-        id: transaction.id,
-        title,
-        titleSearch: normalizedTitle,
-        amount: parseFloat(amount),
-        date: date ? new Date(date) : null,
-        category,
-        type: transaction.type,
-      }),
+    await EditTransactionAction({
+      id: transaction.id,
+      title,
+      amount: parseFloat(amount),
+      date,
+      category,
+      type: transaction.type,
     });
     onSave();
-
     router.refresh();
   };
 
