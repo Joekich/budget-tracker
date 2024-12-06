@@ -4,6 +4,7 @@ import { type Transaction } from 'entities/transaction';
 import { useRouter } from 'next/navigation';
 import { Button } from 'shared/ui/button/ui/button';
 
+import { deleteTransactionAction } from '../api/deleteTransaction.action';
 import styles from './transaction-delete.module.scss';
 
 type TransactionDeleteProps = {
@@ -16,17 +17,9 @@ export function TransactionDelete({ transaction, onClose, onDelete }: Transactio
   const router = useRouter();
 
   const handleDelete = async () => {
-    const response = await fetch('/api/delete-transaction', {
-      method: 'DELETE',
-      body: JSON.stringify({ id: transaction.id }),
-    });
-
-    if (response.ok) {
-      onDelete();
-      router.refresh();
-    } else {
-      console.error('Ошибка при удалении транзакции');
-    }
+    await deleteTransactionAction(transaction.id);
+    onDelete();
+    router.refresh();
   };
 
   return (
