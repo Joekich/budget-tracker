@@ -70,6 +70,9 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
           placeholder={errors.title || 'Название операции'}
           value={title}
           className={styles.input}
+          onClick={(e) => {
+            (e.target as HTMLInputElement).showPicker?.();
+          }}
           onChange={(e) => {
             setTitle(e.target.value);
           }}
@@ -111,6 +114,9 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
           type="date"
           value={date}
           className={styles.input}
+          onClick={(e) => {
+            (e.target as HTMLInputElement).showPicker?.();
+          }}
           onChange={(e) => {
             setDate(e.target.value);
           }}

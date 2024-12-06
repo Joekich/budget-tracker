@@ -187,6 +187,9 @@ export function TransactionFilters({ onClose }: FiltersProps) {
               className={clsx(styles.input)}
               type="date"
               value={filters.dateRange.start ? filters.dateRange.start.toISOString().slice(0, 10) : ''}
+              onClick={(e) => {
+                (e.target as HTMLInputElement).showPicker?.();
+              }}
               onChange={(e) => {
                 setFilters((prev) => ({
                   ...prev,
@@ -201,6 +204,9 @@ export function TransactionFilters({ onClose }: FiltersProps) {
               className={clsx(styles.input)}
               type="date"
               value={filters.dateRange.end ? filters.dateRange.end.toISOString().slice(0, 10) : ''}
+              onClick={(e) => {
+                (e.target as HTMLInputElement).showPicker?.();
+              }}
               onChange={(e) => {
                 setFilters((prev) => ({
                   ...prev,
