@@ -1,40 +1,27 @@
 'use client';
 
+import { type Transaction } from '@prisma/client';
 import clsx from 'clsx';
 import {
   TRANSACTION_EXPENSE_CATEGORIES,
   TRANSACTION_INCOME_CATEGORIES,
-  type TransactionType,
+  transactionFormValidation,
 } from 'entities/transaction';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
-import { z } from 'zod';
+import { type z } from 'zod';
 
 import { EditTransactionAction } from '../api/editTransaction.action';
 import styles from './transaction-edit.module.scss';
 
 type TransactionEditProps = {
-  transaction: {
-    id: number;
-    title: string;
-    amount: number;
-    date: Date;
-    category: string;
-    type: TransactionType;
-  };
+  transaction: Transaction;
   onClose: () => void;
   onSave: () => void;
 };
 
-const transactionSchema = z.object({
-  title: z.string().min(1, 'Поле должно быть заполнено'),
-  amount: z.string().min(1, 'Поле должно быть заполнено'),
-  category: z.string().min(1, 'Выберите категорию'),
-  date: z.string().min(1, 'Дата должна быть указана'),
-});
-
-type TransactionFormFields = keyof z.infer<typeof transactionSchema>;
+type TransactionFormFields = keyof z.infer<typeof transactionFormValidation>;
 type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
 
 export function TransactionEdit({ transaction, onClose, onSave }: TransactionEditProps) {
@@ -42,13 +29,13 @@ export function TransactionEdit({ transaction, onClose, onSave }: TransactionEdi
   const [title, setTitle] = useState(transaction.title);
   const [amount, setAmount] = useState(transaction.amount.toString());
   const [category, setCategory] = useState(transaction.category);
-  const [date, setDate] = useState(transaction.date.toISOString().split('T')[0] || '');
+  const [date, setDate] = useState(new Date(transaction.date).toISOString().split('T')[0] || '');
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
   const categories = transaction.type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
 
   const handleSubmit = async () => {
-    const result = transactionSchema.safeParse({ title, amount, category, date });
+    const result = transactionFormValidation.safeParse({ title, amount, category, date });
 
     if (!result.success) {
       const { fieldErrors } = result.error.formErrors;
@@ -64,7 +51,7 @@ export function TransactionEdit({ transaction, onClose, onSave }: TransactionEdi
     await EditTransactionAction({
       id: transaction.id,
       title,
-      amount: parseFloat(amount),
+      amount,
       date,
       category,
       type: transaction.type,

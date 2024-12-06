@@ -1,11 +1,8 @@
 'use client';
 
+import { type Transaction } from '@prisma/client';
 import clsx from 'clsx';
-import {
-  TRANSACTION_EXPENSE_CATEGORIES,
-  TRANSACTION_INCOME_CATEGORIES,
-  type TransactionType,
-} from 'entities/transaction';
+import { TRANSACTION_EXPENSE_CATEGORIES, TRANSACTION_INCOME_CATEGORIES } from 'entities/transaction';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getPath } from 'shared/routing/paths';
@@ -14,7 +11,7 @@ import { Button } from 'shared/ui/button';
 import styles from './transaction-filters.module.scss';
 
 export type FiltersState = {
-  type: TransactionType | null;
+  type: Transaction['type'] | null;
   categories: string[];
   amountRange: { min: number | null; max: number | null };
   dateRange: { start: Date | null; end: Date | null };
@@ -27,7 +24,7 @@ export const parseFiltersFromUrl = (params: URLSearchParams): FiltersState => {
   const dateEnd = params.get('dateEnd');
 
   return {
-    type: (params.get('type') as TransactionType) || null,
+    type: (params.get('type') as Transaction['type']) || null,
     categories: params.get('categories')?.split(',') || [],
     amountRange: {
       min: amountMin ? parseFloat(amountMin) : null,
@@ -120,7 +117,7 @@ export function TransactionFilters({ onClose }: FiltersProps) {
             className={clsx(styles.select)}
             value={filters.type || ''}
             onChange={(e) => {
-              setFilters((prev) => ({ ...prev, type: e.target.value as TransactionType | null }));
+              setFilters((prev) => ({ ...prev, type: e.target.value as Transaction['type'] | null }));
             }}
           >
             <option value="">Все</option>

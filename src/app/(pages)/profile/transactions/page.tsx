@@ -1,8 +1,5 @@
-import {
-  TRANSACTION_EXPENSE_CATEGORIES,
-  TRANSACTION_INCOME_CATEGORIES,
-  type TransactionType,
-} from 'entities/transaction';
+import { type Transaction } from '@prisma/client';
+import { TRANSACTION_EXPENSE_CATEGORIES, TRANSACTION_INCOME_CATEGORIES } from 'entities/transaction';
 import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'shared/lib/metadata';
@@ -46,7 +43,7 @@ async function Transactions({
   searchParams: {
     page?: string;
     searchQuery?: string;
-    type?: TransactionType;
+    type?: Transaction['type'];
     categories?: string;
     amountMin?: string;
     amountMax?: string;

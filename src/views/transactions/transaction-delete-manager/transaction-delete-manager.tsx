@@ -1,6 +1,6 @@
 'use client';
 
-import { type Transaction } from 'entities/transaction';
+import { type Transaction } from '@prisma/client';
 import { TransactionDelete } from 'features/transaction-delete';
 import { useState } from 'react';
 import { FiDelete } from 'react-icons/fi';

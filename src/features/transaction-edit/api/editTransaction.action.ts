@@ -1,20 +1,14 @@
 'use server';
 
-import { type TransactionType } from '@prisma/client';
+import { type Transaction } from '@prisma/client';
+import { transactionSchema } from 'entities/transaction';
 import { prisma } from 'shared/lib/prisma';
 
 import { auth } from '@/prisma/auth';
 
-type EditTransactionProps = {
-  id: number;
-  title: string;
-  amount: number;
-  date: string;
-  category: string;
-  type: TransactionType;
-};
-
-export async function EditTransactionAction({ id, title, amount, date, category, type }: EditTransactionProps) {
+export async function EditTransactionAction(
+  props: Omit<Transaction, 'date' | 'amount' | 'userId' | 'titleSearch'> & { date: string; amount: string },
+) {
   const session = await auth();
 
   if (!session?.user) {
@@ -26,9 +20,7 @@ export async function EditTransactionAction({ id, title, amount, date, category,
     throw new Error('Не удалось определить пользователя');
   }
 
-  if (!id || !title || Number.isNaN(amount) || !date || !category || !type) {
-    throw new Error('Некорректные данные');
-  }
+  const { id, title, amount, date, category, type } = transactionSchema.parse(props);
 
   try {
     await prisma.transaction.update({

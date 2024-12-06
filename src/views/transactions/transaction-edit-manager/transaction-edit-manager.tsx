@@ -1,17 +1,13 @@
 'use client';
 
-import { type Transaction } from 'entities/transaction';
+import { type Transaction } from '@prisma/client';
 import { TransactionEdit } from 'features/transaction-edit';
 import { useState } from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
-type TransactionEditManagerProps = {
-  transaction: Transaction;
-};
-
-export function TransactionEditManager({ transaction }: TransactionEditManagerProps) {
+export function TransactionEditManager({ transaction }: { transaction: Transaction }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const openEditModal = () => {

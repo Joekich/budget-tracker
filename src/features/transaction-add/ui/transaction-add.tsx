@@ -1,25 +1,25 @@
 'use client';
 
+import { type Transaction } from '@prisma/client';
 import clsx from 'clsx';
 import {
   TRANSACTION_EXPENSE_CATEGORIES,
   TRANSACTION_INCOME_CATEGORIES,
-  type TransactionType,
+  transactionFormValidation,
 } from 'entities/transaction';
 import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
 import { type z } from 'zod';
 
 import { createTransactionAction } from '../api/createTransaction.action';
-import { createTransactionClientValidation } from '../model/createTransaction.validation';
 import styles from './transaction-add.module.scss';
 
 type TransactionAddProps = {
-  type: TransactionType;
+  type: Transaction['type'];
   onClose: () => void;
 };
 
-type TransactionFormFields = keyof z.infer<typeof createTransactionClientValidation>;
+type TransactionFormFields = keyof z.infer<typeof transactionFormValidation>;
 type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
 
 export function TransactionAdd({ type, onClose }: TransactionAddProps) {
@@ -32,7 +32,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
 
   const handleSubmit = async () => {
-    const result = createTransactionClientValidation.safeParse({ title, amount, category, date });
+    const result = transactionFormValidation.safeParse({ title, amount, category, date });
 
     if (!result.success) {
       const { fieldErrors } = result.error.formErrors;

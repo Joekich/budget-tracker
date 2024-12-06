@@ -1,5 +1,5 @@
+import { type Transaction } from '@prisma/client';
 import clsx from 'clsx';
-import { type Transaction } from 'entities/transaction';
 
 import { FiltersManager } from '../filters-manager/filters-manager';
 import { TransactionDeleteManager } from '../transaction-delete-manager/transaction-delete-manager';

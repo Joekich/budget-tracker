@@ -1,6 +1,6 @@
 'use client';
 
-import { type TransactionType } from 'entities/transaction';
+import { type Transaction } from '@prisma/client';
 import { TransactionAdd } from 'features/transaction-add';
 import { type Session } from 'next-auth';
 import { useState } from 'react';
@@ -14,9 +14,9 @@ import styles from './dashboard-page.module.scss';
 
 export function DashboardPage({ session }: { session: Session }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactionType, setTransactionType] = useState<TransactionType>('income');
+  const [transactionType, setTransactionType] = useState<Transaction['type']>('income');
 
-  const openModal = (type: TransactionType) => {
+  const openModal = (type: Transaction['type']) => {
     setTransactionType(type);
     setIsModalOpen(true);
   };

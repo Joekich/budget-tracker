@@ -1,14 +1,13 @@
 'use server';
 
-import { type Transaction } from 'entities/transaction';
+import { type Transaction } from '@prisma/client';
+import { transactionSchema } from 'entities/transaction';
 import { prisma } from 'shared/lib/prisma';
 
 import { auth } from '@/prisma/auth';
 
-import { createTransactionValidation } from '../model/createTransaction.validation';
-
 export async function createTransactionAction(
-  data: Omit<Transaction, 'id' | 'date' | 'amount'> & { date: string; amount: string },
+  data: Omit<Transaction, 'id' | 'date' | 'amount' | 'userId' | 'titleSearch'> & { date: string; amount: string },
 ) {
   const session = await auth();
 
@@ -21,7 +20,7 @@ export async function createTransactionAction(
     throw new Error('Auth');
   }
 
-  const parse = createTransactionValidation.parse(data);
+  const parse = transactionSchema.parse({ ...data, id: 0 });
   const { title, amount, date, category, type } = parse;
   const titleSearch = title.toLowerCase().trim();
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { type Transaction } from 'entities/transaction';
+import { type Transaction } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { Button } from 'shared/ui/button/ui/button';
 
