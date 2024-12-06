@@ -4,11 +4,12 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { PiWarningCircle } from 'react-icons/pi';
 import { fetch } from 'shared/lib/fetch';
 import { Button } from 'shared/ui/button/ui/button';
 import { Input } from 'shared/ui/input';
 
-import { schemaSignupValidation } from '../model/signin.types';
+import { schemaSignupValidation } from '../model/signup.types';
 import styles from './signup-page.module.scss';
 
 export function SignUpPage() {
@@ -18,15 +19,8 @@ export function SignUpPage() {
     password: '',
     confirmPassword: '',
   });
-  const [focusedField, setFocusedField] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const isFormValid = () =>
-    schemaSignupValidation.safeParse({
-      login: state.login,
-      password: state.password,
-      confirmPassword: state.confirmPassword,
-    }).success;
+  const [fieldErrors, setFieldErrors] = useState<{ login?: string; password?: string; confirmPassword?: string }>({});
 
   const handleInputChange = (key: keyof typeof state) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setState((prev) => ({
@@ -40,7 +34,21 @@ export function SignUpPage() {
   };
 
   const handleSubmit = async () => {
-    if (!isFormValid()) return;
+    const validation = schemaSignupValidation.safeParse(state);
+
+    if (!validation.success) {
+      const errors: Record<string, string> = {};
+      validation.error.issues.forEach((issue) => {
+        if (issue.path[0]) {
+          const key = issue.path[0] as keyof typeof fieldErrors;
+          errors[key] = issue.message;
+        }
+      });
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
 
     try {
       await fetch.post('/api/signup', {
@@ -63,47 +71,45 @@ export function SignUpPage() {
           <h1>Регистрация нового пользователя</h1>
         </header>
         <form className={styles.authContainer}>
-          <div className={styles.inputWrapper}>
+          <div className={styles.info}>
+            <span>
+              <PiWarningCircle size={20} /> Логин должен состоять минимум из 4 символов
+            </span>
+            <span>
+              <PiWarningCircle size={20} /> Пароль должен состоять минимум из 8 символов, <br /> содержать одну
+              заглавную букву английского алфавита и одну цифру
+            </span>
+          </div>
+          <div className={clsx(styles.inputWrapper, fieldErrors.login && styles.inputError)}>
             <Input
               value={state.login}
               className={styles.authInput}
               onChange={handleInputChange('login')}
               onFocus={() => {
-                setFocusedField('login');
-              }}
-              onBlur={() => {
-                setFocusedField('');
+                setFieldErrors((prev) => ({ ...prev, login: undefined }));
               }}
             />
-            <div
-              className={clsx(
-                styles.placeholder,
-                (focusedField === 'login' || state.login) && styles.placeholderActive,
-              )}
-            >
-              Логин
+            <div className={clsx(styles.placeholder, fieldErrors.login && styles.errorPlaceholder)}>
+              {fieldErrors.login || 'Логин'}
             </div>
           </div>
-          <div className={styles.inputWrapper}>
+          <div
+            className={clsx(
+              styles.inputWrapper,
+              (fieldErrors.password || fieldErrors.confirmPassword) && styles.inputError,
+            )}
+          >
             <Input
               type={isPasswordVisible ? 'text' : 'password'}
               value={state.password}
               className={styles.authInput}
               onChange={handleInputChange('password')}
               onFocus={() => {
-                setFocusedField('password');
-              }}
-              onBlur={() => {
-                setFocusedField('');
+                setFieldErrors((prev) => ({ ...prev, password: undefined, confirmPassword: undefined }));
               }}
             />
-            <div
-              className={clsx(
-                styles.placeholder,
-                (focusedField === 'password' || state.password) && styles.placeholderActive,
-              )}
-            >
-              Пароль
+            <div className={clsx(styles.placeholder, fieldErrors.password && styles.errorPlaceholder)}>
+              {fieldErrors.password || 'Пароль'}
             </div>
             <button
               type="button"
@@ -113,26 +119,18 @@ export function SignUpPage() {
               {isPasswordVisible ? <FiEyeOff size={24} /> : <FiEye size={24} />}
             </button>
           </div>
-          <div className={styles.inputWrapper}>
+          <div className={clsx(styles.inputWrapper, fieldErrors.confirmPassword && styles.inputError)}>
             <Input
               type={isPasswordVisible ? 'text' : 'password'}
               value={state.confirmPassword}
               className={styles.authInput}
               onChange={handleInputChange('confirmPassword')}
               onFocus={() => {
-                setFocusedField('confirmPassword');
-              }}
-              onBlur={() => {
-                setFocusedField('');
+                setFieldErrors((prev) => ({ ...prev, password: undefined, confirmPassword: undefined }));
               }}
             />
-            <div
-              className={clsx(
-                styles.placeholder,
-                (focusedField === 'confirmPassword' || state.confirmPassword) && styles.placeholderActive,
-              )}
-            >
-              Подтвердите пароль
+            <div className={clsx(styles.placeholder, fieldErrors.confirmPassword && styles.errorPlaceholder)}>
+              {fieldErrors.confirmPassword || 'Подтвердите пароль'}
             </div>
             <button
               type="button"
