@@ -38,7 +38,13 @@ export function SignUpPage() {
 
     if (!validation.success) {
       const errors: Record<string, string> = {};
-      validation.error.issues.forEach((issue) => {
+      // Object.keys(state).forEach((key) => {
+      //   const error = validation.error.issues.find(i => i.path[0] === key)?.message
+      //
+      //   if(error) errors[key] = error;
+      // })
+
+      validation.error.issues.reverse().forEach((issue) => {
         if (issue.path[0]) {
           const key = issue.path[0] as keyof typeof fieldErrors;
           errors[key] = issue.message;
