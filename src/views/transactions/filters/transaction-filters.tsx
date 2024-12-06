@@ -51,14 +51,20 @@ export function TransactionFilters({ onClose }: FiltersProps) {
     type: null,
     categories: [],
     amountRange: { min: null, max: null },
-    dateRange: { start: null, end: null },
+    dateRange: { start: null, end: new Date() },
   });
 
   const isIncomeSelected = filters.type === 'income';
 
   useEffect(() => {
     const parsedFilters = parseFiltersFromUrl(searchParams);
-    setFilters(parsedFilters);
+    setFilters({
+      ...parsedFilters,
+      dateRange: {
+        start: parsedFilters.dateRange.start,
+        end: parsedFilters.dateRange.end || new Date(),
+      },
+    });
   }, [searchParams]);
 
   const handleApply = () => {

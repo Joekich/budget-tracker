@@ -26,7 +26,7 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [title, setTitle] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
   const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
