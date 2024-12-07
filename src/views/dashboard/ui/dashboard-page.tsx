@@ -22,7 +22,6 @@ type DashboardPageProps = {
   onCloseModal: () => void;
   onYearChange: (year: string) => void;
   onMonthChange: (month: string) => void;
-  onTransactionAdd: () => Promise<void>;
 };
 
 export function DashboardPage({
@@ -35,18 +34,17 @@ export function DashboardPage({
   onCloseModal,
   onYearChange,
   onMonthChange,
-  onTransactionAdd,
 }: DashboardPageProps) {
   const { data: session } = useSession();
   if (!session) return null;
 
-  const income = filteredTransactions
-    .filter((transaction) => transaction.type === 'income')
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+  let income = 0;
+  let expense = 0;
 
-  const expense = filteredTransactions
-    .filter((transaction) => transaction.type === 'expense')
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+  filteredTransactions.forEach((transaction) => {
+    if (transaction.type === 'income') income += transaction.amount;
+    if (transaction.type === 'expense') expense += transaction.amount;
+  });
 
   const balance = income - expense;
 
@@ -73,8 +71,8 @@ export function DashboardPage({
         />
         <DashboardCategoriesBlock />
 
-        <Modal forceMount isOpen={isModalOpen} onClose={onCloseModal}>
-          <TransactionAdd type={transactionType} onClose={onCloseModal} onTransactionAdd={onTransactionAdd} />
+        <Modal isOpen={isModalOpen} onClose={onCloseModal}>
+          <TransactionAdd type={transactionType} onClose={onCloseModal} />
         </Modal>
       </div>
     </main>

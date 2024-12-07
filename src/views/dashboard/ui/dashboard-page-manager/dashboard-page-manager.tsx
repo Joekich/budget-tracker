@@ -2,7 +2,7 @@
 
 import { type Transaction } from '@prisma/client';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { getTransactionsByDate } from '../../api/get-transactions-by-date.action';
 import { DashboardPage } from '../dashboard-page';
@@ -13,7 +13,11 @@ export function DashboardPageManager({ transactions, years }: { transactions: Tr
   const [transactionType, setTransactionType] = useState<Transaction['type']>('income');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [selectedMonth, setSelectedMonth] = useState('all');
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>(transactions);
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
+
+  useEffect(() => {
+    setFilteredTransactions(transactions);
+  }, [transactions]);
 
   const getFilteredTransactions = async (year: string, month: string) => {
     if (!session?.user?.id) return;
@@ -45,10 +49,6 @@ export function DashboardPageManager({ transactions, years }: { transactions: Tr
     setIsModalOpen(false);
   };
 
-  const handleTransactionUpdate = async () => {
-    await getFilteredTransactions(selectedYear, selectedMonth);
-  };
-
   return (
     <DashboardPage
       years={years}
@@ -61,7 +61,6 @@ export function DashboardPageManager({ transactions, years }: { transactions: Tr
       onCloseModal={closeModal}
       onYearChange={handleYearChange}
       onMonthChange={handleMonthChange}
-      onTransactionAdd={handleTransactionUpdate}
     />
   );
 }

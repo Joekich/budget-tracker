@@ -7,6 +7,7 @@ import {
   TRANSACTION_INCOME_CATEGORIES,
   transactionFormValidation,
 } from 'entities/transaction';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
 import { type z } from 'zod';
@@ -17,28 +18,21 @@ import styles from './transaction-add.module.scss';
 type TransactionAddProps = {
   type: Transaction['type'];
   onClose: () => void;
-  onTransactionAdd: () => Promise<void>;
 };
 
 type TransactionFormFields = keyof z.infer<typeof transactionFormValidation>;
 type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
 
-export function TransactionAdd({ type, onClose, onTransactionAdd }: TransactionAddProps) {
+export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
-  const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
+  const router = useRouter();
 
-  const resetModal = () => {
-    setCategory('');
-    setAmount('');
-    setTitle('');
-    setDate(new Date().toISOString().slice(0, 10));
-    setErrors({});
-  };
+  const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
 
   const handleSubmit = async () => {
     const result = transactionFormValidation.safeParse({ title, amount, category, date });
@@ -62,9 +56,8 @@ export function TransactionAdd({ type, onClose, onTransactionAdd }: TransactionA
       type,
     });
 
-    resetModal();
-    onTransactionAdd?.();
     onClose();
+    router.refresh();
   };
 
   const handleChange = (field: TransactionFormFields) => () => {

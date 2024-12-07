@@ -15,6 +15,8 @@ type DashboardChartsBlockProps = {
 export const DashboardChartsBlock = React.memo(({ transactions, selectedMonth, title }: DashboardChartsBlockProps) => {
   const chartRef = useRef<HTMLDivElement>(null);
 
+  // ToDo: merge groupByMonths and groupByDays
+  // groupBySelectedMonth(transaction, type)
   function groupByMonths(groupedTransactions: Transaction[]) {
     const formatter = new Intl.DateTimeFormat('ru', { month: 'long' });
     const months = Array.from({ length: 12 }, (_, i) => i);
@@ -22,6 +24,7 @@ export const DashboardChartsBlock = React.memo(({ transactions, selectedMonth, t
       const monthlyTransactions = groupedTransactions.filter(
         (transaction) => new Date(transaction.date).getMonth() === month,
       );
+      // ToDo: duplicate filteredTransactions from dashboard-page
       const income = monthlyTransactions
         .filter((transaction) => transaction.type === 'income')
         .reduce((sum, transaction) => sum + transaction.amount, 0);
@@ -41,6 +44,7 @@ export const DashboardChartsBlock = React.memo(({ transactions, selectedMonth, t
           new Date(transaction.date).getMonth() + 1 === parseInt(month, 10) &&
           new Date(transaction.date).getDate() === day,
       );
+      // ToDo: duplicate filteredTransactions from dashboard-page
       const income = dailyTransactions
         .filter((transaction) => transaction.type === 'income')
         .reduce((sum, transaction) => sum + transaction.amount, 0);
@@ -60,6 +64,8 @@ export const DashboardChartsBlock = React.memo(({ transactions, selectedMonth, t
   useEffect(() => {
     if (chartRef.current) {
       const chart = echarts.init(chartRef.current);
+
+      // ToDo: perf
       const labels = chartData.map((item) => item.label);
       const incomeData = chartData.map((item) => item.income);
       const expenseData = chartData.map((item) => item.expense);
