@@ -3,7 +3,6 @@ import bcrypt from 'bcryptjs';
 import { findUser } from 'entities/user';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-
 import { prisma } from 'shared/lib/prisma';
 
 export const { handlers, auth } = NextAuth({
@@ -16,16 +15,12 @@ export const { handlers, auth } = NextAuth({
   callbacks: {
     session: async ({ session }) => {
       const user = await findUser(String(session.user.name));
-      const transactions = await prisma.transaction.findMany({
-        where: { userId: user?.id },
-      });
       return {
         ...session,
         user: {
           id: user?.id.toString(),
           name: user?.login,
         },
-        transactions,
       };
     },
   },

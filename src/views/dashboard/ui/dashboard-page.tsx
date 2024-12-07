@@ -1,6 +1,8 @@
+'use client';
+
 import { type Transaction } from '@prisma/client';
 import { TransactionAdd } from 'features/transaction-add';
-import { type Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { Modal } from 'shared/ui/modal';
 
 import { DashboardBalanceBlock } from './blocks/dashboard-balance-block';
@@ -10,8 +12,6 @@ import { DashboardChartsBlock } from './blocks/dashboard-charts-block';
 import styles from './dashboard-page.module.scss';
 
 type DashboardPageProps = {
-  session: Session;
-  transactions: Transaction[];
   years: string[];
   filteredTransactions: Transaction[];
   isModalOpen: boolean;
@@ -25,8 +25,6 @@ type DashboardPageProps = {
 };
 
 export function DashboardPage({
-  session,
-  transactions,
   years,
   filteredTransactions,
   isModalOpen,
@@ -36,12 +34,14 @@ export function DashboardPage({
   onYearChange,
   onMonthChange,
 }: DashboardPageProps) {
+  const { data: session } = useSession();
+  if (!session) return null;
+
   return (
     <main className={styles.pageWrapper}>
       <div className={styles.contentWrapper}>
         <DashboardButtonsBlock
           username={session.user?.name || null}
-          transactions={transactions}
           years={years}
           onIncomeClick={() => {
             onOpenModal('income');

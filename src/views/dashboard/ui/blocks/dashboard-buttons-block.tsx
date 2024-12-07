@@ -1,6 +1,5 @@
 'use client';
 
-import { type Transaction } from '@prisma/client';
 import { useState } from 'react';
 import { Button } from 'shared/ui/button/ui/button';
 
@@ -9,7 +8,6 @@ import styles from './dashboard-blocks.module.scss';
 type DashboardButtonsBlockProps = {
   username: string | null;
   years: string[];
-  transactions: Transaction[];
   onYearChange: (year: string) => void;
   onMonthChange: (month: string) => void;
   onIncomeClick: () => void;

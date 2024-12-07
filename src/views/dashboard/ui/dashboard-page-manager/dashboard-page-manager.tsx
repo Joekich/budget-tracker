@@ -1,21 +1,14 @@
 'use client';
 
 import { type Transaction } from '@prisma/client';
-import { type Session } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
-import { getTransactionsByDate } from '../../api/actions/get-transactions-by-date.action';
+import { getTransactionsByDate } from '../../api/get-transactions-by-date.action';
 import { DashboardPage } from '../dashboard-page';
 
-export function DashboardPageManager({
-  session,
-  transactions,
-  years,
-}: {
-  session: Session;
-  transactions: Transaction[];
-  years: string[];
-}) {
+export function DashboardPageManager({ transactions, years }: { transactions: Transaction[]; years: string[] }) {
+  const { data: session } = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<Transaction['type']>('income');
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
@@ -23,7 +16,7 @@ export function DashboardPageManager({
   const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>(transactions);
 
   const getFilteredTransactions = async (year: string, month: string) => {
-    if (!session.user?.id) return;
+    if (!session?.user?.id) return;
 
     try {
       const updatedTransactions = await getTransactionsByDate(parseInt(session.user.id, 10), year, month);
@@ -54,8 +47,6 @@ export function DashboardPageManager({
 
   return (
     <DashboardPage
-      session={session}
-      transactions={transactions}
       years={years}
       filteredTransactions={filteredTransactions}
       isModalOpen={isModalOpen}

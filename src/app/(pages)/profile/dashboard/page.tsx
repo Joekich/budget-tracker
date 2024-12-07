@@ -20,7 +20,7 @@ async function Dashboard() {
   const transactions = await getLastMonthTransactions(userId);
   const years = await getTransactionYears(userId);
 
-  return <DashboardPageManager session={session} transactions={transactions} years={years} />;
+  return <DashboardPageManager transactions={transactions} years={years} />;
 }
 
 export default Dashboard;
