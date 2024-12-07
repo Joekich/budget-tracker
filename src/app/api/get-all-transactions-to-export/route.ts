@@ -1,4 +1,4 @@
-import { getAllUserTransactions } from 'views/transactions';
+import { getAllUserTransactions } from 'entities/transaction';
 import * as XLSX from 'xlsx-js-style';
 import { type CellStyle } from 'xlsx-js-style';
 

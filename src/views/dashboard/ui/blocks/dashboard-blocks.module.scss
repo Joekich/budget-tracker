@@ -1,101 +1,154 @@
 .block {
-    display: flex;
-    gap: 1rem;
-    align-items: stretch;
-    justify-content: space-between;
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: space-between;
 
-    width: 80%;
-    margin: 0 auto;
-  }
+  width: 80%;
+  margin: 0 auto;
+}
   
-  .buttonsBlock {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-  }
+.buttonsBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
   
-  .greeting,
-  .middleBlock,
-  .buttons {
-    display: flex;
-    flex: 1;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
+.greeting,
+.middleBlock,
+.buttons {
+  display: flex;
+  flex: 1;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
 
-    height: 5rem;
-  }
+  height: 5rem;
+}
   
-  .buttons button {
-    width: 100%;
-    height: 100%;
-  }
+.buttons button {
+  width: 100%;
+  height: 100%;
+}
   
-  .balanceBlock {
-    flex-direction: column;
-    width: 80%;
-  }
+.balanceBlock {
+  flex-direction: column;
+  width: 80%;
+}
   
-  .balancePart {
-    flex: 1;
+.balancePart {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 
-    height: 5rem;
-    padding: 1rem;
+  width: 100%;
+  height: 5rem;
 
-    text-align: center;
+  background-color: #f8f9fa;
+  border: 1px solid black;
+  border-radius: 5px;
+}
 
-    border: 1px solid black;
-    border-radius: 0.5rem;
-  }
+.balancePart h2,
+.balancePart p {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+}
+
+.balancePart h2 {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.balancePart p {
+  height: 100%;
+
+  font-size: 1.4rem;
+  font-weight: bold;
+
+  background-color: #eaeaea;
+  border-radius: 0.5rem;
+  box-shadow: inset 2px 2px 5px rgb(0 0 0 / 10%), inset -2px -2px 5px rgb(255 255 255 / 60%);
+}
   
-  .balancePart:last-child {
-    margin-right: 0;
-  }
+.balancePart:last-child {
+  margin-right: 0;
+}
   
-  .chartBlock {
-    width: 80%;
-    height: 40rem;
-    padding: 1rem;
+.chartBlock {
+  width: 80%;
+  height: 40rem;
+  padding: 1rem;
 
-    border: 1px solid black;
-    border-radius: 0.5rem;
-  }
+  border: 1px solid black;
+  border-radius: 0.5rem;
+}
   
-  .categoriesBlock {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-  }
+.categoriesBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
   
-  .categoryPart {
-    flex: 1;
+.categoryPart {
+  flex: 1;
 
-    height: 25rem;
-    margin-right: 1rem;
-    padding: 1rem;
+  height: 25rem;
+  margin-right: 1rem;
+  padding: 1rem;
 
-    text-align: center;
+  text-align: center;
 
-    border: 1px solid black;
-    border-radius: 0.5rem;
-  }
+  border: 1px solid black;
+  border-radius: 0.5rem;
+}
   
-  .categoryPart:last-child {
-    margin-right: 0;
-  }
+.categoryPart:last-child {
+  margin-right: 0;
+}
 
-  .block .incomeButton {
-    background-color: rgb(34 126 34);
+.block .incomeButton {
+  background-color: rgb(34 126 34);
   
-    &:hover {
-      background-color: rgb(61 179 61);
-    }
+  &:hover {
+    background-color: rgb(61 179 61);
   }
+}
 
-  .block .expenseButton {
-    background-color: rgb(150 15 15);
+.block .expenseButton {
+  background-color: rgb(150 15 15);
 
-    &:hover{
-      background-color: rgb(196 32 32);
-    }
+  &:hover{
+    background-color: rgb(196 32 32);
   }
+}
+
+.middleBlock {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+  
+.select {
+  cursor: pointer;
+
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+
+  font-size: 1.5rem;
+  color: black;
+  text-align: center;
+
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+}
+  
+.select:focus {
+  border-color: black;
+}
