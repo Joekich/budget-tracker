@@ -45,6 +45,10 @@ export function DashboardPageManager({ transactions, years }: { transactions: Tr
     setIsModalOpen(false);
   };
 
+  const handleTransactionUpdate = async () => {
+    await getFilteredTransactions(selectedYear, selectedMonth);
+  };
+
   return (
     <DashboardPage
       years={years}
@@ -57,6 +61,7 @@ export function DashboardPageManager({ transactions, years }: { transactions: Tr
       onCloseModal={closeModal}
       onYearChange={handleYearChange}
       onMonthChange={handleMonthChange}
+      onTransactionAdd={handleTransactionUpdate}
     />
   );
 }

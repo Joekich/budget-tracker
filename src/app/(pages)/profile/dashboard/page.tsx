@@ -2,7 +2,7 @@ import { type Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getMetadata } from 'shared/lib/metadata';
 import { getPath } from 'shared/routing/paths';
-import { DashboardPageManager, getLastMonthTransactions, getTransactionYears } from 'views/dashboard';
+import { DashboardPageManager, getLastYearTransactions, getTransactionYears } from 'views/dashboard';
 
 import { auth } from '@/prisma/auth';
 
@@ -17,7 +17,7 @@ async function Dashboard() {
   const userId = session.user?.id ? parseInt(session.user.id, 10) : null;
   if (!userId) redirect(getPath('homepage'));
 
-  const transactions = await getLastMonthTransactions(userId);
+  const transactions = await getLastYearTransactions(userId);
   const years = await getTransactionYears(userId);
 
   return <DashboardPageManager transactions={transactions} years={years} />;

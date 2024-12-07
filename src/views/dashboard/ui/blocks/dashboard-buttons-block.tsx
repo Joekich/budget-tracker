@@ -23,7 +23,7 @@ export function DashboardButtonsBlock({
   onIncomeClick,
 }: DashboardButtonsBlockProps) {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
-  const [selectedMonth, setSelectedMonth] = useState((new Date().getMonth() + 1).toString());
+  const [selectedMonth, setSelectedMonth] = useState('all');
 
   const months = [
     'Январь',

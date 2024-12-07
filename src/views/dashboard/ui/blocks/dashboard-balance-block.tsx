@@ -1,16 +1,12 @@
-import { type Transaction } from '@prisma/client';
-
 import styles from './dashboard-blocks.module.scss';
 
 type DashboardBalanceBlockProps = {
-  transactions: Transaction[];
+  income: number;
+  expense: number;
+  balance: number;
 };
 
-export function DashboardBalanceBlock({ transactions }: DashboardBalanceBlockProps) {
-  const income = transactions.filter((t) => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-  const expense = transactions.filter((t) => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-  const balance = income - expense;
-
+export function DashboardBalanceBlock({ income, expense, balance }: DashboardBalanceBlockProps) {
   return (
     <div className={styles.block}>
       <div className={styles.balancePart}>

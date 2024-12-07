@@ -17,12 +17,13 @@ import styles from './transaction-add.module.scss';
 type TransactionAddProps = {
   type: Transaction['type'];
   onClose: () => void;
+  onTransactionAdd: () => Promise<void>;
 };
 
 type TransactionFormFields = keyof z.infer<typeof transactionFormValidation>;
 type ErrorsStateProps = Partial<Record<TransactionFormFields, string | undefined>>;
 
-export function TransactionAdd({ type, onClose }: TransactionAddProps) {
+export function TransactionAdd({ type, onClose, onTransactionAdd }: TransactionAddProps) {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
   const [title, setTitle] = useState('');
@@ -30,6 +31,14 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
   const [errors, setErrors] = useState<ErrorsStateProps>({});
 
   const categories = type === 'income' ? TRANSACTION_INCOME_CATEGORIES : TRANSACTION_EXPENSE_CATEGORIES;
+
+  const resetModal = () => {
+    setCategory('');
+    setAmount('');
+    setTitle('');
+    setDate(new Date().toISOString().slice(0, 10));
+    setErrors({});
+  };
 
   const handleSubmit = async () => {
     const result = transactionFormValidation.safeParse({ title, amount, category, date });
@@ -53,6 +62,8 @@ export function TransactionAdd({ type, onClose }: TransactionAddProps) {
       type,
     });
 
+    resetModal();
+    onTransactionAdd?.();
     onClose();
   };
 

@@ -7,7 +7,7 @@ import { SavingsPage } from 'views/savings';
 import { auth } from '@/prisma/auth';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'settings' });
+  return getMetadata({ title: 'Profile - budget tracker', description: 'your finance helper', path: 'savings' });
 }
 
 async function Savings() {
