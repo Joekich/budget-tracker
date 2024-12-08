@@ -1,43 +1,34 @@
 'use client';
 
 import { type Transaction } from '@prisma/client';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { getTransactionsByDate } from '../../api/get-transactions-by-date.action';
 import { DashboardPage } from '../dashboard-page';
 
-export function DashboardPageManager({ transactions, years }: { transactions: Transaction[]; years: string[] }) {
-  const { data: session } = useSession();
+export function DashboardPageManager({
+  transactions,
+  years,
+  initialYear,
+  initialMonth,
+}: {
+  transactions: Transaction[];
+  years: string[];
+  initialYear: string;
+  initialMonth: string;
+}) {
+  const [selectedYear, setSelectedYear] = useState(initialYear);
+  const [selectedMonth, setSelectedMonth] = useState(initialMonth);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<Transaction['type']>('income');
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
-  const [selectedMonth, setSelectedMonth] = useState('all');
-  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([]);
 
-  useEffect(() => {
-    setFilteredTransactions(transactions);
-  }, [transactions]);
+  const router = useRouter();
 
-  const getFilteredTransactions = async (year: string, month: string) => {
-    if (!session?.user?.id) return;
-
-    try {
-      const updatedTransactions = await getTransactionsByDate(parseInt(session.user.id, 10), year, month);
-      setFilteredTransactions(updatedTransactions);
-    } catch (error) {
-      console.error('Ошибка при получении транзакций:', error);
-    }
-  };
-
-  const handleYearChange = (year: string) => {
+  const handleQueryChange = (year: string, month: string) => {
     setSelectedYear(year);
-    getFilteredTransactions(year, selectedMonth);
-  };
-
-  const handleMonthChange = (month: string) => {
     setSelectedMonth(month);
-    getFilteredTransactions(selectedYear, month);
+    const params = new URLSearchParams({ year, month });
+    router.push(`?${params.toString()}`);
   };
 
   const openModal = (type: Transaction['type']) => {
@@ -51,16 +42,15 @@ export function DashboardPageManager({ transactions, years }: { transactions: Tr
 
   return (
     <DashboardPage
+      transactions={transactions}
       years={years}
-      filteredTransactions={filteredTransactions}
-      isModalOpen={isModalOpen}
-      transactionType={transactionType}
       selectedYear={selectedYear}
       selectedMonth={selectedMonth}
+      isModalOpen={isModalOpen}
+      transactionType={transactionType}
+      onQueryChange={handleQueryChange}
       onOpenModal={openModal}
       onCloseModal={closeModal}
-      onYearChange={handleYearChange}
-      onMonthChange={handleMonthChange}
     />
   );
 }

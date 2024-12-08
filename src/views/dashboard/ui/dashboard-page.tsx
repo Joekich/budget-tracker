@@ -12,36 +12,37 @@ import { DashboardChartsBlock } from './blocks/dashboard-charts-block';
 import styles from './dashboard-page.module.scss';
 
 type DashboardPageProps = {
+  transactions: Transaction[];
   years: string[];
-  filteredTransactions: Transaction[];
-  isModalOpen: boolean;
-  transactionType: Transaction['type'];
   selectedYear: string;
   selectedMonth: string;
+  isModalOpen: boolean;
+  transactionType: Transaction['type'];
+  onQueryChange: (year: string, month: string) => void;
   onOpenModal: (type: Transaction['type']) => void;
   onCloseModal: () => void;
-  onYearChange: (year: string) => void;
-  onMonthChange: (month: string) => void;
 };
 
 export function DashboardPage({
+  transactions,
   years,
-  filteredTransactions,
+  selectedYear,
+  selectedMonth,
   isModalOpen,
   transactionType,
-  selectedMonth,
+  onQueryChange,
   onOpenModal,
   onCloseModal,
-  onYearChange,
-  onMonthChange,
 }: DashboardPageProps) {
   const { data: session } = useSession();
   if (!session) return null;
 
+  const username = session.user?.name || null;
+
   let income = 0;
   let expense = 0;
 
-  filteredTransactions.forEach((transaction) => {
+  transactions.forEach((transaction) => {
     if (transaction.type === 'income') income += transaction.amount;
     if (transaction.type === 'expense') expense += transaction.amount;
   });
@@ -52,20 +53,21 @@ export function DashboardPage({
     <main className={styles.pageWrapper}>
       <div className={styles.contentWrapper}>
         <DashboardButtonsBlock
-          username={session.user?.name || null}
+          username={username}
           years={years}
+          selectedYear={selectedYear}
+          selectedMonth={selectedMonth}
+          onQueryChange={onQueryChange}
           onIncomeClick={() => {
             onOpenModal('income');
           }}
           onExpenseClick={() => {
             onOpenModal('expense');
           }}
-          onYearChange={onYearChange}
-          onMonthChange={onMonthChange}
         />
         <DashboardBalanceBlock income={income} expense={expense} balance={balance} />
         <DashboardChartsBlock
-          transactions={filteredTransactions}
+          transactions={transactions}
           selectedMonth={selectedMonth}
           title="Доходы и расходы за период"
         />
