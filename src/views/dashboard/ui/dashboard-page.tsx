@@ -21,6 +21,7 @@ type DashboardPageProps = {
   onQueryChange: (year: string, month: string) => void;
   onOpenModal: (type: Transaction['type']) => void;
   onCloseModal: () => void;
+  isLoading: boolean;
 };
 
 export function DashboardPage({
@@ -33,6 +34,7 @@ export function DashboardPage({
   onQueryChange,
   onOpenModal,
   onCloseModal,
+  isLoading,
 }: DashboardPageProps) {
   const { data: session } = useSession();
   if (!session) return null;
@@ -65,11 +67,12 @@ export function DashboardPage({
             onOpenModal('expense');
           }}
         />
-        <DashboardBalanceBlock income={income} expense={expense} balance={balance} />
+        <DashboardBalanceBlock income={income} expense={expense} balance={balance} isLoading={isLoading} />
         <DashboardChartsBlock
           transactions={transactions}
           selectedMonth={selectedMonth}
           title="Доходы и расходы за период"
+          isLoading={isLoading}
         />
         <DashboardCategoriesBlock />
 
