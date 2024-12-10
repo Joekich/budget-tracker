@@ -108,11 +108,7 @@ export const DashboardChartsBlock = React.memo(
 
     return (
       <div className={styles.chartBlock}>
-        {isLoading ? (
-          <Skeleton height="100%" width="100%" style={{ lineHeight: '1.15' }} borderRadius={5} />
-        ) : (
-          <div ref={chartRef} className={styles.chart} />
-        )}
+        {isLoading ? <Skeleton className={styles.maxContainer} /> : <div ref={chartRef} className={styles.chart} />}
       </div>
     );
   },

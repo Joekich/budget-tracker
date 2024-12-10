@@ -74,7 +74,7 @@ export function DashboardPage({
           title="Доходы и расходы за период"
           isLoading={isLoading}
         />
-        <DashboardCategoriesBlock />
+        <DashboardCategoriesBlock transactions={transactions} isLoading={isLoading} />
 
         <Modal isOpen={isModalOpen} onClose={onCloseModal}>
           <TransactionAdd type={transactionType} onClose={onCloseModal} />
