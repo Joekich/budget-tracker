@@ -34,13 +34,20 @@ export function DashboardCategoriesBlock({ transactions, isLoading }: DashboardC
   const chartInstances = useRef<echarts.EChartsType[]>([]);
 
   const chartData = useMemo(() => {
-    const groupCategories = (groupTransactions: Transaction[], type: Transaction['type']): ChartData => {
-      const categoryGroups = groupTransactions
-        .filter((t) => t.type === type)
-        .reduce<Record<string, number>>((acc, t) => {
-          acc[t.category] = (acc[t.category] || 0) + t.amount;
-          return acc;
-        }, {});
+    const _transactions: { income: Transaction[]; expense: Transaction[] } = {
+      income: [],
+      expense: [],
+    };
+
+    transactions.forEach((transaction) => {
+      _transactions[transaction.type].push(transaction);
+    });
+
+    const groupCategories = (groupTransactions: Transaction[]): ChartData => {
+      const categoryGroups = groupTransactions.reduce<Record<string, number>>((acc, t) => {
+        acc[t.category] = (acc[t.category] || 0) + t.amount;
+        return acc;
+      }, {});
 
       const totalAmount = Object.values(categoryGroups).reduce((sum, value) => sum + value, 0);
       const sortedCategories = Object.entries(categoryGroups).sort(([, a], [, b]) => b - a);
@@ -56,8 +63,8 @@ export function DashboardCategoriesBlock({ transactions, isLoading }: DashboardC
     };
 
     return {
-      income: groupCategories(transactions, 'income'),
-      expense: groupCategories(transactions, 'expense'),
+      income: groupCategories(_transactions.income),
+      expense: groupCategories(_transactions.expense),
     };
   }, [transactions]);
 
@@ -76,8 +83,8 @@ export function DashboardCategoriesBlock({ transactions, isLoading }: DashboardC
           tooltip: {
             trigger: 'axis',
             formatter: (params: FormatterParams[]) => {
-              const item = params[0]?.data;
-              return `${params[0]?.name}: ${item?.originalValue.toLocaleString()}₽ (${item?.percentage}%)`;
+              const item = params[0];
+              return `${item?.name}: ${item?.data.originalValue.toLocaleString()}₽ (${item?.data.percentage}%)`;
             },
           },
           xAxis: {

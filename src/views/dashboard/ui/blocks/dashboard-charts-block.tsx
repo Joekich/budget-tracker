@@ -23,7 +23,9 @@ export const DashboardChartsBlock = React.memo(
     const yearFormatter = new Intl.DateTimeFormat('ru', { month: 'long' });
     const monthFormatter = new Intl.DateTimeFormat('ru', { day: '2-digit', month: '2-digit' });
 
-    function generateKeys(month: string, currentYear: number): string[] {
+    function generateKeys(month: string): string[] {
+      const currentYear = new Date().getFullYear();
+
       if (month === 'all') {
         return Array.from({ length: 12 }, (_, i) => yearFormatter.format(new Date(currentYear, i)));
       }
@@ -35,26 +37,22 @@ export const DashboardChartsBlock = React.memo(
     }
 
     function groupTransactions(renamedTransactions: Transaction[], month: string) {
-      const isYear = month === 'all';
-      const currentYear = new Date().getFullYear();
-      const keys = generateKeys(month, currentYear);
+      const keys = generateKeys(month);
 
       const groups = new Map(keys.map((key) => [key, { income: 0, expense: 0 }]));
 
       renamedTransactions.forEach((transaction) => {
         const date = new Date(transaction.date);
-        const key = isYear
-          ? yearFormatter.format(new Date(date.getFullYear(), date.getMonth()))
-          : monthFormatter.format(date);
+        const key =
+          month === 'all'
+            ? yearFormatter.format(new Date(date.getFullYear(), date.getMonth()))
+            : monthFormatter.format(date);
 
         const group = groups.get(key);
-        if (group) {
-          if (transaction.type === 'income') {
-            group.income += transaction.amount;
-          } else if (transaction.type === 'expense') {
-            group.expense += transaction.amount;
-          }
-        }
+        if (!group) return;
+
+        if (transaction.type === 'income') group.income += transaction.amount;
+        if (transaction.type === 'expense') group.expense += transaction.amount;
       });
 
       return keys.map((key) => ({ label: key, ...groups.get(key) }));
