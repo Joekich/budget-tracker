@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaFileExport, FaFilter, FaGlobe, FaTools } from 'react-icons/fa';
+import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 
 import styles from './homepage.module.scss';
@@ -54,14 +55,14 @@ export function HomePage() {
               className={styles.button}
               theme="primary"
               onClick={() => {
-                router.push('signup');
+                router.push(getPath('signup'));
               }}
             >
               Зарегистрироваться
             </Button>
             <p className={styles.loginText}>
               Уже зарегистрированы? <br />
-              <Link href="/signin" className={styles.link}>
+              <Link href={getPath('signin')} className={styles.link}>
                 Войдите в свой аккаунт
               </Link>
             </p>
