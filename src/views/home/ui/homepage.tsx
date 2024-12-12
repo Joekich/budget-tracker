@@ -1,18 +1,12 @@
 'use client';
 
-import { type Metadata } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaFileExport, FaFilter, FaGlobe, FaTools } from 'react-icons/fa';
-import { getMetadata } from 'shared/lib/metadata';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 
 import styles from './homepage.module.scss';
-
-export async function generateMetadata(): Promise<Metadata> {
-  return getMetadata({ title: 'Profile - Budget Tracker', description: 'Your finance helper', path: 'homepage' });
-}
 
 export function HomePage() {
   const router = useRouter();

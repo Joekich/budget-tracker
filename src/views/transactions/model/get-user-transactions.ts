@@ -43,7 +43,7 @@ export async function getUserTransactions(
   try {
     const transactions = await prisma.transaction.findMany({
       where,
-      orderBy: { date: 'desc' },
+      orderBy: [{ date: 'desc' }, { title: 'asc' }],
       skip,
       take: perPage,
     });
