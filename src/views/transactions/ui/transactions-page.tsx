@@ -32,7 +32,9 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
                 key={transaction.id}
                 className={clsx(styles.transactionItem, transaction.type === 'income' ? styles.income : styles.expense)}
               >
-                <div className={styles.transactionTitle}>{transaction.title}</div>
+                <div className={styles.transactionTitle} title={transaction.title}>
+                  {transaction.title}
+                </div>
                 <div className={styles.transactionAmount}>{transaction.amount} ₽</div>
                 <div className={styles.transactionCategory}>{transaction.category}</div>
                 <div className={styles.transactionType}>{transaction.type === 'income' ? 'Доход' : 'Расход'}</div>

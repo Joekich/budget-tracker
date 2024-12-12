@@ -115,6 +115,9 @@ export function TransactionEdit({ transaction, onClose, onSave }: TransactionEdi
           type="date"
           value={date}
           className={styles.input}
+          onClick={(e) => {
+            (e.target as HTMLInputElement).showPicker?.();
+          }}
           onChange={(e) => {
             setDate(e.target.value);
           }}
