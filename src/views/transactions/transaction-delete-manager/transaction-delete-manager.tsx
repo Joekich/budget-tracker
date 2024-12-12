@@ -7,6 +7,8 @@ import { FiDelete } from 'react-icons/fi';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
+import styles from './transaction-delete-manager.module.scss';
+
 type TransactionDeleteManagerProps = {
   transaction: Transaction;
 };
@@ -26,8 +28,8 @@ export function TransactionDeleteManager({ transaction }: TransactionDeleteManag
 
   return (
     <>
-      <Button theme="primary" onClick={openDeleteModal}>
-        <FiDelete size={20} />
+      <Button className={styles.deleteButton} theme="icon" onClick={openDeleteModal}>
+        <FiDelete size={24} />
       </Button>
 
       <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>

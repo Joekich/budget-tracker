@@ -7,6 +7,8 @@ import { FiEdit } from 'react-icons/fi';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
+import styles from './transaction-edit-manager.module.scss';
+
 export function TransactionEditManager({ transaction }: { transaction: Transaction }) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -19,8 +21,8 @@ export function TransactionEditManager({ transaction }: { transaction: Transacti
 
   return (
     <>
-      <Button theme="primary" onClick={openEditModal}>
-        <FiEdit size={20} />
+      <Button className={styles.editButton} theme="icon" onClick={openEditModal}>
+        <FiEdit size={24} />
       </Button>
 
       <Modal isOpen={isEditModalOpen} onClose={closeEditModal}>

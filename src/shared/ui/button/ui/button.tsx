@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { type AnchorHTMLAttributes, type ButtonHTMLAttributes } from 'react';
 
 import styles from './button.module.scss';
@@ -9,8 +9,6 @@ type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 type ButtonOrLinkProps = (ButtonProps | LinkProps) & {
   theme?: 'icon' | 'secondary' | 'primary';
 };
-
-const Link = dynamic(async () => import('next/link'));
 
 export function Button({ children, className, theme = 'secondary', href, ...props }: ButtonOrLinkProps) {
   const classNames = clsx(styles.root, theme && styles[theme], className);

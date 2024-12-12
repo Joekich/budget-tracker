@@ -3,7 +3,7 @@
 import clsx from 'clsx';
 import { signOut } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
-import { FiBarChart2, FiDollarSign, FiList, FiLogOut, FiMenu, FiUser } from 'react-icons/fi';
+import { FiBarChart2, FiList, FiLogOut, FiMenu } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button/ui/button';
 
@@ -16,8 +16,6 @@ export function Sidebar() {
   const navItems = [
     { href: getPath('dashboard'), icon: FiBarChart2, label: 'Статистика' },
     { href: getPath('transactions'), icon: FiList, label: 'Транзакции' },
-    { href: getPath('savings'), icon: FiDollarSign, label: 'Сбережения' },
-    { href: getPath('settings'), icon: FiUser, label: 'Настройки' },
   ];
 
   const toggleSidebar = () => {
