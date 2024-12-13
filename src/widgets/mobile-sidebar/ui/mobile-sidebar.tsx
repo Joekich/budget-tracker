@@ -1,7 +1,7 @@
 'use client';
 
 import { signOut } from 'next-auth/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FiBarChart2, FiList, FiLogOut, FiMenu } from 'react-icons/fi';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button/ui/button';
@@ -26,27 +26,26 @@ export function MobileSidebar() {
     signOut({ callbackUrl: '/' });
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const touchStartY = e.touches[0]?.clientY;
-    sidebarRef.current?.setAttribute('data-touch-start', String(touchStartY));
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const touchStartY = Number(sidebarRef.current?.getAttribute('data-touch-start'));
-    const touchCurrentY = e.touches[0]?.clientY;
-
-    if (touchCurrentY !== undefined && touchCurrentY - touchStartY > 50) {
+  const handleClickOutside = (event: PointerEvent) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('pointerdown', handleClickOutside);
+    } else {
+      document.removeEventListener('pointerdown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('pointerdown', handleClickOutside);
+    };
+  }, [isOpen]);
+
   return (
-    <div
-      ref={sidebarRef}
-      className={styles.mobileSidebar}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-    >
+    <div ref={sidebarRef} className={styles.mobileSidebar}>
       <Button aria-label="Menu" theme="icon" className={styles.menuButton} onClick={toggleSidebar}>
         <FiMenu size={32} />
       </Button>
