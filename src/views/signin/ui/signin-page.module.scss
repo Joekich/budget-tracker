@@ -1,3 +1,5 @@
+@import 'styles/media';
+
 .authPage {
   display: flex;
   align-items: center;
@@ -6,6 +8,12 @@
   height: 100vh;
 
   background-color: #f9f9f9;
+
+  @include media  ('xs-md') {
+    width: auto;
+    padding: 1rem;
+  }
+
 }
 
 .formWrapper {
@@ -19,6 +27,11 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0.4rem 0.8rem rgb(0 0 0 / 10%);
+
+  @include media  ('xs-md') {
+    min-width: 33rem;
+  }
+
 }
 
 .authContainer {

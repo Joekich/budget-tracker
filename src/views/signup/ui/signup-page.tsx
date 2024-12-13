@@ -81,6 +81,8 @@ export function SignUpPage() {
             <span>
               <PiWarningCircle size={20} /> Логин должен состоять минимум из 4 символов
             </span>
+          </div>
+          <div className={styles.info}>
             <span>
               <PiWarningCircle size={20} /> Пароль должен состоять минимум из 8 символов, <br /> содержать одну
               заглавную букву английского алфавита и одну цифру

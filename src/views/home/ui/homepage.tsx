@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FaFileExport, FaFilter, FaGlobe, FaTools } from 'react-icons/fa';
+import { FaFileExport, FaFilter, FaTools } from 'react-icons/fa';
 import { getPath } from 'shared/routing/paths';
 import { Button } from 'shared/ui/button';
 
@@ -38,13 +38,6 @@ export function HomePage() {
                 <div className={styles.featureText}>
                   <strong>Экспорт транзакций</strong>
                   <p>в формате .xlsx</p>
-                </div>
-              </li>
-              <li>
-                <FaGlobe className={styles.icon} />
-                <div className={styles.featureText}>
-                  <strong>Смена языка и валюты</strong>
-                  <p>для удобства пользователей из разных стран</p>
                 </div>
               </li>
             </ul>
