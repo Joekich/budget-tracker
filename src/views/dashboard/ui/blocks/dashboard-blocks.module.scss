@@ -1,3 +1,5 @@
+@import 'styles/media';
+
 .block {
   display: flex;
   gap: 1rem;
@@ -6,6 +8,12 @@
 
   width: 60%;
   margin: 0 auto;
+
+  @include media  ('xs-md') {
+    flex-direction: column;
+    width: 90%;
+  }
+
 }
 
 .buttonsBlock {
@@ -30,6 +38,10 @@
   width: 100%;
   height: 100%;
   border: none;
+
+  @include media  ('xs-md') {
+    height: 4.8rem;
+  }
 }
 
 .balanceBlock {
@@ -88,6 +100,12 @@
   border: 1px solid #e0e0e0;
   border-radius: 0.5rem;
   box-shadow: 0 0.4rem 1rem rgb(0 0 0 / 5%);
+
+  @include media  ('xs-md') {
+    flex-direction: column;
+    width: 90%;
+    min-height: 30rem;
+  }
 }
 
 .categoriesBlock {
@@ -99,7 +117,12 @@
   min-width: 28.5rem;
   max-width: 60%;
   min-height: 25rem;
-  margin: 0 auto;
+
+  @include media  ('xs-md') {
+    flex-direction: column;
+    width: 90%;
+    max-width: none;
+  }
 }
 
 .categoryPart {
@@ -115,6 +138,11 @@
   border: 1px solid #e0e0e0;
   border-radius: 0.5rem;
   box-shadow: 0 0.4rem 1rem rgb(0 0 0 / 5%);
+
+  @include media  ('xs-md') {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .categoryPart:last-child {
@@ -157,6 +185,10 @@
   background-color: white;
   border: 1px solid #e0e0e0;
   border-radius: 0.5rem;
+
+  @include media  ('xs-md') {
+    height: 4.8rem;
+  }
 }
 
 .select:focus {
@@ -170,7 +202,6 @@
 
 .doubleChart {
   height: 25rem;
-  padding: 0.5rem;
 }
 
 .maxContainer {

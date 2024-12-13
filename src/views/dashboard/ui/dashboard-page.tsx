@@ -3,7 +3,10 @@
 import { type Transaction } from '@prisma/client';
 import { TransactionAdd } from 'features/transaction-add';
 import { useSession } from 'next-auth/react';
+import { useBreakpoint } from 'shared/lib/breakpoints';
 import { Modal } from 'shared/ui/modal';
+import { MobileSidebar } from 'widgets/mobile-sidebar';
+import { Sidebar } from 'widgets/sidebar';
 
 import { DashboardBalanceBlock } from './blocks/dashboard-balance-block';
 import { DashboardButtonsBlock } from './blocks/dashboard-buttons-block';
@@ -37,6 +40,8 @@ export function DashboardPage({
   isLoading,
 }: DashboardPageProps) {
   const { data: session } = useSession();
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint.between('xs', 'md');
   if (!session) return null;
 
   const username = session.user?.name || null;
@@ -53,6 +58,7 @@ export function DashboardPage({
 
   return (
     <main className={styles.pageWrapper}>
+      {isMobile ? <MobileSidebar /> : <Sidebar />}
       <div className={styles.contentWrapper}>
         <DashboardButtonsBlock
           username={username}

@@ -1,5 +1,10 @@
+'use client';
+
 import { type Transaction } from '@prisma/client';
 import clsx from 'clsx';
+import { useBreakpoint } from 'shared/lib/breakpoints';
+import { MobileSidebar } from 'widgets/mobile-sidebar';
+import { Sidebar } from 'widgets/sidebar';
 
 import { FiltersManager } from '../filters-manager/filters-manager';
 import { TransactionDeleteManager } from '../transaction-delete-manager/transaction-delete-manager';
@@ -16,8 +21,11 @@ type TransactionsPageProps = {
 };
 
 export function TransactionsPage({ transactions, totalTransactions, transactionsPerPage }: TransactionsPageProps) {
+  const breakpoint = useBreakpoint();
+  const isMobile = breakpoint.between('xs', 'md');
   return (
     <main className={styles.pageWrapper}>
+      {isMobile ? <MobileSidebar /> : <Sidebar />}
       <div className={styles.contentWrapper}>
         <h1 className={styles.title}>Транзакции</h1>
         <div className={styles.actions}>

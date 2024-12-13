@@ -80,6 +80,9 @@ export function DashboardCategoriesBlock({ transactions, isLoading }: DashboardC
 
         instance.setOption({
           title: { text: titles[index], left: 'center', top: 10 },
+          grid: {
+            left: '14%',
+          },
           tooltip: {
             trigger: 'axis',
             formatter: (params: FormatterParams[]) => {

@@ -89,6 +89,9 @@ export const DashboardChartsBlock = React.memo(
             { name: 'Доходы', type: 'bar', data: incomeData, itemStyle: { color: 'green' } },
           ],
           legend: { data: ['Расходы', 'Доходы'], top: 'bottom' },
+          grid: {
+            left: '18%',
+          },
         };
 
         chart.setOption(option);
