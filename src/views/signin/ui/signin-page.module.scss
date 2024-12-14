@@ -6,6 +6,7 @@
   justify-content: center;
 
   height: 100vh;
+  padding: calc(1rem + env(safe-area-inset-top));
 
   background-color: #f9f9f9;
 

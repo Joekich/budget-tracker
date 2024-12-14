@@ -2,16 +2,17 @@
 
 .authPage {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  height: 100vh;
+  min-height: 100vh;
+  padding: calc(1rem + env(safe-area-inset-top));
 
   background-color: #f9f9f9;
   
   @include media  ('xs-md') {
     width: auto;
-    padding: 1rem;
   }
 }
 
@@ -27,8 +28,9 @@
   border-radius: 8px;
   box-shadow: 0 0.4rem 0.8rem rgb(0 0 0 / 10%);
 
-  @include media  ('xs-md') {
-    min-width: 33rem;
+  @include media('xs-md') {
+    min-width: auto;
+    padding: 1rem;
   }
 }
 
