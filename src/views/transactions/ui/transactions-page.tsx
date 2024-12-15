@@ -2,7 +2,8 @@
 
 import { type Transaction } from '@prisma/client';
 import clsx from 'clsx';
-import { useBreakpoint } from 'shared/lib/breakpoints';
+import { useState } from 'react';
+import { Button } from 'shared/ui/button';
 import { MobileSidebar } from 'widgets/mobile-sidebar';
 import { Sidebar } from 'widgets/sidebar';
 
@@ -21,11 +22,16 @@ type TransactionsPageProps = {
 };
 
 export function TransactionsPage({ transactions, totalTransactions, transactionsPerPage }: TransactionsPageProps) {
-  const breakpoint = useBreakpoint();
-  const isMobile = breakpoint.between('xs', 'md');
+  const [openTransactionId, setOpenTransactionId] = useState<Transaction['id'] | null>(null);
+
+  const toggleAccordion = (transactionId: Transaction['id']) => {
+    setOpenTransactionId((prev) => (prev === transactionId ? null : transactionId));
+  };
+
   return (
     <main className={styles.pageWrapper}>
-      {isMobile ? <MobileSidebar /> : <Sidebar />}
+      <MobileSidebar />
+      <Sidebar />
       <div className={styles.contentWrapper}>
         <h1 className={styles.title}>Транзакции</h1>
         <div className={styles.actions}>
@@ -40,17 +46,35 @@ export function TransactionsPage({ transactions, totalTransactions, transactions
                 key={transaction.id}
                 className={clsx(styles.transactionItem, transaction.type === 'income' ? styles.income : styles.expense)}
               >
-                <div className={styles.transactionTitle} title={transaction.title}>
-                  {transaction.title}
-                </div>
-                <div className={styles.transactionAmount}>{transaction.amount} ₽</div>
-                <div className={styles.transactionCategory}>{transaction.category}</div>
-                <div className={styles.transactionType}>{transaction.type === 'income' ? 'Доход' : 'Расход'}</div>
-                <div className={styles.transactionDate}>{new Date(transaction.date).toLocaleDateString()}</div>
-                <div className={styles.editButton}>
-                  <TransactionEditManager transaction={transaction} />
-                  <TransactionDeleteManager transaction={transaction} />
-                </div>
+                <Button
+                  className={clsx(styles.resetButtonStyles, styles.transactionAccordion)}
+                  onClick={() => {
+                    toggleAccordion(transaction.id);
+                  }}
+                >
+                  <span className={styles.transactionTitle}>{transaction.title}</span>
+                  <span className={styles.transactionAmount}>{transaction.amount} ₽</span>
+                </Button>
+                <section
+                  className={clsx(styles.transactionDetails, openTransactionId === transaction.id && styles.open)}
+                >
+                  <div className={styles.mobileDetailsRow}>
+                    <p className={styles.detailsLabel}>Тип:</p>
+                    <p className={styles.detailsValue}>{transaction.type === 'income' ? 'Доход' : 'Расход'}</p>
+                  </div>
+                  <div className={styles.mobileDetailsRow}>
+                    <p className={styles.detailsLabel}>Категория:</p>
+                    <p className={styles.detailsValue}>{transaction.category}</p>
+                  </div>
+                  <div className={styles.mobileDetailsRow}>
+                    <p className={styles.detailsLabel}>Дата:</p>
+                    <p className={styles.detailsValue}>{new Date(transaction.date).toLocaleDateString()}</p>
+                  </div>
+                  <div className={styles.editButton}>
+                    <TransactionEditManager transaction={transaction} />
+                    <TransactionDeleteManager transaction={transaction} />
+                  </div>
+                </section>
               </li>
             ))
           ) : (

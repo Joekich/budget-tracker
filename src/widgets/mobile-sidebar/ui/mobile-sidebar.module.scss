@@ -1,3 +1,5 @@
+@import 'styles/media';
+
 .mobileSidebar {
   position: fixed;
   z-index: var(--z-top-layer);
@@ -11,6 +13,10 @@
   width: 100%;
 
   background-color: #333;
+
+  @include media ('lg') {
+    display: none;
+  }
 
   .menuButton {
     padding: 1.2rem;

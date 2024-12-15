@@ -1,8 +1,13 @@
+@import 'styles/media';
+
 .pageWrapper {
   overflow: hidden;
   display: flex;
-  width: 100vw;
-  height: 100vh;
+
+  @include media('xs-lg') {
+    height: auto;
+    padding-top: 5rem;
+  }
 }
 
 .contentWrapper {
@@ -11,8 +16,10 @@
   flex-grow: 1;
   align-items: center;
 
-  min-width: 120rem;
-  padding: 1.2rem;
+  @include media('xs-lg') {
+    width: 90%;
+    padding: calc(1rem + env(safe-area-inset-top));
+  }
 }
 
 .title {
@@ -24,72 +31,232 @@
 .transactionList {
   display: flex;
   flex-direction: column;
+  gap: 1.2rem;
   align-items: center;
 
   width: 100%;
-  min-height: 70rem;
   margin: 0;
   padding: 0;
+
+  @include media('xs-lg') {
+    min-width: unset;
+  }
 }
 
 .transactionItem {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
 
   width: 60%;
-  height: 5.2rem;
-  margin-bottom: 1.5rem;
-  padding: 0 2.5rem;
-
-  font-size: 1.35rem;
-  font-weight: bold;
-  color: #000;
+  min-width: 84rem;
+  height: 6rem;
 
   background-color: #f8f9fa;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 0.4rem 1rem rgb(0 0 0 / 5%);
 
-  transition: background-color 0.3s ease;
+  @include media('xs-lg') {
+    width: 100%;
+    min-width: unset;
+    height: unset;
+  }
+
+  @include media('lg') {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+
+    .transactionAccordion {
+      flex: 0 0 50%;
+    }
+
+    .transactionDetails {
+      overflow: visible;
+      display: flex;
+      flex: 1;
+
+      max-height: none;
+      padding: 0;
+
+      opacity: 1;
+      background: none;
+
+      .mobileDetailsRow {
+        border-bottom: none;
+
+        .detailsLabel {
+          display: none;
+        }
+
+        .detailsValue {
+          font-size: 1.6rem;
+          font-weight: bold;
+        }
+      }
+    }
+
+    .editButton {
+      justify-content: flex-end;
+      width: 10rem;
+    }
+  }
+
+  &.income {
+    background: rgb(189 236 194);
+  }
+
+  &.expense {
+    background: rgb(236 184 184);
+  }
 }
 
-.income {
-  background: rgb(189 236 194);
-}
+.transactionAccordion {
+  cursor: pointer;
 
-.expense {
-  background: rgb(236 184 184);
-}
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-.transactionTitle,
-.transactionAmount,
-.transactionCategory,
-.transactionType,
-.transactionDate {
-  flex: 1;
-  text-align: center;
+  min-width: 0;
+  padding: 1rem;
+
+  @include media('xs-lg') {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  @include media('lg') {
+    pointer-events: none;
+    cursor: default;
+  }
 }
 
 .transactionTitle {
   cursor: pointer;
 
-  position: relative;
+  overflow: hidden;
+  display: block;
+  flex: 3;
+  align-items: center;
+  justify-content: flex-start;
 
+  min-width: 0;
+  margin: auto 0;
+  padding: 1rem;
+
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @include media ('xs-lg') {
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+  }
+}
+
+.transactionDetails {
   overflow: hidden;
 
-  text-overflow: ellipsis;
+  max-height: 0;
+  padding: 0;
+
+  opacity: 0;
+  background-color: #fff;
+
+  transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
+
+  @include media('xs-lg') {
+    width: 100%;
+  }
+
+  @include media('lg') {
+    gap: 1rem;
+  }
+
+  &.open {
+    overflow: visible;
+    max-height: 30rem;
+    padding: 1rem;
+    opacity: 1;
+
+    .transactionTitle {
+      overflow: visible;
+      text-overflow: unset;
+      white-space: normal;
+    }
+  }
+
+  .mobileDetailsRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 80%;
+    min-width: 0;
+    padding: 0.5rem 0;
+
+    border-bottom: 1px solid #e0e0e0;
+    
+    @include media('xs-lg') {
+      justify-content: flex-end;
+      width: 100%;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .detailsLabel {
+      flex: 1;
+      font-size: 1.4rem;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    .detailsValue {
+      flex: 1;
+      font-size: 1.4rem;
+      text-align: right;
+    }
+  }
+}
+
+
+
+.transactionCategory,
+.transactionType,
+.editButton {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
+.transactionAmount,
+.transactionDate {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 1rem;
+
+  font-size: 1.6rem;
+  font-weight: bold;
   white-space: nowrap;
 }
 
-.transactionTitle:hover::after {
-  content: attr(title);
-
-  position: absolute;
-  z-index: var(--z-tooltip-layer);
-  top: 100%;
-  left: 0;
-}
 
 .actions {
   display: flex;
@@ -100,6 +267,35 @@
 
   width: 80%;
   margin-bottom: 1.5rem;
+
+  @include media('xs-lg') {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+
+    .actionsRow {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-start;
+      width: 100%;
+
+      &:first-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .actionButtons {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      button {
+        flex: 1;
+        max-width: calc(50% - 0.5rem);
+      }
+    }
+  }
 }
 
 .editButton {
@@ -108,7 +304,13 @@
   align-items: center;
   justify-content: center;
 
-  button {
+  @include media('xs-lg') {
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 0.5rem;
+  }
+
+  .editButtonAction {
     cursor: pointer;
 
     display: flex;
@@ -125,5 +327,29 @@
     &:hover {
       transform: scale(1.4);
     }
+  }
+}
+
+.resetButtonStyles {
+  all: unset;
+
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+
+  @include media ('xs-lg') {
+    pointer-events: all;
+    min-height: 6rem;
+  }
+
+  &:focus,
+  &:active {
+    background: none;
+    outline: none;
+    box-shadow: none;
   }
 }

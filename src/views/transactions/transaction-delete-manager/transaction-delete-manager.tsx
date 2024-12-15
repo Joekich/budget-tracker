@@ -3,7 +3,7 @@
 import { type Transaction } from '@prisma/client';
 import { TransactionDelete } from 'features/transaction-delete';
 import { useState } from 'react';
-import { FiDelete } from 'react-icons/fi';
+import { FiTrash2 } from 'react-icons/fi';
 import { Button } from 'shared/ui/button';
 import { Modal } from 'shared/ui/modal';
 
@@ -29,7 +29,7 @@ export function TransactionDeleteManager({ transaction }: TransactionDeleteManag
   return (
     <>
       <Button className={styles.deleteButton} theme="icon" onClick={openDeleteModal}>
-        <FiDelete size={24} />
+        <FiTrash2 size={24} />
       </Button>
 
       <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
