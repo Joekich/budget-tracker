@@ -4,7 +4,7 @@
     z-index: var(--z-content-layer);
     display: flex;
 
-    @include media  ('xs-md') {
+    @include media ('xs-lg') {
       width: 100%;
       padding-top: 8rem;    
     }
@@ -19,11 +19,11 @@
     justify-content: center;
 
     width: 100%;
-    padding: calc(5rem + env(safe-area-inset-top));
+    padding: calc(1rem + env(safe-area-inset-top));
 
     transition: margin-left 0.3s ease;
 
-    @include media  ('xs-md') {
+    @include media  ('xs-lg') {
       padding: calc(1rem + env(safe-area-inset-top)); 
     }
   }
