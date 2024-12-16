@@ -154,6 +154,8 @@
   .button {
     width: 80%;
     height: 6rem;
+
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -161,6 +163,8 @@
   cursor: pointer;
   color: #000;
   text-decoration: underline;
+
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     text-decoration: none;

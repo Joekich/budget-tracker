@@ -1,3 +1,5 @@
+@import 'styles/media';
+
 .wrapper {
   display: flex;
   align-items: center;
@@ -59,6 +61,8 @@
 .buttonAdd {
   color: #fff;
   background-color: #333;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .buttonAdd:hover {

@@ -161,6 +161,8 @@
   border-radius: 0.5rem;
 
   transition: background-color 0.2s;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .submitButton:hover {

@@ -41,6 +41,8 @@
 
   @include media  ('xs-lg') {
     height: 4.8rem;
+
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
@@ -155,10 +157,22 @@
   &:hover {
     background-color: rgb(61 179 61);
   }
+
+  &:focus,
+  &:active {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 .block .expenseButton {
   background-color: rgb(150 15 15);
+
+  @include media ('xs-lg') {
+    &:focus,
+    &:active {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
 
   &:hover{
     background-color: rgb(196 32 32);
@@ -188,6 +202,8 @@
 
   @include media  ('xs-lg') {
     height: 4.8rem;
+
+    -webkit-tap-highlight-color: transparent;
   }
 }
 

@@ -271,30 +271,7 @@
   @include media('xs-lg') {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
     width: 100%;
-
-    .actionsRow {
-      display: flex;
-      gap: 1rem;
-      justify-content: flex-start;
-      width: 100%;
-
-      &:first-child {
-        grid-column: 1 / -1;
-      }
-    }
-
-    .actionButtons {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-
-      button {
-        flex: 1;
-        max-width: calc(50% - 0.5rem);
-      }
-    }
   }
 }
 

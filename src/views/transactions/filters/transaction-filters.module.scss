@@ -50,6 +50,8 @@
   flex: 1;
   padding: 1rem;
   font-size: 1.2rem;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .categoryBlock fieldset {
@@ -91,6 +93,8 @@
   position: relative;
   height: 4rem;
   padding: 0.7rem 1.2rem;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .filterIcon {

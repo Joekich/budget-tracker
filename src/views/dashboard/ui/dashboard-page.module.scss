@@ -3,9 +3,11 @@
 .pageWrapper {
     z-index: var(--z-content-layer);
     display: flex;
+    height: 100vh;
 
     @include media ('xs-lg') {
       width: 100%;
+      height: unset;
       padding-top: 8rem;    
     }
   }

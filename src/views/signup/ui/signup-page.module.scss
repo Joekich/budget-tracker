@@ -129,6 +129,8 @@
 
   background: none;
   border: none;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .iconWrapper:hover {
@@ -150,6 +152,8 @@
   border-radius: 0.5rem;
 
   transition: background-color 0.2s;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
 .submitButton:hover {
